@@ -1,0 +1,23 @@
+# <type>: <short summary>
+
+# Types:
+# feat      A new capability or user-visible behavior
+# fix       A bug fix
+# docs      Documentation-only changes
+# style     Formatting or styling-only changes
+# refactor  Code restructuring without behavior change
+# test      Tests or test infrastructure
+# chore     Tooling, config, repo maintenance
+
+# Body:
+# - What changed?
+# - Why did it change?
+# - What tradeoffs or follow-ups remain?
+
+# Verification:
+# - [ ] Typecheck
+# - [ ] Tests
+# - [ ] Build
+# - [ ] Accessibility/visual check
+# - [ ] Not applicable
+
