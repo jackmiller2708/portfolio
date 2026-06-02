@@ -14,6 +14,25 @@ test.describe("System Map", () => {
     await expect(map.locator("[data-map-details]")).toContainText(/Risk hotspot|Decision overlay/);
   });
 
+  test("uses distinct messy and bounded node layouts", async ({ page }) => {
+    await page.goto("/");
+
+    const map = page.locator("[data-system-map]").first();
+    const boundaryNode = map.locator("[data-node-id='feature-boundary']");
+    const roadmapNode = map.locator("[data-node-id='roadmap']");
+
+    const messyBoundary = await boundaryNode.boundingBox();
+    const messyRoadmap = await roadmapNode.boundingBox();
+
+    await map.getByRole("button", { name: "Bounded" }).click();
+
+    const boundedBoundary = await boundaryNode.boundingBox();
+    const boundedRoadmap = await roadmapNode.boundingBox();
+
+    expect(messyBoundary?.x).not.toBe(boundedBoundary?.x);
+    expect(messyRoadmap?.y).not.toBe(boundedRoadmap?.y);
+  });
+
   test("captures desktop and mobile map screenshots", async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 });
     await page.goto("/");

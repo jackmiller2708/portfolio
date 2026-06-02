@@ -41,10 +41,10 @@ const initialDiagnostic = viewModel.diagnostics[0];
     {viewModel.inspectStrip.map((item) => <a href={item.href}>{item.label}</a>)}
   </nav>
 
-  <section class="home-section" id="diagnostic">
+  <section class="home-section home-section--diagnostic" id="diagnostic">
     <div class="u-container u-stack">
       <SectionHeader
-        title="Start with the symptom"
+        title="Start with a scoped diagnostic"
         summary="Pick the frontend-system pain that is closest to the current risk. The recommendation updates to a service, an audit proof point, and the map state to inspect next."
       />
       <div class="diagnostic" data-diagnostic-selector>
@@ -233,7 +233,17 @@ const initialDiagnostic = viewModel.diagnostics[0];
   }
 
   .home-section {
+    scroll-margin-top: 96px;
     padding: var(--space-12) 0 var(--space-16);
+  }
+
+  .home-section--diagnostic {
+    padding-top: var(--space-5);
+  }
+
+  .home-section--diagnostic > .u-container {
+    padding-top: var(--space-6);
+    border-top: var(--border-1);
   }
 
   .home-section--surface {

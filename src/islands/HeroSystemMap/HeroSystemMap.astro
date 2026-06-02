@@ -10,7 +10,7 @@ const riskByNode = new Map(map.riskMarkers.map((marker) => [marker.nodeId, marke
 const decisionByNode = new Map(map.decisionMarkers.map((marker) => [marker.nodeId, marker]));
 ---
 
-<figure class="system-map" aria-label={map.fallbackLabel} data-system-map>
+<figure class="system-map" aria-label={map.fallbackLabel} data-system-map data-state="messy">
   <figcaption>
     <strong>{map.title}</strong>
     <span>{map.summary}</span>
@@ -82,6 +82,7 @@ const decisionByNode = new Map(map.decisionMarkers.map((marker) => [marker.nodeI
             <button
               class:list={["system-map__node", risk && "has-risk", decision && "has-decision"]}
               type="button"
+              data-node-index={map.nodes.indexOf(node)}
               data-node-id={node.id}
               data-node-label={node.label}
               data-node-description={node.description}
@@ -121,6 +122,7 @@ const decisionByNode = new Map(map.decisionMarkers.map((marker) => [marker.nodeI
     position: relative;
     display: grid;
     gap: var(--space-4);
+    scroll-margin-top: 96px;
     margin: 0;
     padding: var(--space-4);
     background: var(--color-surface);
@@ -197,25 +199,6 @@ const decisionByNode = new Map(map.decisionMarkers.map((marker) => [marker.nodeI
     background-size: 56px 56px;
   }
 
-  .system-map__stage::before {
-    position: absolute;
-    inset: 48% auto auto 8%;
-    width: 84%;
-    height: 1px;
-    background: var(--color-muted);
-    content: "";
-    opacity: 0.45;
-    transform-origin: left;
-    transition:
-      opacity var(--duration-2) var(--ease-standard),
-      width var(--duration-2) var(--ease-standard);
-  }
-
-  .system-map[data-state="explicit"] .system-map__stage::before {
-    width: 88%;
-    opacity: 0.7;
-  }
-
   .system-map__fallback,
   .system-map__noscript {
     display: none;
@@ -244,7 +227,8 @@ const decisionByNode = new Map(map.decisionMarkers.map((marker) => [marker.nodeI
     position: relative;
     z-index: 1;
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-auto-rows: minmax(92px, auto);
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: var(--space-3);
     padding: var(--space-4);
   }
@@ -262,11 +246,84 @@ const decisionByNode = new Map(map.decisionMarkers.map((marker) => [marker.nodeI
     cursor: pointer;
     transition:
       background-color var(--duration-1) var(--ease-standard),
-      border-color var(--duration-1) var(--ease-standard);
+      border-color var(--duration-1) var(--ease-standard),
+      outline-color var(--duration-1) var(--ease-standard);
+  }
+
+  .system-map__node:nth-child(1) {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .system-map__node:nth-child(2) {
+    grid-column: 3;
+    grid-row: 1;
+  }
+
+  .system-map__node:nth-child(3) {
+    grid-column: 2;
+    grid-row: 2;
+  }
+
+  .system-map__node:nth-child(4) {
+    grid-column: 3;
+    grid-row: 3;
+  }
+
+  .system-map__node:nth-child(5) {
+    grid-column: 1;
+    grid-row: 4;
+  }
+
+  .system-map__node:nth-child(6) {
+    grid-column: 2;
+    grid-row: 4;
+  }
+
+  .system-map[data-state="messy"] .system-map__node {
+    outline: 1px dashed color-mix(in srgb, var(--color-danger) 42%, transparent);
+    outline-offset: -5px;
   }
 
   .system-map[data-state="explicit"] .system-map__node {
+    grid-column: auto;
+    grid-row: auto;
     background: var(--color-surface);
+    outline-color: transparent;
+  }
+
+  .system-map[data-state="explicit"] .system-map__nodes {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .system-map[data-state="explicit"] .system-map__node:nth-child(1) {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .system-map[data-state="explicit"] .system-map__node:nth-child(2) {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  .system-map[data-state="explicit"] .system-map__node:nth-child(3) {
+    grid-column: 2;
+    grid-row: 2;
+  }
+
+  .system-map[data-state="explicit"] .system-map__node:nth-child(4) {
+    grid-column: 2;
+    grid-row: 3;
+  }
+
+  .system-map[data-state="explicit"] .system-map__node:nth-child(5) {
+    grid-column: 3;
+    grid-row: 1;
+  }
+
+  .system-map[data-state="explicit"] .system-map__node:nth-child(6) {
+    grid-column: 3;
+    grid-row: 2;
   }
 
   .system-map__node.is-active,
@@ -335,9 +392,15 @@ const decisionByNode = new Map(map.decisionMarkers.map((marker) => [marker.nodeI
     padding-left: var(--space-5);
   }
 
-  @media (min-width: 720px) {
-    .system-map__nodes {
-      grid-template-columns: repeat(3, minmax(0, 1fr));
+  @media (max-width: 719px) {
+    .system-map[data-state="messy"] .system-map__nodes {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .system-map[data-state="messy"] .system-map__node:nth-child(n),
+    .system-map[data-state="explicit"] .system-map__node:nth-child(n) {
+      grid-column: auto;
+      grid-row: auto;
     }
   }
 
@@ -366,15 +429,21 @@ const decisionByNode = new Map(map.decisionMarkers.map((marker) => [marker.nodeI
         var(--color-surface);
       background-size: 56px 56px;
     }
+  }
 
-    .system-map__stage::before {
-      background: var(--color-text);
-      opacity: 0.34;
-    }
-
-    .system-map[data-state="explicit"] .system-map__stage::before {
-      opacity: 0.52;
-    }
+  :global(:root[data-theme="dark"]) .system-map__stage {
+    background:
+      linear-gradient(
+        color-mix(in srgb, var(--color-border) 72%, transparent) 1px,
+        transparent 1px
+      ),
+      linear-gradient(
+        90deg,
+        color-mix(in srgb, var(--color-border) 72%, transparent) 1px,
+        transparent 1px
+      ),
+      var(--color-surface);
+    background-size: 56px 56px;
   }
 
   noscript .system-map__noscript {

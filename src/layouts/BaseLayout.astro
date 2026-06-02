@@ -36,6 +36,12 @@ const navItems = [
     {seo && <meta property="og:url" content={seo.ogUrl} />}
     {seo && <meta property="og:type" content="website" />}
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <script is:inline>
+      const storedTheme = localStorage.getItem("theme");
+      if (storedTheme === "light" || storedTheme === "dark") {
+        document.documentElement.dataset.theme = storedTheme;
+      }
+    </script>
     <title>{pageTitle}</title>
   </head>
   <body>
@@ -62,6 +68,14 @@ const navItems = [
             })
           }
         </nav>
+        <button
+          class="site-header__theme"
+          type="button"
+          data-theme-toggle
+          aria-label="Switch theme"
+        >
+          <span data-theme-label>Theme</span>
+        </button>
       </div>
     </header>
     <main id="main">
@@ -96,8 +110,10 @@ const navItems = [
   }
 
   .site-header__brand,
-  .site-header__nav a {
+  .site-header__nav a,
+  .site-header__theme {
     transition:
+      background-color var(--duration-1) var(--ease-standard),
       color var(--duration-1) var(--ease-standard),
       border-color var(--duration-1) var(--ease-standard);
   }
@@ -126,6 +142,22 @@ const navItems = [
     border-color: var(--color-accent);
   }
 
+  .site-header__theme {
+    min-height: 38px;
+    padding: var(--space-2) var(--space-3);
+    color: var(--color-text);
+    background: var(--color-surface);
+    border: var(--border-1);
+    border-radius: var(--radius-1);
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 700;
+  }
+
+  .site-header__theme:hover {
+    border-color: var(--color-accent);
+  }
+
   @media (max-width: 760px) {
     .site-header__inner {
       align-items: flex-start;
@@ -139,3 +171,28 @@ const navItems = [
     }
   }
 </style>
+
+<script>
+  const themeToggle = document.querySelector<HTMLButtonElement>("[data-theme-toggle]");
+  const themeLabel = document.querySelector<HTMLElement>("[data-theme-label]");
+  const systemPrefersDark = window.matchMedia("(prefers-color-scheme: dark)");
+
+  const getResolvedTheme = () =>
+    document.documentElement.dataset.theme || (systemPrefersDark.matches ? "dark" : "light");
+
+  const setThemeLabel = () => {
+    if (themeLabel) {
+      themeLabel.textContent = getResolvedTheme() === "dark" ? "Light" : "Dark";
+    }
+  };
+
+  themeToggle?.addEventListener("click", () => {
+    const nextTheme = getResolvedTheme() === "dark" ? "light" : "dark";
+    document.documentElement.dataset.theme = nextTheme;
+    localStorage.setItem("theme", nextTheme);
+    setThemeLabel();
+  });
+
+  systemPrefersDark.addEventListener("change", setThemeLabel);
+  setThemeLabel();
+</script>

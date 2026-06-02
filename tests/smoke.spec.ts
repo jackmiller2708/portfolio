@@ -28,6 +28,20 @@ test.describe("Smoke Tests", () => {
     );
   });
 
+  test("Theme switch toggles the page theme", async ({ page }) => {
+    await page.goto("/");
+
+    const toggle = page.getByRole("button", { name: "Switch theme" });
+    await expect(toggle).toBeVisible();
+
+    const before = await page.locator("html").getAttribute("data-theme");
+    await toggle.click();
+    const after = await page.locator("html").getAttribute("data-theme");
+
+    expect(after).not.toBe(before);
+    expect(["light", "dark"]).toContain(after);
+  });
+
   test("Services page should load and display services", async ({ page }) => {
     await page.goto("/services");
     await expect(page).toHaveTitle(/Services \| Frontend Systems Portfolio/);
