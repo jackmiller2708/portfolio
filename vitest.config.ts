@@ -10,7 +10,8 @@ export default defineConfig({
       "@programs": "/src/programs",
       "@schemas": "/src/schemas",
       "@services": "/src/services",
-      "@styles": "/src/styles"
+      "@styles": "/src/styles",
+      "@utils": "/src/utils"
     }
   }
 });

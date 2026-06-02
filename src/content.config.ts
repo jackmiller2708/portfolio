@@ -56,8 +56,24 @@ const siteMeta = defineCollection({
   schema: z.object({
     title: z.string(),
     description: z.string(),
+    siteUrl: z.url(),
+    ogImage: z.string(),
     availability: z.string(),
-    contactEmail: z.email()
+    contactEmail: z.email(),
+    proofPoints: z.array(
+      z.object({
+        label: z.string(),
+        value: z.string(),
+        detail: z.string()
+      })
+    ),
+    nonFitCriteria: z.array(z.string()),
+    about: z.object({
+      context: z.string(),
+      workingStyle: z.array(z.string()),
+      qualityPhilosophy: z.array(z.string()),
+      communication: z.string()
+    })
   })
 });
 

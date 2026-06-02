@@ -25,8 +25,24 @@ const repository: ContentRepository = {
   getSiteMeta: Effect.succeed({
     title: "Site",
     description: "Description",
+    siteUrl: "https://example.com",
+    ogImage: "/og/default.png",
     availability: "Available",
-    contactEmail: "hello@example.com"
+    contactEmail: "hello@example.com",
+    proofPoints: [
+      {
+        label: "Focus",
+        value: "Angular",
+        detail: "Systems work"
+      }
+    ],
+    nonFitCriteria: ["Not fit"],
+    about: {
+      context: "Context",
+      workingStyle: ["Diagnostic first"],
+      qualityPhilosophy: ["Make decisions visible"],
+      communication: "Async"
+    }
   })
 };
 
@@ -36,5 +52,6 @@ describe("loadHomePage", () => {
 
     expect(viewModel.hero.title).toContain("frontend systems");
     expect(viewModel.services).toHaveLength(1);
+    expect(viewModel.proofPoints).toHaveLength(1);
   });
 });

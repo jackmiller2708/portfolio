@@ -65,18 +65,18 @@ Latest commits:
 
 ## Phase 3: V1 Page Completion
 
-- [ ] Replace placeholder home layout with full V1 structure: hero, proof strip, services, audit preview, lab preview, CTA.
-- [ ] Add basic static `HeroSystemMap` into Home hero.
-- [ ] Expand Services page with deliverables, best-fit, not-fit, and first-step sections.
-- [ ] Expand Sample Audit with severity grouping, risk matrix, and sprint roadmap.
-- [ ] Expand Contact page with accessible success, validation, spam, delivery failure, and direct-email fallback states.
-- [ ] Add About content collection or typed metadata.
-- [ ] Add site-wide SEO metadata helpers.
-- [ ] Add Open Graph defaults.
-- [ ] Add canonical URL handling.
-- [ ] Add reusable proof-strip component.
-- [ ] Add reusable evidence panel component.
-- [ ] Add reusable contact intake component or island.
+- [x] Replace placeholder home layout with full V1 structure: hero, proof strip, services, audit preview, lab preview, CTA.
+- [x] Add basic static `HeroSystemMap` into Home hero.
+- [x] Expand Services page with deliverables, best-fit, not-fit, and first-step sections.
+- [x] Expand Sample Audit with severity grouping, risk matrix, and sprint roadmap.
+- [x] Expand Contact page with accessible success, validation, spam, delivery failure, and direct-email fallback states.
+- [x] Add About content collection or typed metadata.
+- [x] Add site-wide SEO metadata helpers.
+- [x] Add Open Graph defaults.
+- [x] Add canonical URL handling.
+- [x] Add reusable proof-strip component.
+- [x] Add reusable evidence panel component.
+- [x] Add reusable contact intake component or island.
 
 ## Phase 4: V1 Quality Gate
 
@@ -124,12 +124,6 @@ Latest commits:
 
 ## Immediate Next Milestone
 
-Finish **Phase 3: V1 Page Completion**.
+Finish **Phase 4: V1 Quality Gate**.
 
-Recommended order:
-
-1. Home full V1 structure.
-2. Services detail sections.
-3. Sample Audit report structure.
-4. Contact form states and componentization.
-5. SEO/social metadata helpers.
+Implementation plan: `docs/implementation/v1-quality-gate-implementation-plan.md`

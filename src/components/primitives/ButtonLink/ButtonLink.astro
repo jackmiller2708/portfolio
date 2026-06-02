@@ -22,13 +22,12 @@ const { href, label, variant = "primary" } = Astro.props;
     font-weight: 700;
     text-decoration: none;
     transition:
-      transform var(--duration-1) var(--ease-standard),
       border-color var(--duration-1) var(--ease-standard),
       background var(--duration-1) var(--ease-standard);
   }
 
   .button-link:hover {
-    transform: scale(1.01);
+    border-color: var(--color-text);
   }
 
   .button-link--primary {

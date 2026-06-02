@@ -1,16 +1,135 @@
 ---
+import { Effect } from "effect";
 import BaseLayout from "@layouts/BaseLayout.astro";
 import PageHero from "@components/sections/PageHero/PageHero.astro";
+import { loadAboutPage } from "@programs/load-about-page";
+import { astroContentRepository } from "@services/AstroContentRepository";
+import { buildPageSeo } from "@utils/seo";
+
+const viewModel = await Effect.runPromise(loadAboutPage);
+const site = await Effect.runPromise(astroContentRepository.getSiteMeta);
+const seo = buildPageSeo(site, {
+  path: "/about",
+  title: viewModel.title,
+  description: viewModel.summary
+});
 ---
 
-<BaseLayout
-  title="About | Frontend Systems Portfolio"
-  description="Working style and architecture philosophy for frontend systems work."
->
+<BaseLayout seo={seo}>
   <PageHero
     title="Practical frontend architecture under real delivery constraints."
-    summary="I focus on making ownership, state, data flow, and errors explicit enough that teams can change Angular systems with less guesswork."
+    summary={viewModel.about.context}
     primaryCta={{ label: "View services", href: "/services" }}
-    secondaryCta={{ label: "Contact", href: "/contact" }}
+    secondaryCta={viewModel.cta}
   />
+  <section class="about-section">
+    <div class="u-container about-grid">
+      <article class="about-panel">
+        <h2>Small diagnostics before large prescriptions</h2>
+        <p>The work is designed to make constraints explicit before implementation starts.</p>
+        <ul class="about-list">
+          {viewModel.about.workingStyle.map((item) => <li>{item}</li>)}
+        </ul>
+      </article>
+      <article class="about-panel">
+        <h2>Maintainability as visible decisions</h2>
+        <p>
+          The useful output is not just cleaner code; it is a system your team can reason about.
+        </p>
+        <ul class="about-list">
+          {viewModel.about.qualityPhilosophy.map((item) => <li>{item}</li>)}
+        </ul>
+      </article>
+    </div>
+  </section>
+  <section class="about-section about-section--compact">
+    <div class="u-container communication">
+      <h2>Communication</h2>
+      <p>{viewModel.about.communication}</p>
+      <p>
+        Direct fallback: <a href={`mailto:${viewModel.contactEmail}`}>{viewModel.contactEmail}</a>
+      </p>
+    </div>
+  </section>
 </BaseLayout>
+
+<style>
+  .about-section {
+    padding: 0 0 var(--space-16);
+  }
+
+  .about-section--compact {
+    padding-top: 0;
+  }
+
+  .about-grid {
+    display: grid;
+    gap: var(--space-6);
+  }
+
+  .about-panel,
+  .about-list,
+  .communication {
+    padding: var(--space-6);
+    background: var(--color-surface);
+    border: var(--border-1);
+    border-radius: var(--radius-2);
+  }
+
+  .about-panel {
+    display: grid;
+    align-content: start;
+    gap: var(--space-5);
+  }
+
+  .about-panel h2,
+  .about-panel p {
+    margin: 0;
+  }
+
+  .about-panel h2 {
+    font-family: var(--font-display);
+    font-size: clamp(1.75rem, 3vw, 2.4rem);
+    line-height: 1.12;
+  }
+
+  .about-panel p {
+    color: var(--color-muted);
+  }
+
+  .about-list {
+    display: grid;
+    gap: var(--space-3);
+    padding: 0 0 0 var(--space-5);
+    margin: 0;
+    background: transparent;
+    border: 0;
+    color: var(--color-muted);
+  }
+
+  .communication {
+    display: grid;
+    gap: var(--space-3);
+    max-width: 760px;
+  }
+
+  .communication h2,
+  .communication p {
+    margin: 0;
+  }
+
+  .communication h2 {
+    font-family: var(--font-display);
+    font-size: 2rem;
+  }
+
+  .communication p {
+    color: var(--color-muted);
+  }
+
+  @media (min-width: 900px) {
+    .about-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+</style>

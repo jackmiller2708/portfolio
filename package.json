@@ -13,7 +13,8 @@
     "format": "prettier . --write",
     "format:check": "prettier . --check",
     "quality": "npm run format:check && npm run lint && npm run check && npm test && npm run build",
-    "test": "vitest run"
+    "test": "vitest run",
+    "verify:ui": "node scripts/verify-ui.mjs"
   },
   "dependencies": {
     "astro": "^6.4.2",
@@ -21,6 +22,7 @@
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.9",
+    "@playwright/test": "^1.60.0",
     "@typescript-eslint/parser": "^8.60.1",
     "cross-env": "^10.1.0",
     "eslint": "^9.39.4",

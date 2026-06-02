@@ -5,11 +5,10 @@ type Props = {
   summary?: string;
 };
 
-const { eyebrow, title, summary } = Astro.props;
+const { title, summary } = Astro.props;
 ---
 
 <header class="section-header">
-  {eyebrow && <p class="section-header__eyebrow">{eyebrow}</p>}
   <h2>{title}</h2>
   {summary && <p class="section-header__summary">{summary}</p>}
 </header>
@@ -17,12 +16,6 @@ const { eyebrow, title, summary } = Astro.props;
 <style>
   .section-header {
     max-width: 760px;
-  }
-
-  .section-header__eyebrow {
-    margin: 0 0 var(--space-2);
-    color: var(--color-accent);
-    font-weight: 700;
   }
 
   h2 {

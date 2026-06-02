@@ -1,12 +1,16 @@
 ---
 import "@styles/global.css";
+import type { PageSeo } from "@domain/site";
 
 type Props = {
-  title: string;
-  description: string;
+  title?: string;
+  description?: string;
+  seo?: PageSeo;
 };
 
-const { title, description } = Astro.props;
+const { title, description, seo } = Astro.props;
+const pageTitle = seo?.title ?? title ?? "Frontend Systems Portfolio";
+const pageDescription = seo?.description ?? description ?? "Angular frontend systems engineering.";
 
 const navItems = [
   { label: "Services", href: "/services" },
@@ -22,9 +26,15 @@ const navItems = [
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="description" content={description} />
+    <meta name="description" content={pageDescription} />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>{title}</title>
+    {seo && <link rel="canonical" href={seo.canonicalUrl} />}
+    {seo && <meta property="og:title" content={seo.ogTitle} />}
+    {seo && <meta property="og:description" content={seo.ogDescription} />}
+    {seo && <meta property="og:image" content={seo.ogImage} />}
+    {seo && <meta property="og:url" content={seo.ogUrl} />}
+    {seo && <meta property="og:type" content="website" />}
+    <title>{pageTitle}</title>
   </head>
   <body>
     <a class="u-skip-link" href="#main">Skip to content</a>

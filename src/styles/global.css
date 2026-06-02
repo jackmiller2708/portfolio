@@ -73,17 +73,16 @@ svg {
 
 .u-skip-link {
   position: fixed;
-  top: var(--space-4);
+  top: -80px;
   left: var(--space-4);
   z-index: var(--z-header);
   padding: var(--space-3) var(--space-4);
   background: var(--color-surface);
   border: var(--border-1);
-  transform: translateY(-160%);
 }
 
 .u-skip-link:focus {
-  transform: translateY(0);
+  top: var(--space-4);
 }
 
 @media (min-width: 720px) {

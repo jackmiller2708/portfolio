@@ -1,0 +1,105 @@
+---
+import ButtonLink from "@components/primitives/ButtonLink/ButtonLink.astro";
+
+type Props = {
+  eyebrow?: string;
+  title: string;
+  summary?: string;
+  evidence?: string;
+  risk?: string;
+  recommendation?: string;
+  cta?: {
+    readonly label: string;
+    readonly href: string;
+  };
+};
+
+const { eyebrow, title, summary, evidence, risk, recommendation, cta } = Astro.props;
+---
+
+<article class="evidence-panel">
+  <div class="evidence-panel__header">
+    <h3>{title}</h3>
+    {eyebrow && <p class="evidence-panel__context">{eyebrow}</p>}
+    {summary && <p>{summary}</p>}
+  </div>
+  {
+    (evidence || risk || recommendation) && (
+      <dl>
+        {evidence && (
+          <div>
+            <dt>Evidence</dt>
+            <dd>{evidence}</dd>
+          </div>
+        )}
+        {risk && (
+          <div>
+            <dt>Risk</dt>
+            <dd>{risk}</dd>
+          </div>
+        )}
+        {recommendation && (
+          <div>
+            <dt>Recommendation</dt>
+            <dd>{recommendation}</dd>
+          </div>
+        )}
+      </dl>
+    )
+  }
+  {cta && <ButtonLink href={cta.href} label={cta.label} variant="secondary" />}
+</article>
+
+<style>
+  .evidence-panel {
+    display: grid;
+    gap: var(--space-5);
+    padding: var(--space-6);
+    background: var(--color-surface);
+    border: var(--border-1);
+    border-radius: var(--radius-2);
+  }
+
+  .evidence-panel__header {
+    display: grid;
+    gap: var(--space-2);
+  }
+
+  .evidence-panel__context,
+  p,
+  dl,
+  dd {
+    margin: 0;
+  }
+
+  .evidence-panel__context {
+    color: var(--color-muted);
+    font-size: 0.95rem;
+  }
+
+  h3 {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: 1.45rem;
+    line-height: 1.15;
+  }
+
+  p,
+  dd {
+    color: var(--color-muted);
+  }
+
+  dl {
+    display: grid;
+    gap: var(--space-4);
+  }
+
+  dt {
+    color: var(--color-text);
+    font-weight: 700;
+  }
+
+  dd {
+    margin-top: var(--space-1);
+  }
+</style>

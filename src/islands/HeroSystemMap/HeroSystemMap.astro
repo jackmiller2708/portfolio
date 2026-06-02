@@ -1,22 +1,41 @@
-<figure class="system-map" aria-label="Static frontend system map placeholder">
-  <div class="system-map__node">UI</div>
-  <div class="system-map__node">Feature Boundary</div>
-  <div class="system-map__node">Data Access</div>
-  <div class="system-map__node">Error Model</div>
+---
+type Props = {
+  label: string;
+  nodes: readonly string[];
+};
+
+const { label, nodes } = Astro.props;
+---
+
+<figure class="system-map" aria-label={label}>
+  <figcaption class="u-visually-hidden">{label}</figcaption>
+  {nodes.map((node) => <div class="system-map__node">{node}</div>)}
 </figure>
 
 <style>
   .system-map {
+    position: relative;
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: var(--space-3);
     margin: 0;
+    padding: var(--space-4);
+    background: var(--color-surface);
+    border: var(--border-1);
+    border-radius: var(--radius-2);
   }
 
   .system-map__node {
     padding: var(--space-4);
     background: var(--color-surface-2);
     border: var(--border-1);
-    border-radius: var(--radius-2);
+    border-radius: var(--radius-1);
+    font-weight: 700;
+  }
+
+  @media (min-width: 720px) {
+    .system-map {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
   }
 </style>

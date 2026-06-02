@@ -1,6 +1,32 @@
 import { Effect } from "effect";
 import { astroContentRepository } from "@services/AstroContentRepository";
 import type { ContentRepository } from "@services/ContentRepository";
+import {
+  initialContactState,
+  submittingContactState,
+  type ContactIntakeState
+} from "@utils/contact-state";
+
+type ContactStateByKind<TKind extends ContactIntakeState["kind"]> = Extract<
+  ContactIntakeState,
+  { readonly kind: TKind }
+>;
+
+export type ContactPageViewModel = {
+  readonly title: string;
+  readonly summary: string;
+  readonly availability: string;
+  readonly contactEmail: string;
+  readonly nonFitCriteria: readonly string[];
+  readonly states: {
+    readonly initial: ContactStateByKind<"initial">;
+    readonly submitting: ContactStateByKind<"submitting">;
+    readonly success: ContactStateByKind<"success">;
+    readonly validation: ContactStateByKind<"validation">;
+    readonly blocked: ContactStateByKind<"blocked">;
+    readonly delivery: ContactStateByKind<"delivery">;
+  };
+};
 
 export const loadContactPageFromRepository = (repository: ContentRepository) =>
   Effect.gen(function* () {
@@ -11,8 +37,32 @@ export const loadContactPageFromRepository = (repository: ContentRepository) =>
       summary:
         "Share the product context, Angular version, team shape, current pain, timeline, and budget comfort so the first response can be useful.",
       availability: site.availability,
-      contactEmail: site.contactEmail
-    };
+      contactEmail: site.contactEmail,
+      nonFitCriteria: site.nonFitCriteria,
+      states: {
+        initial: initialContactState,
+        submitting: submittingContactState,
+        success: {
+          kind: "success",
+          message: "Inquiry received. The next response can focus on system context and fit."
+        },
+        validation: {
+          kind: "validation",
+          message: "Some required fields need attention before this inquiry can be sent.",
+          summary: ["Required fields must be complete and consent must be checked."]
+        },
+        blocked: {
+          kind: "blocked",
+          message:
+            "This inquiry could not be accepted. Use the direct email fallback if this is a legitimate request."
+        },
+        delivery: {
+          kind: "delivery",
+          message:
+            "The inquiry could not be delivered right now. Try again or use the direct email fallback."
+        }
+      }
+    } satisfies ContactPageViewModel;
   });
 
 export const loadContactPage = loadContactPageFromRepository(astroContentRepository);

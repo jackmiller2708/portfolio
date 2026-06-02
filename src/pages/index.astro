@@ -1,23 +1,40 @@
 ---
 import { Effect } from "effect";
 import BaseLayout from "@layouts/BaseLayout.astro";
+import EvidencePanel from "@components/organisms/EvidencePanel/EvidencePanel.astro";
 import PageHero from "@components/sections/PageHero/PageHero.astro";
+import ProofStrip from "@components/sections/ProofStrip/ProofStrip.astro";
 import SectionHeader from "@components/molecules/SectionHeader/SectionHeader.astro";
 import ServiceCard from "@components/organisms/ServiceCard/ServiceCard.astro";
+import HeroSystemMap from "@islands/HeroSystemMap/HeroSystemMap.astro";
 import { loadHomePageFromRepository } from "@programs/load-home-page";
 import { astroContentRepository } from "@services/AstroContentRepository";
+import { buildPageSeo } from "@utils/seo";
 
 const viewModel = await Effect.runPromise(loadHomePageFromRepository(astroContentRepository));
+const site = await Effect.runPromise(astroContentRepository.getSiteMeta);
+const seo = buildPageSeo(site, {
+  path: "/",
+  description: viewModel.hero.summary
+});
 ---
 
-<BaseLayout title="Frontend Systems Portfolio" description={viewModel.hero.summary}>
-  <PageHero
-    eyebrow={viewModel.hero.eyebrow}
-    title={viewModel.hero.title}
-    summary={viewModel.hero.summary}
-    primaryCta={{ label: "Start a diagnostic", href: "/contact" }}
-    secondaryCta={{ label: "View services", href: "/services" }}
-  />
+<BaseLayout seo={seo}>
+  <section class="home-hero">
+    <div class="home-hero__inner u-container">
+      <div class="home-hero__copy">
+        <PageHero
+          eyebrow={viewModel.hero.eyebrow}
+          title={viewModel.hero.title}
+          summary={viewModel.hero.summary}
+          primaryCta={{ label: "Start a diagnostic", href: "/contact" }}
+          secondaryCta={{ label: "View services", href: "/services" }}
+        />
+      </div>
+      <HeroSystemMap label={viewModel.heroMap.label} nodes={viewModel.heroMap.nodes} />
+    </div>
+  </section>
+  <ProofStrip points={viewModel.proofPoints} />
   <section class="home-section">
     <div class="u-container u-stack">
       <SectionHeader
@@ -30,11 +47,87 @@ const viewModel = await Effect.runPromise(loadHomePageFromRepository(astroConten
       </div>
     </div>
   </section>
+  <section class="home-section home-section--surface">
+    <div class="u-container u-stack">
+      <SectionHeader
+        eyebrow="Sample audit"
+        title="A report shape built around evidence and sequence"
+        summary={viewModel.auditPreview.summary}
+      />
+      <div class="panel-grid">
+        {
+          viewModel.auditPreview.findings.map((finding) => (
+            <EvidencePanel
+              eyebrow={finding.severity}
+              title={finding.title}
+              evidence={finding.evidence}
+              risk={finding.risk}
+              recommendation={finding.recommendation}
+              cta={{ label: "View sample audit", href: "/sample-audit" }}
+            />
+          ))
+        }
+      </div>
+    </div>
+  </section>
+  <section class="home-section">
+    <div class="u-container u-stack">
+      <SectionHeader
+        eyebrow="Technical lab"
+        title="Notes that show the engineering stance"
+        summary="Short technical entries preview the kind of decisions, tradeoffs, and implementation details behind the service work."
+      />
+      <div class="panel-grid">
+        {
+          viewModel.labPreview.map((post) => (
+            <EvidencePanel
+              eyebrow={post.topic}
+              title={post.title}
+              summary={post.summary}
+              recommendation={post.takeaway}
+              cta={{ label: "Open lab", href: `/lab/${post.slug}` }}
+            />
+          ))
+        }
+      </div>
+    </div>
+  </section>
+  <section class="home-section home-section--cta">
+    <div class="u-container">
+      <EvidencePanel
+        title={viewModel.cta.title}
+        summary={viewModel.cta.summary}
+        cta={{ href: viewModel.cta.href, label: viewModel.cta.label }}
+      />
+    </div>
+  </section>
 </BaseLayout>
 
 <style>
+  .home-hero {
+    padding: var(--space-10) 0 var(--space-12);
+  }
+
+  .home-hero__inner {
+    display: grid;
+    gap: var(--space-8);
+    align-items: center;
+  }
+
+  .home-hero :global(.page-hero) {
+    padding: 0;
+  }
+
   .home-section {
     padding: var(--space-12) 0 var(--space-16);
+  }
+
+  .home-section--surface {
+    background: var(--color-surface-2);
+  }
+
+  .home-section--cta {
+    padding-top: 0;
   }
 
   .service-grid {
@@ -42,9 +135,22 @@ const viewModel = await Effect.runPromise(loadHomePageFromRepository(astroConten
     gap: var(--space-6);
   }
 
+  .panel-grid {
+    display: grid;
+    gap: var(--space-6);
+  }
+
   @media (min-width: 860px) {
+    .home-hero__inner {
+      grid-template-columns: minmax(0, 1.15fr) minmax(320px, 0.85fr);
+    }
+
     .service-grid {
       grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .panel-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
     }
   }
 </style>

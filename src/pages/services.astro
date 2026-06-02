@@ -1,14 +1,25 @@
 ---
 import { Effect } from "effect";
 import BaseLayout from "@layouts/BaseLayout.astro";
+import ButtonLink from "@components/primitives/ButtonLink/ButtonLink.astro";
+import EvidencePanel from "@components/organisms/EvidencePanel/EvidencePanel.astro";
 import PageHero from "@components/sections/PageHero/PageHero.astro";
+import SectionHeader from "@components/molecules/SectionHeader/SectionHeader.astro";
 import ServiceCard from "@components/organisms/ServiceCard/ServiceCard.astro";
 import { loadServicesPage } from "@programs/load-services-page";
+import { astroContentRepository } from "@services/AstroContentRepository";
+import { buildPageSeo } from "@utils/seo";
 
 const viewModel = await Effect.runPromise(loadServicesPage);
+const site = await Effect.runPromise(astroContentRepository.getSiteMeta);
+const seo = buildPageSeo(site, {
+  path: "/services",
+  title: viewModel.title,
+  description: viewModel.summary
+});
 ---
 
-<BaseLayout title="Services | Frontend Systems Portfolio" description={viewModel.summary}>
+<BaseLayout seo={seo}>
   <PageHero
     title={viewModel.title}
     summary={viewModel.summary}
@@ -19,6 +30,90 @@ const viewModel = await Effect.runPromise(loadServicesPage);
       {viewModel.services.map((service) => <ServiceCard service={service} />)}
     </div>
   </section>
+  <section class="services-section services-section--surface">
+    <div class="u-container u-stack">
+      <SectionHeader
+        eyebrow="Deliverables"
+        title="Concrete outputs by service"
+        summary="Each offer ends with artifacts your team can act on, review, and sequence."
+      />
+      <div class="detail-grid">
+        {
+          viewModel.services.map((service) => (
+            <EvidencePanel
+              title={service.title}
+              evidence={service.clientPain}
+              recommendation={service.outputs.join(", ")}
+              cta={{ label: service.cta.label, href: service.cta.href }}
+            />
+          ))
+        }
+      </div>
+    </div>
+  </section>
+  <section class="services-section">
+    <div class="u-container fit-grid">
+      <article class="fit-panel">
+        <div class="fit-panel__header">
+          <h2>Where this work is useful</h2>
+          <p>
+            Use these criteria to check whether a diagnostic or implementation sprint is a good
+            first move.
+          </p>
+        </div>
+        <div class="fit-panel__items">
+          {
+            viewModel.services.map((service) => (
+              <section class="fit-card" aria-labelledby={`${service.id}-best-fit`}>
+                <h3 id={`${service.id}-best-fit`}>{service.title}</h3>
+                <ul>
+                  {service.bestFit.map((item) => (
+                    <li>{item}</li>
+                  ))}
+                </ul>
+              </section>
+            ))
+          }
+        </div>
+      </article>
+      <article class="fit-panel">
+        <div class="fit-panel__header">
+          <h2>Boundaries that keep scope useful</h2>
+          <p>
+            These exclusions reduce mismatched requests and keep the work tied to frontend system
+            outcomes.
+          </p>
+        </div>
+        <div class="fit-panel__items">
+          <section class="fit-card" aria-labelledby="site-exclusions">
+            <h3 id="site-exclusions">Site-level exclusions</h3>
+            <ul>{viewModel.nonFitCriteria.map((item) => <li>{item}</li>)}</ul>
+          </section>
+          {
+            viewModel.services.map((service) => (
+              <section class="fit-card" aria-labelledby={`${service.id}-not-fit`}>
+                <h3 id={`${service.id}-not-fit`}>{service.title}</h3>
+                <ul>
+                  {service.notFit.map((item) => (
+                    <li>{item}</li>
+                  ))}
+                </ul>
+              </section>
+            ))
+          }
+        </div>
+      </article>
+    </div>
+  </section>
+  <section class="services-section services-section--cta">
+    <div class="u-container first-step">
+      <div>
+        <h2>{viewModel.firstStep.title}</h2>
+        <p>{viewModel.firstStep.summary}</p>
+      </div>
+      <ButtonLink href={viewModel.firstStep.href} label={viewModel.firstStep.label} />
+    </div>
+  </section>
 </BaseLayout>
 
 <style>
@@ -26,14 +121,110 @@ const viewModel = await Effect.runPromise(loadServicesPage);
     padding: 0 0 var(--space-16);
   }
 
+  .services-section--surface {
+    padding-top: var(--space-12);
+    background: var(--color-surface-2);
+  }
+
+  .services-section--cta {
+    padding-top: var(--space-4);
+  }
+
   .service-grid {
     display: grid;
     gap: var(--space-6);
   }
 
+  .detail-grid,
+  .fit-grid {
+    display: grid;
+    gap: var(--space-6);
+  }
+
+  .fit-panel,
+  .first-step {
+    padding: var(--space-6);
+    background: var(--color-surface);
+    border: var(--border-1);
+    border-radius: var(--radius-2);
+  }
+
+  .fit-panel {
+    display: grid;
+    align-content: start;
+    gap: var(--space-6);
+  }
+
+  .fit-panel__header {
+    display: grid;
+    gap: var(--space-3);
+  }
+
+  .fit-panel__header h2,
+  .fit-panel__header p,
+  .fit-card h3,
+  .first-step h2,
+  .first-step p {
+    margin: 0;
+  }
+
+  .fit-panel__header h2 {
+    font-family: var(--font-display);
+    font-size: clamp(1.75rem, 3vw, 2.4rem);
+    line-height: 1.12;
+  }
+
+  .fit-panel__header p,
+  .first-step p {
+    color: var(--color-muted);
+  }
+
+  .fit-panel__items {
+    display: grid;
+    gap: var(--space-4);
+  }
+
+  .fit-card {
+    padding-top: var(--space-4);
+    border-top: var(--border-1);
+  }
+
+  .fit-card ul {
+    display: grid;
+    gap: var(--space-2);
+    margin-block: var(--space-3) 0;
+    color: var(--color-muted);
+  }
+
+  .first-step {
+    display: grid;
+    gap: var(--space-5);
+    align-items: center;
+  }
+
+  .first-step h2 {
+    font-family: var(--font-display);
+    font-size: 2rem;
+    line-height: 1.15;
+  }
+
+  .first-step p {
+    max-width: 68ch;
+    margin-top: var(--space-3);
+  }
+
   @media (min-width: 860px) {
     .service-grid {
       grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .detail-grid,
+    .fit-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .first-step {
+      grid-template-columns: minmax(0, 1fr) auto;
     }
   }
 </style>

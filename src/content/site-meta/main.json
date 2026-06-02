@@ -1,6 +1,44 @@
 {
   "title": "Frontend Systems Portfolio",
   "description": "Angular frontend systems engineering for audits, refactors, and stabilization.",
+  "siteUrl": "https://frontend-systems.example.com",
+  "ogImage": "/og/default.png",
   "availability": "Available for scoped diagnostics and focused architecture engagements.",
-  "contactEmail": "hello@example.com"
+  "contactEmail": "hello@example.com",
+  "proofPoints": [
+    {
+      "label": "Primary focus",
+      "value": "Angular systems",
+      "detail": "Architecture, state, data flow, errors, and maintainability."
+    },
+    {
+      "label": "Engagement shape",
+      "value": "Scoped diagnostics",
+      "detail": "Short audits and focused implementation plans before larger work."
+    },
+    {
+      "label": "Delivery style",
+      "value": "Evidence first",
+      "detail": "Findings tie visible symptoms to risk, recommendation, and sequence."
+    }
+  ],
+  "nonFitCriteria": [
+    "Pure visual redesigns without frontend system risk.",
+    "Greenfield marketing sites with no product architecture constraints.",
+    "Open-ended staff augmentation without a scoped outcome."
+  ],
+  "about": {
+    "context": "Frontend systems engineer focused on Angular applications where state, data access, ownership, and errors have become hard to reason about.",
+    "workingStyle": [
+      "Start with a small diagnostic and make the current system visible before prescribing changes.",
+      "Prefer explicit boundaries, typed contracts, and practical migration steps over large rewrites.",
+      "Work in short feedback loops with engineering leads and product constraints in view."
+    ],
+    "qualityPhilosophy": [
+      "Architecture should reduce the number of places a team has to remember hidden rules.",
+      "Tests are most valuable when they pin important behavior and risky seams, not when they mirror implementation.",
+      "Refactors should leave a trail of decisions, tradeoffs, and rollback options."
+    ],
+    "communication": "Based in Asia/Bangkok and comfortable with async-first collaboration across US and European time zones."
+  }
 }

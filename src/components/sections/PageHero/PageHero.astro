@@ -15,12 +15,11 @@ type Props = {
   };
 };
 
-const { eyebrow, title, summary, primaryCta, secondaryCta } = Astro.props;
+const { title, summary, primaryCta, secondaryCta } = Astro.props;
 ---
 
 <section class="page-hero">
   <div class="page-hero__inner u-container">
-    {eyebrow && <p class="page-hero__eyebrow">{eyebrow}</p>}
     <h1>{title}</h1>
     <p class="page-hero__summary">{summary}</p>
     {
@@ -44,12 +43,6 @@ const { eyebrow, title, summary, primaryCta, secondaryCta } = Astro.props;
   .page-hero__inner {
     display: grid;
     gap: var(--space-5);
-  }
-
-  .page-hero__eyebrow {
-    margin: 0;
-    color: var(--color-accent);
-    font-weight: 700;
   }
 
   h1 {

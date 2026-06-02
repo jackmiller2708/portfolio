@@ -1,14 +1,24 @@
 ---
 import { Effect } from "effect";
 import BaseLayout from "@layouts/BaseLayout.astro";
+import ButtonLink from "@components/primitives/ButtonLink/ButtonLink.astro";
 import PageHero from "@components/sections/PageHero/PageHero.astro";
 import AuditFinding from "@components/organisms/AuditFinding/AuditFinding.astro";
 import { loadSampleAuditPage } from "@programs/load-sample-audit-page";
+import { astroContentRepository } from "@services/AstroContentRepository";
+import { buildPageSeo } from "@utils/seo";
 
 const viewModel = await Effect.runPromise(loadSampleAuditPage);
+const site = await Effect.runPromise(astroContentRepository.getSiteMeta);
+const seo = buildPageSeo(site, {
+  path: "/sample-audit",
+  title: viewModel.title,
+  description: viewModel.summary
+});
+const formatSeverity = (severity: string) => `${severity[0]?.toUpperCase()}${severity.slice(1)}`;
 ---
 
-<BaseLayout title="Sample Audit | Frontend Systems Portfolio" description={viewModel.summary}>
+<BaseLayout seo={seo}>
   <PageHero
     title={viewModel.title}
     summary={viewModel.summary}
@@ -16,7 +26,53 @@ const viewModel = await Effect.runPromise(loadSampleAuditPage);
   />
   <section class="audit-section">
     <div class="u-container u-stack">
-      {viewModel.findings.map((finding) => <AuditFinding finding={finding} />)}
+      <div class="matrix-grid" aria-label="Risk matrix summary">
+        {
+          viewModel.riskMatrix.map((row) => (
+            <article class="matrix-card">
+              <p>{row.severity}</p>
+              <strong>{row.count} findings</strong>
+              <span>{row.areas.join(", ")}</span>
+            </article>
+          ))
+        }
+      </div>
+      {
+        viewModel.severityGroups.map((group) => (
+          <section class="severity-group" aria-labelledby={`${group.severity}-findings`}>
+            <h2 id={`${group.severity}-findings`}>{formatSeverity(group.severity)} severity</h2>
+            <div class="finding-grid">
+              {group.findings.map((finding) => (
+                <AuditFinding finding={finding} />
+              ))}
+            </div>
+          </section>
+        ))
+      }
+      <section class="roadmap" aria-labelledby="audit-roadmap">
+        <h2 id="audit-roadmap">Sprint roadmap</h2>
+        <div class="roadmap-grid">
+          {
+            viewModel.roadmap.map((step) => (
+              <article class="roadmap-card">
+                <p>{step.title}</p>
+                <ul>
+                  {step.findings.map((finding) => (
+                    <li>{finding.title}</li>
+                  ))}
+                </ul>
+              </article>
+            ))
+          }
+        </div>
+      </section>
+      <section class="audit-cta" aria-labelledby="audit-cta-title">
+        <div>
+          <h2 id="audit-cta-title">{viewModel.cta.title}</h2>
+          <p>{viewModel.cta.summary}</p>
+        </div>
+        <ButtonLink href={viewModel.cta.href} label={viewModel.cta.label} />
+      </section>
     </div>
   </section>
 </BaseLayout>
@@ -24,5 +80,93 @@ const viewModel = await Effect.runPromise(loadSampleAuditPage);
 <style>
   .audit-section {
     padding: 0 0 var(--space-16);
+  }
+
+  .matrix-grid,
+  .finding-grid,
+  .roadmap-grid {
+    display: grid;
+    gap: var(--space-5);
+  }
+
+  .matrix-card,
+  .roadmap-card,
+  .audit-cta {
+    padding: var(--space-6);
+    background: var(--color-surface);
+    border: var(--border-1);
+    border-radius: var(--radius-2);
+  }
+
+  .matrix-card {
+    display: grid;
+    gap: var(--space-2);
+  }
+
+  .matrix-card p,
+  .matrix-card span,
+  .roadmap-card p,
+  .audit-cta h2,
+  .audit-cta p {
+    margin: 0;
+  }
+
+  .matrix-card p,
+  .roadmap-card p {
+    color: var(--color-accent);
+    font-weight: 700;
+    text-transform: capitalize;
+  }
+
+  .matrix-card strong {
+    font-family: var(--font-display);
+    font-size: 1.45rem;
+  }
+
+  .matrix-card span,
+  .audit-cta p {
+    color: var(--color-muted);
+  }
+
+  .severity-group,
+  .roadmap {
+    display: grid;
+    gap: var(--space-5);
+  }
+
+  .severity-group h2,
+  .roadmap h2,
+  .audit-cta h2 {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: 2rem;
+    line-height: 1.15;
+  }
+
+  .roadmap-card ul {
+    display: grid;
+    gap: var(--space-2);
+    margin-block: var(--space-4) 0;
+    color: var(--color-muted);
+  }
+
+  .audit-cta {
+    display: grid;
+    gap: var(--space-5);
+    align-items: center;
+  }
+
+  @media (min-width: 760px) {
+    .matrix-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .roadmap-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .audit-cta {
+      grid-template-columns: minmax(0, 1fr) auto;
+    }
   }
 </style>

@@ -1,0 +1,74 @@
+---
+type ProofPoint = {
+  readonly label: string;
+  readonly value: string;
+  readonly detail: string;
+};
+
+type Props = {
+  points: readonly ProofPoint[];
+};
+
+const { points } = Astro.props;
+---
+
+<section class="proof-strip" aria-label="Proof points">
+  <div class="proof-strip__inner u-container">
+    <ul>
+      {
+        points.map((point) => (
+          <li>
+            <p class="proof-strip__label">{point.label}</p>
+            <strong>{point.value}</strong>
+            <p>{point.detail}</p>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  .proof-strip {
+    padding: var(--space-8) 0;
+    background: var(--color-surface);
+    border-block: var(--border-1);
+  }
+
+  ul {
+    display: grid;
+    gap: var(--space-5);
+    padding: 0;
+    margin: 0;
+    list-style: none;
+  }
+
+  li {
+    display: grid;
+    gap: var(--space-2);
+  }
+
+  .proof-strip__label,
+  p {
+    margin: 0;
+    color: var(--color-muted);
+  }
+
+  .proof-strip__label {
+    color: var(--color-muted);
+    font-size: 0.95rem;
+    font-weight: 600;
+  }
+
+  strong {
+    color: var(--color-text);
+    font-family: var(--font-display);
+    font-size: 1.35rem;
+  }
+
+  @media (min-width: 820px) {
+    ul {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+</style>

@@ -1,1 +1,227 @@
-<slot />
+---
+import type { ContactPageViewModel } from "@programs/load-contact-page";
+
+type Props = {
+  viewModel: ContactPageViewModel;
+};
+
+const { viewModel } = Astro.props;
+const fields = [
+  {
+    id: "name",
+    label: "Name",
+    autocomplete: "name"
+  },
+  {
+    id: "email",
+    label: "Email",
+    type: "email",
+    autocomplete: "email"
+  },
+  {
+    id: "productContext",
+    label: "Product or company context"
+  },
+  {
+    id: "angularVersion",
+    label: "Angular version or frontend stack"
+  },
+  {
+    id: "teamSize",
+    label: "Team size"
+  },
+  {
+    id: "timeline",
+    label: "Timeline"
+  },
+  {
+    id: "budgetComfort",
+    label: "Budget comfort"
+  }
+] as const;
+---
+
+<div class="contact-intake">
+  <div class="contact-intake__status-grid" aria-label="Contact form states">
+    <p class={`contact-intake__status contact-intake__status--${viewModel.states.initial.kind}`}>
+      <strong>Initial</strong>
+      {viewModel.states.initial.message}
+    </p>
+    <p
+      class={`contact-intake__status contact-intake__status--${viewModel.states.submitting.kind}`}
+      aria-live="polite"
+    >
+      <strong>Submitting</strong>
+      {viewModel.states.submitting.message}
+    </p>
+    <p
+      class={`contact-intake__status contact-intake__status--${viewModel.states.success.kind}`}
+      role="status"
+    >
+      <strong>Success</strong>
+      {viewModel.states.success.message}
+    </p>
+    <div
+      class={`contact-intake__status contact-intake__status--${viewModel.states.validation.kind}`}
+      role="alert"
+    >
+      <strong>Validation</strong>
+      <p>{viewModel.states.validation.message}</p>
+      <ul>
+        {viewModel.states.validation.summary.map((item) => <li>{item}</li>)}
+      </ul>
+    </div>
+    <p
+      class={`contact-intake__status contact-intake__status--${viewModel.states.blocked.kind}`}
+      role="alert"
+    >
+      <strong>Spam/unavailable</strong>
+      {viewModel.states.blocked.message}
+    </p>
+    <p
+      class={`contact-intake__status contact-intake__status--${viewModel.states.delivery.kind}`}
+      role="alert"
+    >
+      <strong>Delivery failure</strong>
+      {viewModel.states.delivery.message}
+    </p>
+  </div>
+
+  <form class="contact-form" method="post" aria-describedby="contact-fallback">
+    <p class="contact-form__availability">{viewModel.availability}</p>
+    {
+      fields.map((field) => (
+        <label for={field.id}>
+          {field.label}
+          <input
+            id={field.id}
+            name={field.id}
+            type={"type" in field ? field.type : "text"}
+            autocomplete={"autocomplete" in field ? field.autocomplete : undefined}
+            required
+          />
+        </label>
+      ))
+    }
+    <label for="pain">
+      Main pain
+      <textarea id="pain" name="pain" rows="5" required></textarea>
+    </label>
+    <label for="engagementType">
+      Engagement type
+      <select id="engagementType" name="engagementType" required>
+        <option value="diagnosis">Diagnosis</option>
+        <option value="implementation">Implementation</option>
+        <option value="advisory">Advisory</option>
+        <option value="unsure">Unsure</option>
+      </select>
+    </label>
+    <label class="contact-form__checkbox" for="consent">
+      <input id="consent" name="consent" type="checkbox" value="true" required />
+      I consent to being contacted about this inquiry.
+    </label>
+    <button type="submit">Submit inquiry</button>
+    <p id="contact-fallback" class="contact-form__fallback">
+      Prefer email? Use <a href={`mailto:${viewModel.contactEmail}`}>{viewModel.contactEmail}</a>.
+    </p>
+  </form>
+</div>
+
+<style>
+  .contact-intake {
+    display: grid;
+    gap: var(--space-8);
+    max-width: 900px;
+  }
+
+  .contact-intake__status-grid {
+    display: grid;
+    gap: var(--space-3);
+  }
+
+  .contact-intake__status {
+    display: grid;
+    gap: var(--space-1);
+    padding: var(--space-4);
+    margin: 0;
+    color: var(--color-muted);
+    background: var(--color-surface);
+    border: var(--border-1);
+    border-radius: var(--radius-1);
+  }
+
+  .contact-intake__status strong {
+    color: var(--color-text);
+  }
+
+  .contact-intake__status--success {
+    border-color: color-mix(in srgb, var(--color-success) 50%, var(--color-border));
+  }
+
+  .contact-intake__status--validation,
+  .contact-intake__status--blocked,
+  .contact-intake__status--delivery {
+    border-color: color-mix(in srgb, var(--color-danger) 50%, var(--color-border));
+  }
+
+  .contact-intake__status p,
+  .contact-intake__status ul {
+    margin: 0;
+  }
+
+  .contact-form {
+    display: grid;
+    gap: var(--space-5);
+  }
+
+  .contact-form__availability,
+  .contact-form__fallback {
+    margin: 0;
+    color: var(--color-muted);
+  }
+
+  label {
+    display: grid;
+    gap: var(--space-2);
+    color: var(--color-text);
+    font-weight: 700;
+  }
+
+  input,
+  select,
+  textarea {
+    width: 100%;
+    padding: var(--space-3);
+    color: var(--color-text);
+    background: var(--color-surface);
+    border: var(--border-1);
+    border-radius: var(--radius-1);
+  }
+
+  .contact-form__checkbox {
+    display: flex;
+    align-items: flex-start;
+  }
+
+  .contact-form__checkbox input {
+    width: auto;
+    margin-top: 0.35em;
+  }
+
+  button {
+    min-height: 44px;
+    width: fit-content;
+    padding: var(--space-3) var(--space-5);
+    color: #ffffff;
+    background: var(--color-accent);
+    border: 1px solid var(--color-accent);
+    border-radius: var(--radius-2);
+    font-weight: 700;
+  }
+
+  @media (min-width: 760px) {
+    .contact-intake__status-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+</style>

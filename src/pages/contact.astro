@@ -2,69 +2,31 @@
 import { Effect } from "effect";
 import BaseLayout from "@layouts/BaseLayout.astro";
 import PageHero from "@components/sections/PageHero/PageHero.astro";
+import ContactIntake from "@islands/ContactIntake/ContactIntake.astro";
 import { loadContactPage } from "@programs/load-contact-page";
+import { astroContentRepository } from "@services/AstroContentRepository";
+import { buildPageSeo } from "@utils/seo";
 
 const viewModel = await Effect.runPromise(loadContactPage);
+const site = await Effect.runPromise(astroContentRepository.getSiteMeta);
+const seo = buildPageSeo(site, {
+  path: "/contact",
+  title: "Contact",
+  description: "Start a scoped frontend systems diagnostic."
+});
 ---
 
-<BaseLayout
-  title="Contact | Frontend Systems Portfolio"
-  description="Start a scoped frontend systems diagnostic."
->
+<BaseLayout seo={seo}>
   <PageHero title={viewModel.title} summary={viewModel.summary} />
   <section class="contact-section">
-    <form class="contact-form u-container" method="post">
-      <p class="contact-form__availability">{viewModel.availability}</p>
-      <label>
-        Name
-        <input name="name" autocomplete="name" required />
-      </label>
-      <label>
-        Email
-        <input name="email" type="email" autocomplete="email" required />
-      </label>
-      <label>
-        Product or company context
-        <input name="productContext" required />
-      </label>
-      <label>
-        Angular version or frontend stack
-        <input name="angularVersion" required />
-      </label>
-      <label>
-        Team size
-        <input name="teamSize" required />
-      </label>
-      <label>
-        Main pain
-        <textarea name="pain" rows="5" required></textarea>
-      </label>
-      <label>
-        Engagement type
-        <select name="engagementType" required>
-          <option value="diagnosis">Diagnosis</option>
-          <option value="implementation">Implementation</option>
-          <option value="advisory">Advisory</option>
-          <option value="unsure">Unsure</option>
-        </select>
-      </label>
-      <label>
-        Timeline
-        <input name="timeline" required />
-      </label>
-      <label>
-        Budget comfort
-        <input name="budgetComfort" required />
-      </label>
-      <label class="contact-form__checkbox">
-        <input name="consent" type="checkbox" value="true" required />
-        I consent to being contacted about this inquiry.
-      </label>
-      <button type="submit">Submit inquiry</button>
-      <p class="contact-form__fallback">
-        Prefer email? Use <a href={`mailto:${viewModel.contactEmail}`}>{viewModel.contactEmail}</a>.
-      </p>
-    </form>
+    <div class="u-container contact-layout">
+      <ContactIntake viewModel={viewModel} />
+      <aside class="fit-note" aria-labelledby="contact-boundaries">
+        <h2 id="contact-boundaries">Before sending</h2>
+        <p>These requests are usually not a fit for this diagnostic path.</p>
+        <ul>{viewModel.nonFitCriteria.map((item) => <li>{item}</li>)}</ul>
+      </aside>
+    </div>
   </section>
 </BaseLayout>
 
@@ -73,54 +35,37 @@ const viewModel = await Effect.runPromise(loadContactPage);
     padding: 0 0 var(--space-16);
   }
 
-  .contact-form {
+  .contact-layout {
     display: grid;
-    gap: var(--space-5);
-    max-width: 760px;
+    gap: var(--space-8);
   }
 
-  .contact-form__availability,
-  .contact-form__fallback {
+  .fit-note {
+    padding: var(--space-6);
+    background: var(--color-surface);
+    border: var(--border-1);
+    border-radius: var(--radius-2);
+  }
+
+  .fit-note h2,
+  .fit-note p {
     margin: 0;
+  }
+
+  .fit-note h2 {
+    font-family: var(--font-display);
+    font-size: 1.6rem;
+  }
+
+  .fit-note p,
+  .fit-note ul {
     color: var(--color-muted);
   }
 
-  label {
-    display: grid;
-    gap: var(--space-2);
-    color: var(--color-text);
-    font-weight: 700;
-  }
-
-  input,
-  select,
-  textarea {
-    width: 100%;
-    padding: var(--space-3);
-    color: var(--color-text);
-    background: var(--color-surface);
-    border: var(--border-1);
-    border-radius: var(--radius-1);
-  }
-
-  .contact-form__checkbox {
-    display: flex;
-    align-items: flex-start;
-  }
-
-  .contact-form__checkbox input {
-    width: auto;
-    margin-top: 0.35em;
-  }
-
-  button {
-    min-height: 44px;
-    width: fit-content;
-    padding: var(--space-3) var(--space-5);
-    color: #ffffff;
-    background: var(--color-accent);
-    border: 1px solid var(--color-accent);
-    border-radius: var(--radius-2);
-    font-weight: 700;
+  @media (min-width: 980px) {
+    .contact-layout {
+      grid-template-columns: minmax(0, 1fr) 320px;
+      align-items: start;
+    }
   }
 </style>
