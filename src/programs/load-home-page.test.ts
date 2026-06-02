@@ -6,8 +6,8 @@ import { loadHomePageFromRepository } from "./load-home-page";
 const repository: ContentRepository = {
   listServices: Effect.succeed([
     {
-      id: "audit",
-      title: "Audit",
+      id: "angular-system-audit",
+      title: "Angular System Audit",
       summary: "Find risks.",
       clientPain: "Unknown risk.",
       outputs: ["roadmap"],
@@ -19,7 +19,17 @@ const repository: ContentRepository = {
       }
     }
   ]),
-  listAuditFindings: Effect.succeed([]),
+  listAuditFindings: Effect.succeed([
+    {
+      id: "implicit-state",
+      title: "Implicit state ownership",
+      severity: "high",
+      area: "state",
+      evidence: "State is shared across unrelated components.",
+      risk: "Changes can create hidden regressions.",
+      recommendation: "Name the owner before refactoring."
+    }
+  ]),
   listLabPosts: Effect.succeed([]),
   listCaseStudies: Effect.succeed([]),
   getCaseStudyBySlug: () =>
@@ -84,5 +94,16 @@ describe("loadHomePage", () => {
     expect(viewModel.services).toHaveLength(1);
     expect(viewModel.proofPoints).toHaveLength(1);
     expect(viewModel.heroMap.states.explicit).toBe("Explicit ownership");
+  });
+
+  it("returns diagnostic options connected to services, audit proof, and map state", async () => {
+    const viewModel = await Effect.runPromise(loadHomePageFromRepository(repository));
+    const diagnostic = viewModel.diagnostics[0];
+
+    expect(viewModel.diagnostics).toHaveLength(4);
+    expect(diagnostic?.recommendedService.title).toBe("Angular System Audit");
+    expect(diagnostic?.auditFinding.title).toBe("Implicit state ownership");
+    expect(diagnostic?.systemMapState).toBe("messy");
+    expect(diagnostic?.cta.href).toBe("/contact?diagnostic=unclear-state");
   });
 });

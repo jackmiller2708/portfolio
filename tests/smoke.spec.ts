@@ -8,6 +8,26 @@ test.describe("Smoke Tests", () => {
     await expect(heroHeading).toBeVisible();
   });
 
+  test("Home diagnostic selector updates proof path and CTA", async ({ page }) => {
+    await page.goto("/");
+
+    const diagnostic = page.locator("[data-diagnostic-selector]");
+    await expect(diagnostic).toBeVisible();
+
+    await diagnostic.getByRole("button", { name: /Cache and data behavior/ }).click();
+    await expect(diagnostic.locator("[data-diagnostic-service]")).toContainText(
+      "Frontend Stabilization"
+    );
+    await expect(diagnostic.locator("[data-diagnostic-proof]")).toContainText(
+      "Cache semantics are undocumented"
+    );
+    await expect(diagnostic.locator("[data-diagnostic-map-state]")).toContainText("explicit");
+    await expect(diagnostic.locator("[data-diagnostic-cta]")).toHaveAttribute(
+      "href",
+      "/contact?diagnostic=cache-data"
+    );
+  });
+
   test("Services page should load and display services", async ({ page }) => {
     await page.goto("/services");
     await expect(page).toHaveTitle(/Services \| Frontend Systems Portfolio/);
@@ -44,14 +64,14 @@ test.describe("Smoke Tests", () => {
 
   test("Case study detail page should load", async ({ page }) => {
     await page.goto("/case-studies/checkout-stabilization");
-    await expect(page).toHaveTitle(/Checkout Stabilization/);
+    await expect(page).toHaveTitle(/Checkout flow stabilization/);
     await expect(page.locator("main h1")).toBeVisible();
     await expect(page.getByRole("heading", { name: "Problem" })).toBeVisible();
   });
 
   test("Lab detail page should load", async ({ page }) => {
     await page.goto("/lab/rxjs-cleanup");
-    await expect(page).toHaveTitle(/RxJS Cleanup/);
+    await expect(page).toHaveTitle(/RxJS cleanup without hiding ownership/);
     await expect(page.locator("main h1")).toBeVisible();
     await expect(page.getByRole("heading", { name: "Related services" })).toBeVisible();
   });

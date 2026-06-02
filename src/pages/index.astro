@@ -17,6 +17,8 @@ const seo = buildPageSeo(site, {
   path: "/",
   description: viewModel.hero.summary
 });
+
+const initialDiagnostic = viewModel.diagnostics[0];
 ---
 
 <BaseLayout seo={seo}>
@@ -27,30 +29,134 @@ const seo = buildPageSeo(site, {
           eyebrow={viewModel.hero.eyebrow}
           title={viewModel.hero.title}
           summary={viewModel.hero.summary}
-          primaryCta={{ label: "Start a diagnostic", href: "/contact" }}
+          primaryCta={{ label: "Start a diagnostic", href: "#diagnostic" }}
           secondaryCta={{ label: "View services", href: "/services" }}
         />
       </div>
-      <HeroSystemMap map={viewModel.heroMap} />
     </div>
   </section>
   <ProofStrip points={viewModel.proofPoints} />
-  <section class="home-section">
+
+  <nav class="inspect-strip u-container" aria-label="Proof artifacts">
+    {viewModel.inspectStrip.map((item) => <a href={item.href}>{item.label}</a>)}
+  </nav>
+
+  <section class="home-section" id="diagnostic">
     <div class="u-container u-stack">
       <SectionHeader
-        eyebrow="Services"
-        title="Scoped ways to make risk visible"
-        summary="Each offer is designed around a concrete engineering outcome, not a vague list of technologies."
+        title="Start with the symptom"
+        summary="Pick the frontend-system pain that is closest to the current risk. The recommendation updates to a service, an audit proof point, and the map state to inspect next."
       />
-      <div class="service-grid">
-        {viewModel.services.map((service) => <ServiceCard service={service} />)}
+      <div class="diagnostic" data-diagnostic-selector>
+        <div class="diagnostic__options" aria-label="Frontend system pains">
+          {
+            viewModel.diagnostics.map((option, index) => (
+              <button
+                class:list={["diagnostic__option", index === 0 && "is-active"]}
+                type="button"
+                aria-pressed={index === 0 ? "true" : "false"}
+                data-diagnostic-option
+                data-id={option.id}
+                data-label={option.label}
+                data-pain={option.pain}
+                data-service-title={option.recommendedService.title}
+                data-service-href={option.recommendedService.href}
+                data-audit-title={option.auditFinding.title}
+                data-audit-href={option.auditFinding.href}
+                data-system-state={option.systemMapState}
+                data-proof-href={option.proofHref}
+                data-cta-label={option.cta.label}
+                data-cta-href={option.cta.href}
+              >
+                <span>{option.label}</span>
+                <small>{option.pain}</small>
+              </button>
+            ))
+          }
+        </div>
+        {
+          initialDiagnostic && (
+            <article class="diagnostic__result" aria-live="polite" data-diagnostic-result>
+              <p class="diagnostic__label">Recommended path</p>
+              <h3 data-diagnostic-title>{initialDiagnostic.label}</h3>
+              <p data-diagnostic-pain>{initialDiagnostic.pain}</p>
+              <dl>
+                <div>
+                  <dt>Service</dt>
+                  <dd>
+                    <a href={initialDiagnostic.recommendedService.href} data-diagnostic-service>
+                      {initialDiagnostic.recommendedService.title}
+                    </a>
+                  </dd>
+                </div>
+                <div>
+                  <dt>Proof</dt>
+                  <dd>
+                    <a href={initialDiagnostic.auditFinding.href} data-diagnostic-proof>
+                      {initialDiagnostic.auditFinding.title}
+                    </a>
+                  </dd>
+                </div>
+                <div>
+                  <dt>Map state</dt>
+                  <dd data-diagnostic-map-state>{initialDiagnostic.systemMapState}</dd>
+                </div>
+              </dl>
+              <a class="diagnostic__cta" href={initialDiagnostic.cta.href} data-diagnostic-cta>
+                {initialDiagnostic.cta.label}
+              </a>
+            </article>
+          )
+        }
       </div>
     </div>
   </section>
+
+  <section class="home-section home-section--surface" id="system-map">
+    <div class="u-container u-stack">
+      <SectionHeader
+        title="Inspect the architecture proof"
+        summary="The map shows the before/after boundary work behind the diagnostic recommendation."
+      />
+      <HeroSystemMap map={viewModel.heroMap} />
+    </div>
+  </section>
+
+  <section class="home-section" id="case-proof">
+    <div class="u-container u-stack">
+      <SectionHeader
+        title="Case proof before the service list"
+        summary="Each case study summarizes the problem, the architectural decision, and the result without exposing private client data."
+      />
+      <div class="proof-card-list">
+        {
+          viewModel.proofCards.map((card) => (
+            <a class="proof-card" href={card.href}>
+              <span>{card.title}</span>
+              <dl>
+                <div>
+                  <dt>Problem</dt>
+                  <dd>{card.problem}</dd>
+                </div>
+                <div>
+                  <dt>Decision</dt>
+                  <dd>{card.decision}</dd>
+                </div>
+                <div>
+                  <dt>Result</dt>
+                  <dd>{card.result}</dd>
+                </div>
+              </dl>
+            </a>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
   <section class="home-section home-section--surface">
     <div class="u-container u-stack">
       <SectionHeader
-        eyebrow="Sample audit"
         title="A report shape built around evidence and sequence"
         summary={viewModel.auditPreview.summary}
       />
@@ -73,7 +179,6 @@ const seo = buildPageSeo(site, {
   <section class="home-section">
     <div class="u-container u-stack">
       <SectionHeader
-        eyebrow="Technical lab"
         title="Notes that show the engineering stance"
         summary="Short technical entries preview the kind of decisions, tradeoffs, and implementation details behind the service work."
       />
@@ -92,6 +197,17 @@ const seo = buildPageSeo(site, {
       </div>
     </div>
   </section>
+  <section class="home-section home-section--surface">
+    <div class="u-container u-stack">
+      <SectionHeader
+        title="Scoped ways to make risk visible"
+        summary="Each offer is designed around a concrete engineering outcome, not a vague list of technologies."
+      />
+      <div class="service-grid">
+        {viewModel.services.map((service) => <ServiceCard service={service} />)}
+      </div>
+    </div>
+  </section>
   <section class="home-section home-section--cta">
     <div class="u-container">
       <EvidencePanel
@@ -105,13 +221,11 @@ const seo = buildPageSeo(site, {
 
 <style>
   .home-hero {
-    padding: var(--space-10) 0 var(--space-12);
+    padding: var(--space-10) 0 var(--space-8);
   }
 
   .home-hero__inner {
-    display: grid;
-    gap: var(--space-8);
-    align-items: center;
+    max-width: 980px;
   }
 
   .home-hero :global(.page-hero) {
@@ -130,6 +244,146 @@ const seo = buildPageSeo(site, {
     padding-top: 0;
   }
 
+  .inspect-strip {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    padding-block: var(--space-4);
+    border-top: var(--border-1);
+    border-bottom: var(--border-1);
+  }
+
+  .inspect-strip a {
+    color: var(--color-muted);
+    font-size: 0.95rem;
+    font-weight: 700;
+    text-decoration: none;
+    transition: color var(--duration-1) var(--ease-standard);
+  }
+
+  .inspect-strip a:hover {
+    color: var(--color-text);
+  }
+
+  .diagnostic {
+    display: grid;
+    gap: var(--space-6);
+  }
+
+  .diagnostic__options {
+    display: grid;
+    gap: var(--space-3);
+  }
+
+  .diagnostic__option {
+    display: grid;
+    gap: var(--space-2);
+    min-height: 112px;
+    padding: var(--space-4);
+    color: var(--color-text);
+    background: var(--color-surface);
+    border: var(--border-1);
+    border-radius: var(--radius-2);
+    cursor: pointer;
+    text-align: left;
+    transition:
+      background-color var(--duration-1) var(--ease-standard),
+      border-color var(--duration-1) var(--ease-standard);
+  }
+
+  .diagnostic__option:hover,
+  .diagnostic__option.is-active {
+    border-color: var(--color-accent);
+  }
+
+  .diagnostic__option span {
+    font-weight: 700;
+  }
+
+  .diagnostic__option small {
+    color: var(--color-muted);
+    font-size: 0.95rem;
+  }
+
+  .diagnostic__result,
+  .proof-card {
+    display: grid;
+    gap: var(--space-4);
+    padding: var(--space-6);
+    background: var(--color-surface);
+    border: var(--border-1);
+    border-radius: var(--radius-2);
+  }
+
+  .diagnostic__label,
+  .diagnostic__result p,
+  .diagnostic__result dl,
+  .diagnostic__result dd,
+  .proof-card dl,
+  .proof-card dd {
+    margin: 0;
+  }
+
+  .diagnostic__label {
+    color: var(--color-text);
+    font-weight: 700;
+  }
+
+  .diagnostic__result h3 {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: 1.45rem;
+    line-height: 1.15;
+  }
+
+  .diagnostic__result p,
+  .diagnostic__result dd,
+  .proof-card dd {
+    color: var(--color-muted);
+  }
+
+  .diagnostic__result dl,
+  .proof-card dl {
+    display: grid;
+    gap: var(--space-3);
+  }
+
+  .diagnostic__result dt,
+  .proof-card dt {
+    color: var(--color-text);
+    font-weight: 700;
+  }
+
+  .diagnostic__result a,
+  .proof-card {
+    color: var(--color-text);
+  }
+
+  .diagnostic__cta {
+    width: fit-content;
+    min-height: 44px;
+    padding: var(--space-3) var(--space-5);
+    background: var(--color-accent);
+    border: 1px solid var(--color-accent);
+    border-radius: var(--radius-2);
+    color: #ffffff;
+    cursor: pointer;
+    font-weight: 700;
+    text-decoration: none;
+    transition:
+      background-color var(--duration-1) var(--ease-standard),
+      border-color var(--duration-1) var(--ease-standard);
+  }
+
+  .diagnostic__result .diagnostic__cta {
+    color: #ffffff;
+  }
+
+  .diagnostic__cta:hover {
+    background: var(--color-text);
+    border-color: var(--color-text);
+  }
+
   .service-grid {
     display: grid;
     gap: var(--space-6);
@@ -140,9 +394,35 @@ const seo = buildPageSeo(site, {
     gap: var(--space-6);
   }
 
+  .proof-card-list {
+    display: grid;
+    gap: var(--space-4);
+  }
+
+  .proof-card {
+    text-decoration: none;
+    transition: border-color var(--duration-1) var(--ease-standard);
+  }
+
+  .proof-card:hover {
+    border-color: var(--color-accent);
+  }
+
+  .proof-card span {
+    font-family: var(--font-display);
+    font-size: 1.2rem;
+    font-weight: 700;
+    line-height: 1.2;
+  }
+
   @media (min-width: 860px) {
-    .home-hero__inner {
-      grid-template-columns: minmax(0, 1.15fr) minmax(320px, 0.85fr);
+    .diagnostic {
+      grid-template-columns: minmax(0, 1.1fr) minmax(320px, 0.9fr);
+      align-items: start;
+    }
+
+    .diagnostic__options {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
     .service-grid {
@@ -154,3 +434,61 @@ const seo = buildPageSeo(site, {
     }
   }
 </style>
+
+<script>
+  const selectors = document.querySelectorAll<HTMLElement>("[data-diagnostic-selector]");
+
+  for (const selector of selectors) {
+    const options = selector.querySelectorAll<HTMLButtonElement>("[data-diagnostic-option]");
+    const result = selector.querySelector<HTMLElement>("[data-diagnostic-result]");
+    const title = selector.querySelector<HTMLElement>("[data-diagnostic-title]");
+    const pain = selector.querySelector<HTMLElement>("[data-diagnostic-pain]");
+    const service = selector.querySelector<HTMLAnchorElement>("[data-diagnostic-service]");
+    const proof = selector.querySelector<HTMLAnchorElement>("[data-diagnostic-proof]");
+    const mapState = selector.querySelector<HTMLElement>("[data-diagnostic-map-state]");
+    const cta = selector.querySelector<HTMLAnchorElement>("[data-diagnostic-cta]");
+
+    const activate = (option: HTMLButtonElement) => {
+      for (const item of options) {
+        const isActive = item === option;
+        item.classList.toggle("is-active", isActive);
+        item.setAttribute("aria-pressed", String(isActive));
+      }
+
+      if (!result || !title || !pain || !service || !proof || !mapState || !cta) {
+        return;
+      }
+
+      title.textContent = option.dataset.label ?? "";
+      pain.textContent = option.dataset.pain ?? "";
+      service.textContent = option.dataset.serviceTitle ?? "";
+      service.href = option.dataset.serviceHref ?? "/services";
+      proof.textContent = option.dataset.auditTitle ?? "";
+      proof.href = option.dataset.auditHref ?? "/sample-audit";
+      mapState.textContent = option.dataset.systemState ?? "";
+      cta.textContent = option.dataset.ctaLabel ?? "Start diagnostic";
+      cta.href = option.dataset.ctaHref ?? "/contact";
+
+      const map = document.querySelector<HTMLElement>("[data-system-map]");
+      const stateButton = map?.querySelector<HTMLButtonElement>(
+        `[data-map-state="${option.dataset.systemState ?? "messy"}"]`
+      );
+      stateButton?.click();
+    };
+
+    for (const option of options) {
+      option.addEventListener("click", () => activate(option));
+      option.addEventListener("keydown", (event) => {
+        if (event.key !== "ArrowRight" && event.key !== "ArrowLeft") {
+          return;
+        }
+
+        event.preventDefault();
+        const current = [...options].indexOf(option);
+        const offset = event.key === "ArrowRight" ? 1 : -1;
+        const next = options[(current + offset + options.length) % options.length];
+        next?.focus();
+      });
+    }
+  }
+</script>

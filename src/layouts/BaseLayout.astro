@@ -11,6 +11,7 @@ type Props = {
 const { title, description, seo } = Astro.props;
 const pageTitle = seo?.title ?? title ?? "Frontend Systems Portfolio";
 const pageDescription = seo?.description ?? description ?? "Angular frontend systems engineering.";
+const currentPath = Astro.url.pathname.replace(/\/$/, "") || "/";
 
 const navItems = [
   { label: "Services", href: "/services" },
@@ -34,6 +35,7 @@ const navItems = [
     {seo && <meta property="og:image" content={seo.ogImage} />}
     {seo && <meta property="og:url" content={seo.ogUrl} />}
     {seo && <meta property="og:type" content="website" />}
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <title>{pageTitle}</title>
   </head>
   <body>
@@ -42,7 +44,23 @@ const navItems = [
       <div class="site-header__inner u-container">
         <a class="site-header__brand" href="/">Frontend Systems</a>
         <nav class="site-header__nav" aria-label="Primary navigation">
-          {navItems.map((item) => <a href={item.href}>{item.label}</a>)}
+          {
+            navItems.map((item) => {
+              const isActive =
+                currentPath === item.href ||
+                (item.href !== "/" && currentPath.startsWith(`${item.href}/`));
+
+              return (
+                <a
+                  class:list={[isActive && "is-active"]}
+                  href={item.href}
+                  aria-current={isActive ? "page" : undefined}
+                >
+                  {item.label}
+                </a>
+              );
+            })
+          }
         </nav>
       </div>
     </header>
@@ -77,6 +95,13 @@ const navItems = [
     text-decoration: none;
   }
 
+  .site-header__brand,
+  .site-header__nav a {
+    transition:
+      color var(--duration-1) var(--ease-standard),
+      border-color var(--duration-1) var(--ease-standard);
+  }
+
   .site-header__nav {
     display: flex;
     flex-wrap: wrap;
@@ -85,13 +110,20 @@ const navItems = [
   }
 
   .site-header__nav a {
+    padding-block: var(--space-2);
     color: var(--color-muted);
+    border-bottom: 2px solid transparent;
     font-size: 0.94rem;
     text-decoration: none;
   }
 
-  .site-header__nav a:hover {
+  .site-header__nav a:hover,
+  .site-header__nav a.is-active {
     color: var(--color-text);
+  }
+
+  .site-header__nav a.is-active {
+    border-color: var(--color-accent);
   }
 
   @media (max-width: 760px) {

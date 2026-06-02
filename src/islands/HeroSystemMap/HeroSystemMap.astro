@@ -97,7 +97,7 @@ const decisionByNode = new Map(map.decisionMarkers.map((marker) => [marker.nodeI
     </div>
   </div>
   <div class="system-map__details" aria-live="polite" data-map-details>
-    <h3>Map details</h3>
+    <h2>Map details</h2>
     <p>Select a node to read its risk or decision marker.</p>
   </div>
   <details class="system-map__text">
@@ -143,7 +143,7 @@ const decisionByNode = new Map(map.decisionMarkers.map((marker) => [marker.nodeI
   }
 
   figcaption strong,
-  .system-map__details h3 {
+  .system-map__details h2 {
     font-family: var(--font-display);
     line-height: 1.2;
   }
@@ -169,6 +169,14 @@ const decisionByNode = new Map(map.decisionMarkers.map((marker) => [marker.nodeI
     border: var(--border-1);
     border-radius: var(--radius-1);
     cursor: pointer;
+    transition:
+      background-color var(--duration-1) var(--ease-standard),
+      border-color var(--duration-1) var(--ease-standard),
+      color var(--duration-1) var(--ease-standard);
+  }
+
+  .system-map__state:hover {
+    border-color: var(--color-accent);
   }
 
   .system-map__state.is-active {
@@ -289,11 +297,15 @@ const decisionByNode = new Map(map.decisionMarkers.map((marker) => [marker.nodeI
 
   .system-map__node.has-risk::after {
     color: var(--color-danger);
+    background: color-mix(in srgb, var(--color-danger) 10%, var(--color-surface));
+    border-color: color-mix(in srgb, var(--color-danger) 55%, var(--color-border));
     content: "Risk";
   }
 
   .system-map__node.has-decision::before {
     color: var(--color-success);
+    background: color-mix(in srgb, var(--color-success) 10%, var(--color-surface));
+    border-color: color-mix(in srgb, var(--color-success) 55%, var(--color-border));
     content: "Decision";
   }
 
@@ -306,7 +318,7 @@ const decisionByNode = new Map(map.decisionMarkers.map((marker) => [marker.nodeI
     border-radius: var(--radius-1);
   }
 
-  .system-map__details h3 {
+  .system-map__details h2 {
     margin: 0;
     font-size: 1.05rem;
   }
@@ -407,7 +419,7 @@ const decisionByNode = new Map(map.decisionMarkers.map((marker) => [marker.nodeI
         .filter(Boolean)
         .join(" ");
 
-      details.innerHTML = `<h3>${node.dataset.nodeLabel}</h3><p>${node.dataset.nodeDescription} ${markers}</p>`;
+      details.innerHTML = `<h2>${node.dataset.nodeLabel}</h2><p>${node.dataset.nodeDescription} ${markers}</p>`;
     };
 
     for (const button of stateButtons) {

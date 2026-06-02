@@ -19,6 +19,7 @@ Latest commits:
 - `1d444b8 docs: update readme`
 - `189f88e feat: add v1.5 proof content`
 - `2905c28 feat: add signature system map`
+- `67b2df6 Complete home page diagnostic view model`
 
 ## Phase 0: Planning Foundation
 
@@ -130,33 +131,33 @@ Latest commits:
 
 Source: `ui-ux-pro-max` accessibility, performance, and professional UI checks.
 
-- [ ] Add favicon and confirm no Lighthouse console errors on Home.
-- [ ] Fix Home heading order around the system-map detail heading.
-- [ ] Improve dark-mode accent contrast for labels and severity markers.
-- [ ] Add active navigation state without adding visual clutter.
-- [ ] Confirm all interactive controls have pointer affordance, visible focus, and stable hover states.
-- [ ] Re-run `npm run quality`, `npm run verify:ui`, and production-preview `npm run verify:perf`.
+- [x] Add favicon and confirm no Lighthouse console errors on Home.
+- [x] Fix Home heading order around the system-map detail heading.
+- [x] Improve dark-mode accent contrast for labels and severity markers.
+- [x] Add active navigation state without adding visual clutter.
+- [x] Confirm all interactive controls have pointer affordance, visible focus, and stable hover states.
+- [x] Re-run `npm run quality`, `npm run verify:ui`, and production-preview `npm run verify:perf`.
 
 ## Phase 9: Interactive Diagnostic Experience
 
 Goal: Let visitors experience the consulting value before contacting.
 
-- [ ] Add a compact Home diagnostic selector for common frontend-system pains: unclear state, unreliable cache/data behavior, weak error recovery, and refactor planning.
-- [ ] Connect each diagnostic option to a recommended service, relevant sample audit finding, system-map state, and route-specific CTA.
-- [ ] Keep the interaction minimal, keyboard-accessible, and reduced-motion safe.
-- [ ] Add a typed diagnostic content model or view model so options are not hard-coded in the template.
-- [ ] Add unit coverage for diagnostic selection data.
-- [ ] Add Playwright coverage for selector states and CTA updates.
+- [x] Add a compact Home diagnostic selector for common frontend-system pains: unclear state, unreliable cache/data behavior, weak error recovery, and refactor planning.
+- [x] Connect each diagnostic option to a recommended service, relevant sample audit finding, system-map state, and route-specific CTA.
+- [x] Keep the interaction minimal, keyboard-accessible, and reduced-motion safe.
+- [x] Add a typed diagnostic content model or view model so options are not hard-coded in the template.
+- [x] Add unit coverage for diagnostic selection data.
+- [x] Add Playwright coverage for selector states and CTA updates.
 
 ## Phase 10: Proof-First Home Flow
 
 Source: `ui-ux-pro-max` portfolio-grid and before-after transformation patterns, adapted for technical proof rather than visual masonry.
 
-- [ ] Reorder the Home proof path around system map, case studies, sample audit, and lab notes.
-- [ ] Add a compact "what you can inspect" strip near the hero.
-- [ ] Add proof cards that summarize problem, decision, and result for each case study.
-- [ ] Make the primary path lead from diagnostic selector to proof artifact to contact.
-- [ ] Reduce same-weight card grids where progressive disclosure would scan better.
+- [x] Reorder the Home proof path around system map, case studies, sample audit, and lab notes.
+- [x] Add a compact "what you can inspect" strip near the hero.
+- [x] Add proof cards that summarize problem, decision, and result for each case study.
+- [x] Make the primary path lead from diagnostic selector to proof artifact to contact.
+- [x] Reduce same-weight card grids where progressive disclosure would scan better.
 
 ## Phase 11: Guided Sample Audit Walkthrough
 
@@ -205,6 +206,6 @@ Source: `ui-ux-pro-max` Astro performance guidance.
 
 ## Immediate Next Milestone
 
-Begin **Phase 8: UX QA Polish**, then move into **Phase 9: Interactive Diagnostic Experience**.
+Begin **Phase 11: Guided Sample Audit Walkthrough**.
 
-Next implementation plan to draft: `docs/implementation/v4-ux-consulting-proof-implementation-plan.md`.
+Next implementation plan to draft: `docs/implementation/v5-guided-sample-audit-implementation-plan.md`.
