@@ -80,14 +80,14 @@ Latest commits:
 
 ## Phase 4: V1 Quality Gate
 
-- [ ] Add Playwright smoke tests for Home, Services, Sample Audit, Contact, and 404.
-- [ ] Add axe accessibility checks for core routes.
-- [ ] Add Lighthouse script or CI-friendly performance checks.
-- [ ] Add keyboard navigation checklist.
-- [ ] Add reduced-motion verification checklist.
-- [ ] Add responsive viewport checks for 360px, tablet, laptop, and desktop.
-- [ ] Add CI workflow that runs `npm run quality`.
-- [ ] Review npm audit findings and decide whether to remediate, accept, or pin.
+- [x] Add Playwright smoke tests for Home, Services, Sample Audit, Contact, and 404.
+- [x] Add axe accessibility checks for core routes.
+- [x] Add Lighthouse script or CI-friendly performance checks.
+- [x] Add keyboard navigation checklist.
+- [x] Add reduced-motion verification checklist.
+- [x] Add responsive viewport checks for 360px, tablet, laptop, and desktop.
+- [x] Add CI workflow that runs `npm run quality`.
+- [x] Review npm audit findings and decide whether to remediate, accept, or pin.
 
 ## Phase 5: V1.5 Proof
 
@@ -124,6 +124,6 @@ Latest commits:
 
 ## Immediate Next Milestone
 
-Finish **Phase 4: V1 Quality Gate**.
+Finish **Phase 5: V1.5 Proof**.
 
-Implementation plan: `docs/implementation/v1-quality-gate-implementation-plan.md`
+Implementation plan: `docs/implementation/v1-5-proof-implementation-plan.md`

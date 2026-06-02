@@ -1,63 +1,29 @@
-# My Frontend Systems Portfolio
+![reversal](https://capsule-render.vercel.app/api?type=waving&height=300&text=Jack%20Miller&textBg=false&fontAlign=50&animation=fadeIn&section=header&desc=The%20Web%20Developer&descAlignY=55&fontAlignY=40&stroke=fff&strokeWidth=1&theme=onedark)
 
-Hi, I'm a Frontend Systems Engineer, and this repository contains the source code for my personal portfolio. 
 
-I built this site to serve as more than just a digital resume—it's a direct reflection of how I approach engineering. My core professional focus is to **make complex frontend systems explicit, safer, and easier to evolve.** This portfolio is designed from the ground up to communicate exactly that.
+> **"Make complex frontend systems explicit, safer, and easier to evolve."**
 
-Instead of relying on flashy 3D spectacle or experimental UI patterns that distract from the content, I aimed for a "calm technical premium" aesthetic. The site uses architectural visual metaphors to highlight what I actually do: managing risk, optimizing data flow, and clarifying ownership boundaries in large-scale applications (specifically Angular).
+Hi, I'm a Frontend Systems Engineer. While most portfolios are built to showcase flashy 3D spectacles or experimental UI trends, I built this space to reflect how I actually approach software engineering in production: with intent, predictability, and a deep respect for constraints.
 
-## Why I Built It This Way
+This repository holds the source code for my personal portfolio a living example of a "calm technical premium" system designed from the ground up to manage chaos, optimize data flow, and clarify ownership boundaries.
 
-When designing this portfolio, I wanted the architecture and the user experience of the site itself to mirror the quality of the work I deliver to clients:
+---
 
-- **Architectural Storytelling:** The interactive system map isn't just a gimmick. It visually translates the messy reality of large frontend codebases into bounded, explicit architecture.
-- **Proof over Claims:** You won't just find a list of technologies here. My case studies and lab notes dive deep into real-world constraints, engineering tradeoffs, architectural decisions, and the concrete before/after improvements I've driven.
-- **Fast and Accessible Craft:** Craft matters. The site adheres to strict non-functional requirements, ensuring Lighthouse scores stay ≥ 90, maintaining WCAG 2.2 AA contrast, supporting robust keyboard navigation, and respecting reduced-motion preferences out of the box.
+## The Philosophy Behind the Build
 
-## The Tech Stack
+I treat my portfolio exactly like I treat a client's production codebase. I didn't want to just _tell_ you I care about architecture; I wanted to prove it through the constraints of this site:
 
-To keep the site fast and the logic robust, this project is built with:
+- **Architectural Storytelling over Flash:** The interactive system map on the site isn't a gimmick. It visually translates the often-messy reality of large frontend codebases into bounded, explicit architecture. It s a direct reflection of my daily work wrangling large-scale Angular applications.
+- **Tradeoffs over Tech-Stacks:** You won't find a mindless bulleted list of buzzwords here. My case studies and lab notes dive deep into real-world constraints, engineering tradeoffs, and the concrete before/after metrics I've driven.
+- **The Craft of Non-Functionals:** Fast, accessible UI isn't a "nice-to-have" feature to sprinkle on at the end it's a baseline requirement.
 
-- **Framework**: [Astro](https://astro.build/) for static site generation, blazing fast initial loads, and selective interactive islands.
-- **Typing**: TypeScript (because explicit contracts prevent implicit bugs).
-- **Logic & Flow**: [Effect](https://effect.website/) for robust workflow handling, error management, and dependency injection.
-- **Styling**: Token-based vanilla CSS defined in `src/styles`.
-- **Quality Gate**: Vitest, Playwright (for E2E & Axe accessibility checks), Lighthouse, ESLint, and Prettier.
+The site enforces strict quality gates out of the box: keeping Lighthouse scores ≥ 90, maintaining WCAG 2.2 AA contrast, and natively respecting reduced-motion preferences.
 
-## Running It Locally
+## The Stack (And Why It's Here)
 
-If you're exploring the code and want to spin the site up yourself:
+I chose these tools because they solve specific engineering problems, not because they are trendy:
 
-1. **Install dependencies**:
-   ```bash
-   npm install
-   ```
-
-2. **Start the development server**:
-   ```bash
-   npm run dev
-   ```
-
-3. **Check project quality (Lint, Typecheck, Build)**:
-   ```bash
-   npm run quality
-   ```
-
-4. **Run E2E Smoke & Accessibility (Axe) Tests**:
-   ```bash
-   npm run test:e2e
-   ```
-
-5. **Verify UI Constraints & Performance**:
-   ```bash
-   npm run verify:ui
-   npm run verify:perf
-   ```
-
-## Documentation
-
-For a deeper dive into the planning, roadmap, and architectural decisions behind this portfolio, check out the [docs/](docs) directory. Specifically:
-
-- **[Design & Tech Specs](docs/portfolio_requirements_technical_spec_award_update.md)**: The core thesis, non-functional requirements, and design direction that guided this build.
-- **[Roadmap](docs/roadmap.md)**: Task tracking and phase planning (from Foundation to Award Polish).
-- **[Architecture ADRs](docs/adrs)**: The *why* behind the tech stack, content data flows, and component architecture.
+- **Framework**: [Astro](https://astro.build/) for static site generation. It gives me blazing fast initial loads while letting me selectively sprinkle in interactive islands only where they add value.
+- **Typing**: TypeScript. Because explicit contracts prevent implicit, late-night production bugs.
+- **Logic & Flow**: [Effect](https://effect.website/). A personal favorite for robust workflow handling, explicit error management, and predictable dependency injection.
+- **Styling**: Token-based vanilla CSS defined in `src/styles`. No heavy runtime overhead, just clean architectural layout.
