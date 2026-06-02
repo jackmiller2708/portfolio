@@ -10,14 +10,14 @@ Describe the page goal and the user need it supports.
 
 ## Route
 
-| Route | Rendering | Data owner |
-|---|---|---|
+| Route      | Rendering                   | Data owner             |
+| ---------- | --------------------------- | ---------------------- |
 | `/example` | Static/server/client island | Example loader/program |
 
 ## Content Requirements
 
-| Block | Content | Source | Notes |
-|---|---|---|---|
+| Block         | Content          | Source              | Notes         |
+| ------------- | ---------------- | ------------------- | ------------- |
 | Example block | Example content. | Example collection. | Example note. |
 
 ## Initial State
@@ -72,4 +72,3 @@ Visitor --> UC1
 ## Related Documents
 
 - Related architecture, data flow, content model, UI convention, and ADR docs.
-

@@ -10,19 +10,19 @@ Define how a visitor's contact inquiry is validated, classified, protected from 
 
 ## Sources
 
-| Source | Type | Owner | Notes |
-|---|---|---|---|
-| Contact form | User input | `ContactIntake` | Progressive enhancement should preserve accessibility. |
-| Runtime config | Environment/config | `ConfigService` | Contains destination and provider settings. |
-| Spam signal | Request metadata/provider | `SpamProtection` | Implementation depends on deployment. |
+| Source         | Type                      | Owner            | Notes                                                  |
+| -------------- | ------------------------- | ---------------- | ------------------------------------------------------ |
+| Contact form   | User input                | `ContactIntake`  | Progressive enhancement should preserve accessibility. |
+| Runtime config | Environment/config        | `ConfigService`  | Contains destination and provider settings.            |
+| Spam signal    | Request metadata/provider | `SpamProtection` | Implementation depends on deployment.                  |
 
 ## Target Outputs
 
-| Output | Consumer | Shape |
-|---|---|---|
-| Contact result | Contact page/island | `ContactSubmissionResult` |
-| Inquiry record | Storage/email provider | `ContactInquiry` |
-| Redacted diagnostic event | Logger | `ContactDiagnosticEvent` |
+| Output                    | Consumer               | Shape                     |
+| ------------------------- | ---------------------- | ------------------------- |
+| Contact result            | Contact page/island    | `ContactSubmissionResult` |
+| Inquiry record            | Storage/email provider | `ContactInquiry`          |
+| Redacted diagnostic event | Logger                 | `ContactDiagnosticEvent`  |
 
 ## Flow
 
@@ -71,14 +71,14 @@ Classification informs response copy and internal prioritization. It must not bl
 
 ## Failure Modes
 
-| Failure | Error type | Fallback or response |
-|---|---|---|
-| Invalid input | `ContactValidationError` | Show field-level accessible errors. |
-| Missing consent | `ContactValidationError` | Show consent requirement. |
-| Spam detected | `SpamProtectionError` | Show generic non-committal response or block submission. |
-| Provider unavailable | `ContactDeliveryError` | Show retry/contact-by-email fallback. |
-| Config missing | `ConfigError` | Fail deployment/build or return unavailable state. |
-| Unexpected defect | `UnexpectedDefect` | Log redacted diagnostic and show generic fallback. |
+| Failure              | Error type               | Fallback or response                                     |
+| -------------------- | ------------------------ | -------------------------------------------------------- |
+| Invalid input        | `ContactValidationError` | Show field-level accessible errors.                      |
+| Missing consent      | `ContactValidationError` | Show consent requirement.                                |
+| Spam detected        | `SpamProtectionError`    | Show generic non-committal response or block submission. |
+| Provider unavailable | `ContactDeliveryError`   | Show retry/contact-by-email fallback.                    |
+| Config missing       | `ConfigError`            | Fail deployment/build or return unavailable state.       |
+| Unexpected defect    | `UnexpectedDefect`       | Log redacted diagnostic and show generic fallback.       |
 
 ## Privacy And Redaction
 
@@ -123,4 +123,3 @@ Analytics must not require blocking third-party scripts.
 - `docs/adrs/ADR-003-error-model.md`
 - `docs/adrs/ADR-004-effect-service-layers.md`
 - `docs/error-models/portfolio_error_model.md`
-

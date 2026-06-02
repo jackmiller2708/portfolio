@@ -18,11 +18,11 @@ Tailwind can move quickly, but it can make award-level editorial components hard
 
 ## Options Considered
 
-| Option | Summary | Tradeoff |
-|---|---|---|
-| Tailwind | Utility-first classes in markup. | Fast, but large class strings can obscure component intent. |
-| Global BEM | Global CSS with block/element/modifier naming. | Predictable, but global scope can become hard to maintain. |
-| StyleX | Typed atomic CSS-in-JS style system. | Strong compile-time model, but added complexity for Astro. |
+| Option                          | Summary                                               | Tradeoff                                                     |
+| ------------------------------- | ----------------------------------------------------- | ------------------------------------------------------------ |
+| Tailwind                        | Utility-first classes in markup.                      | Fast, but large class strings can obscure component intent.  |
+| Global BEM                      | Global CSS with block/element/modifier naming.        | Predictable, but global scope can become hard to maintain.   |
+| StyleX                          | Typed atomic CSS-in-JS style system.                  | Strong compile-time model, but added complexity for Astro.   |
 | Tokens + scoped CSS/CSS Modules | Native CSS with component locality and global tokens. | Slightly more manual, but clear, portable, and low overhead. |
 
 ## Rationale
@@ -63,4 +63,3 @@ The portfolio needs editorial control and design-token discipline more than rapi
 - `docs/ui/styling-conventions.md`
 - `docs/portfolio_design_system_award_update.md`
 - `docs/architecture/portfolio_architectural_foundation.md`
-

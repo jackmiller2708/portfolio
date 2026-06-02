@@ -1,6 +1,6 @@
 ## Summary
 
-- 
+-
 
 ## Scope
 
@@ -26,13 +26,12 @@
 
 Relevant ADRs/specs:
 
-- 
+-
 
 Tradeoffs or follow-ups:
 
-- 
+-
 
 ## Screenshots
 
 Add screenshots or recordings for UI changes.
-

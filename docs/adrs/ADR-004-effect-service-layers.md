@@ -14,11 +14,11 @@ The portfolio will have mostly static pages, but it still needs workflows with d
 
 ## Options Considered
 
-| Option | Summary | Tradeoff |
-|---|---|---|
-| Direct imports | Programs import concrete modules directly. | Simple, but harder to test and replace. |
-| Manual dependency parameters | Functions receive dependencies as arguments. | Explicit, but repetitive as workflows grow. |
-| Effect services/layers | Dependencies are declared and provided through layers. | More structure, stronger testability and composition. |
+| Option                       | Summary                                                | Tradeoff                                              |
+| ---------------------------- | ------------------------------------------------------ | ----------------------------------------------------- |
+| Direct imports               | Programs import concrete modules directly.             | Simple, but harder to test and replace.               |
+| Manual dependency parameters | Functions receive dependencies as arguments.           | Explicit, but repetitive as workflows grow.           |
+| Effect services/layers       | Dependencies are declared and provided through layers. | More structure, stronger testability and composition. |
 
 ## Rationale
 
@@ -54,4 +54,3 @@ Effect layers fit the desired system shape: explicit boundaries, testable servic
 - `docs/architecture/portfolio_architectural_foundation.md`
 - `docs/data-flows/contact-intake-data-flow.md`
 - `docs/implementation/v1-foundation-implementation-plan.md`
-

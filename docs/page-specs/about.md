@@ -10,19 +10,19 @@ Provide professional context, working style, constraints, and quality philosophy
 
 ## Route
 
-| Route | Rendering | Data owner |
-|---|---|---|
-| `/about` | Static | `load-about-page` |
+| Route    | Rendering | Data owner        |
+| -------- | --------- | ----------------- |
+| `/about` | Static    | `load-about-page` |
 
 ## Content Requirements
 
-| Block | Content | Source | Notes |
-|---|---|---|---|
-| Professional context | Role, positioning, experience shape. | Site metadata/about content. | Human but work-focused. |
-| Working style | How engagements are run. | About content. | Practical constraints and collaboration model. |
-| Quality philosophy | Architecture, testing, maintainability stance. | About content. | Supports trust. |
-| Languages/timezone | Availability and communication. | Site metadata. | Helps fit. |
-| CTA | Contact or services link. | Contact metadata. | Clear next step. |
+| Block                | Content                                        | Source                       | Notes                                          |
+| -------------------- | ---------------------------------------------- | ---------------------------- | ---------------------------------------------- |
+| Professional context | Role, positioning, experience shape.           | Site metadata/about content. | Human but work-focused.                        |
+| Working style        | How engagements are run.                       | About content.               | Practical constraints and collaboration model. |
+| Quality philosophy   | Architecture, testing, maintainability stance. | About content.               | Supports trust.                                |
+| Languages/timezone   | Availability and communication.                | Site metadata.               | Helps fit.                                     |
+| CTA                  | Contact or services link.                      | Contact metadata.            | Clear next step.                               |
 
 ## Initial State
 
@@ -84,4 +84,3 @@ Client --> UC4
 - `docs/page-specs/portfolio_page_specs.md`
 - `docs/content-models/portfolio_content_models.md`
 - `docs/ui/styling-conventions.md`
-

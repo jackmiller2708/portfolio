@@ -32,15 +32,15 @@ Use CSS custom properties plus Astro scoped styles and CSS Modules. Keep global 
 
 ## Styling Stack
 
-| Concern | Choice | Notes |
-|---|---|---|
-| Design tokens | CSS custom properties | Colors, spacing, typography, radius, shadow, z-index, motion. |
-| Base styles | Global CSS | Reset, body, typography, links, focus, selection, media defaults. |
-| Component styles | Astro scoped styles or CSS Modules | Prefer locality over broad global selectors. |
-| Utilities | Small global utility layer | Layout/accessibility helpers only. |
-| Tailwind | Not default | Can be reconsidered only through a new ADR. |
-| StyleX | Not default | Can be reconsidered only through a new ADR. |
-| BEM | Selective convention | Useful for global utilities or complex component CSS Modules. |
+| Concern          | Choice                             | Notes                                                             |
+| ---------------- | ---------------------------------- | ----------------------------------------------------------------- |
+| Design tokens    | CSS custom properties              | Colors, spacing, typography, radius, shadow, z-index, motion.     |
+| Base styles      | Global CSS                         | Reset, body, typography, links, focus, selection, media defaults. |
+| Component styles | Astro scoped styles or CSS Modules | Prefer locality over broad global selectors.                      |
+| Utilities        | Small global utility layer         | Layout/accessibility helpers only.                                |
+| Tailwind         | Not default                        | Can be reconsidered only through a new ADR.                       |
+| StyleX           | Not default                        | Can be reconsidered only through a new ADR.                       |
+| BEM              | Selective convention               | Useful for global utilities or complex component CSS Modules.     |
 
 ## Global CSS Rules
 
@@ -59,11 +59,16 @@ Global CSS must not contain page-specific or component-specific styling.
 Allowed global utility examples:
 
 ```css
-.u-container {}
-.u-stack {}
-.u-grid {}
-.u-visually-hidden {}
-.u-skip-link {}
+.u-container {
+}
+.u-stack {
+}
+.u-grid {
+}
+.u-visually-hidden {
+}
+.u-skip-link {
+}
 ```
 
 ## Token Rules
@@ -102,25 +107,39 @@ Avoid raw hex values outside token definition files.
 For CSS Modules:
 
 ```css
-.root {}
-.header {}
-.title {}
-.body {}
-.footer {}
-.action {}
-.isSelected {}
-.isDisabled {}
-.variantPrimary {}
-.variantQuiet {}
+.root {
+}
+.header {
+}
+.title {
+}
+.body {
+}
+.footer {
+}
+.action {
+}
+.isSelected {
+}
+.isDisabled {
+}
+.variantPrimary {
+}
+.variantQuiet {
+}
 ```
 
 For global or complex non-module CSS, use BEM-style names:
 
 ```css
-.service-card {}
-.service-card__header {}
-.service-card__title {}
-.service-card--featured {}
+.service-card {
+}
+.service-card__header {
+}
+.service-card__title {
+}
+.service-card--featured {
+}
 ```
 
 Do not mix arbitrary naming styles inside the same component.
@@ -235,4 +254,3 @@ Focus rings should use the accent token and remain visible against light and dar
 - `docs/portfolio_design_system_award_update.md`
 - `docs/ui/component-management.md`
 - `docs/architecture/portfolio_architectural_foundation.md`
-

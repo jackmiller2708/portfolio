@@ -16,11 +16,11 @@ The requirements call for content maintainability through MDX/schema and privacy
 
 ## Options Considered
 
-| Option | Summary | Tradeoff |
-|---|---|---|
-| Raw MDX/frontmatter in pages | Pages query and render content directly. | Simple, but validation and redaction become scattered. |
-| Astro content collections only | Use Astro schema and direct collection access. | Good baseline, but workflow errors and transformations are less explicit. |
-| Astro content collections + Effect programs | Decode, normalize, and transform content through typed programs. | More structure, but stronger data flow and testing. |
+| Option                                      | Summary                                                          | Tradeoff                                                                  |
+| ------------------------------------------- | ---------------------------------------------------------------- | ------------------------------------------------------------------------- |
+| Raw MDX/frontmatter in pages                | Pages query and render content directly.                         | Simple, but validation and redaction become scattered.                    |
+| Astro content collections only              | Use Astro schema and direct collection access.                   | Good baseline, but workflow errors and transformations are less explicit. |
+| Astro content collections + Effect programs | Decode, normalize, and transform content through typed programs. | More structure, but stronger data flow and testing.                       |
 
 ## Rationale
 
@@ -58,4 +58,3 @@ The portfolio should not treat content as loose page decoration. Services, case 
 - `docs/data-flows/content-to-page-data-flow.md`
 - `docs/content-models/portfolio_content_models.md`
 - `docs/portfolio_requirements_technical_spec_award_update.md`
-

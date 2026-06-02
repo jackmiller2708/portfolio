@@ -16,8 +16,8 @@ Reference relevant requirements, design goals, or previous ADRs.
 
 ## Options Considered
 
-| Option | Summary | Tradeoff |
-|---|---|---|
+| Option   | Summary            | Tradeoff           |
+| -------- | ------------------ | ------------------ |
 | Option A | Brief description. | Main cost or risk. |
 | Option B | Brief description. | Main cost or risk. |
 
@@ -61,4 +61,3 @@ Define how implementation will prove this decision was followed.
 
 - `docs/portfolio_design_system_award_update.md`
 - `docs/portfolio_requirements_technical_spec_award_update.md`
-

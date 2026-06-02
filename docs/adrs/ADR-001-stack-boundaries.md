@@ -18,12 +18,12 @@ Astro is a strong fit for the public marketing and content shell. Effect is a st
 
 ## Options Considered
 
-| Option | Summary | Tradeoff |
-|---|---|---|
-| Astro + plain TypeScript | Use functions, schemas, and local `try/catch`. | Lower initial complexity, but error and dependency handling can become implicit. |
-| Astro + Effect | Use Effect programs for workflows and typed failure. | More upfront structure, but clearer boundaries and testable programs. |
-| Angular shell | Build the whole portfolio in Angular. | Shows Angular directly, but worse fit for static content, MDX, and minimal JS. |
-| Next.js + React | Use React ecosystem and server features. | More moving parts than needed for this portfolio. |
+| Option                   | Summary                                              | Tradeoff                                                                         |
+| ------------------------ | ---------------------------------------------------- | -------------------------------------------------------------------------------- |
+| Astro + plain TypeScript | Use functions, schemas, and local `try/catch`.       | Lower initial complexity, but error and dependency handling can become implicit. |
+| Astro + Effect           | Use Effect programs for workflows and typed failure. | More upfront structure, but clearer boundaries and testable programs.            |
+| Angular shell            | Build the whole portfolio in Angular.                | Shows Angular directly, but worse fit for static content, MDX, and minimal JS.   |
+| Next.js + React          | Use React ecosystem and server features.             | More moving parts than needed for this portfolio.                                |
 
 ## Rationale
 
@@ -69,4 +69,3 @@ This separation prevents presentational components from becoming responsible for
 - `docs/error-models/portfolio_error_model.md`
 - `docs/portfolio_design_system_award_update.md`
 - `docs/portfolio_requirements_technical_spec_award_update.md`
-

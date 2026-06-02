@@ -10,9 +10,9 @@ Define the content collection, schema, and page view model for a content type.
 
 ## Collection
 
-| Field | Type | Required | Notes |
-|---|---|---|---|
-| `title` | `string` | Yes | Public display title. |
+| Field   | Type     | Required | Notes                 |
+| ------- | -------- | -------- | --------------------- |
+| `title` | `string` | Yes      | Public display title. |
 
 ## Schema Rules
 
@@ -60,4 +60,3 @@ List pages/components that consume this model.
 - Related data flow
 - Related ADRs
 - Related page specs
-

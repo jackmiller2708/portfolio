@@ -1,0 +1,75 @@
+---
+import ButtonLink from "@components/primitives/ButtonLink/ButtonLink.astro";
+
+type Props = {
+  eyebrow?: string;
+  title: string;
+  summary: string;
+  primaryCta?: {
+    label: string;
+    href: string;
+  };
+  secondaryCta?: {
+    label: string;
+    href: string;
+  };
+};
+
+const { eyebrow, title, summary, primaryCta, secondaryCta } = Astro.props;
+---
+
+<section class="page-hero">
+  <div class="page-hero__inner u-container">
+    {eyebrow && <p class="page-hero__eyebrow">{eyebrow}</p>}
+    <h1>{title}</h1>
+    <p class="page-hero__summary">{summary}</p>
+    {
+      (primaryCta || secondaryCta) && (
+        <div class="page-hero__actions">
+          {primaryCta && <ButtonLink href={primaryCta.href} label={primaryCta.label} />}
+          {secondaryCta && (
+            <ButtonLink href={secondaryCta.href} label={secondaryCta.label} variant="secondary" />
+          )}
+        </div>
+      )
+    }
+  </div>
+</section>
+
+<style>
+  .page-hero {
+    padding: var(--space-16) 0 var(--space-12);
+  }
+
+  .page-hero__inner {
+    display: grid;
+    gap: var(--space-5);
+  }
+
+  .page-hero__eyebrow {
+    margin: 0;
+    color: var(--color-accent);
+    font-weight: 700;
+  }
+
+  h1 {
+    max-width: 900px;
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: clamp(2.4rem, 6vw, 4.5rem);
+    line-height: 1.02;
+  }
+
+  .page-hero__summary {
+    max-width: 72ch;
+    margin: 0;
+    color: var(--color-muted);
+    font-size: 1.15rem;
+  }
+
+  .page-hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-4);
+  }
+</style>

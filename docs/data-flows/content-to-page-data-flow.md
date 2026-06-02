@@ -10,24 +10,24 @@ Define how portfolio content moves from source files into rendered pages and int
 
 ## Sources
 
-| Source | Type | Owner | Notes |
-|---|---|---|---|
-| Services | MDX/frontmatter or typed data | Content collection | Used by Home and Services. |
-| Case studies | MDX/frontmatter | Content collection | Can be redacted or synthetic. |
-| Lab posts | MDX/frontmatter | Content collection | At least four required entries. |
-| Audit findings | MDX/frontmatter or typed data | Content collection | Used by Sample Audit. |
-| Site metadata | Typed config/content | Content collection | SEO, availability, social links. |
+| Source         | Type                          | Owner              | Notes                            |
+| -------------- | ----------------------------- | ------------------ | -------------------------------- |
+| Services       | MDX/frontmatter or typed data | Content collection | Used by Home and Services.       |
+| Case studies   | MDX/frontmatter               | Content collection | Can be redacted or synthetic.    |
+| Lab posts      | MDX/frontmatter               | Content collection | At least four required entries.  |
+| Audit findings | MDX/frontmatter or typed data | Content collection | Used by Sample Audit.            |
+| Site metadata  | Typed config/content          | Content collection | SEO, availability, social links. |
 
 ## Target Outputs
 
-| Output | Consumer | Shape |
-|---|---|---|
-| Home page view model | Home page/components | `HomePageViewModel` |
-| Services page view model | Services page/components | `ServicesPageViewModel` |
-| Case study view model | Case detail page/components | `CaseStudyPageViewModel` |
+| Output                         | Consumer                       | Shape                                   |
+| ------------------------------ | ------------------------------ | --------------------------------------- |
+| Home page view model           | Home page/components           | `HomePageViewModel`                     |
+| Services page view model       | Services page/components       | `ServicesPageViewModel`                 |
+| Case study view model          | Case detail page/components    | `CaseStudyPageViewModel`                |
 | Lab listing/detail view models | Technical Lab pages/components | `LabIndexViewModel`, `LabPostViewModel` |
-| Audit page view model | Sample Audit page/components | `SampleAuditViewModel` |
-| System map view model | Hero/SystemMap island | `SystemMapViewModel` |
+| Audit page view model          | Sample Audit page/components   | `SampleAuditViewModel`                  |
+| System map view model          | Hero/SystemMap island          | `SystemMapViewModel`                    |
 
 ## Flow
 
@@ -64,13 +64,13 @@ Required validation:
 
 ## Failure Modes
 
-| Failure | Error type | Fallback or response |
-|---|---|---|
-| Required content missing | `MissingContentError` | Fail build for core pages. |
-| Invalid content shape | `ContentDecodeError` | Fail build. |
-| Case study redaction missing | `PrivacyRedactionError` | Fail build. |
-| Optional lab entry unavailable | `MissingContentError` | Exclude from optional lists if minimum count is still met. |
-| System map data invalid | `ContentDecodeError` | Render static fallback only if fallback data is valid. |
+| Failure                        | Error type              | Fallback or response                                       |
+| ------------------------------ | ----------------------- | ---------------------------------------------------------- |
+| Required content missing       | `MissingContentError`   | Fail build for core pages.                                 |
+| Invalid content shape          | `ContentDecodeError`    | Fail build.                                                |
+| Case study redaction missing   | `PrivacyRedactionError` | Fail build.                                                |
+| Optional lab entry unavailable | `MissingContentError`   | Exclude from optional lists if minimum count is still met. |
+| System map data invalid        | `ContentDecodeError`    | Render static fallback only if fallback data is valid.     |
 
 ## Privacy And Redaction
 
@@ -106,4 +106,3 @@ Build output should report:
 - `docs/adrs/ADR-002-content-data-flow.md`
 - `docs/content-models/portfolio_content_models.md`
 - `docs/error-models/portfolio_error_model.md`
-

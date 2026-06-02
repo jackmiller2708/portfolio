@@ -14,11 +14,11 @@ The design system calls for one memorable technical interaction and subtle syste
 
 ## Options Considered
 
-| Option | Summary | Tradeoff |
-|---|---|---|
-| Mostly static Astro | Minimal JS. | Fast, but may underserve the signature interaction. |
-| Interactive islands | Hydrate only specific components. | Balanced craft and performance. |
-| Full SPA | Hydrate the whole site. | More JS than needed and worse fit for content. |
+| Option              | Summary                           | Tradeoff                                            |
+| ------------------- | --------------------------------- | --------------------------------------------------- |
+| Mostly static Astro | Minimal JS.                       | Fast, but may underserve the signature interaction. |
+| Interactive islands | Hydrate only specific components. | Balanced craft and performance.                     |
+| Full SPA            | Hydrate the whole site.           | More JS than needed and worse fit for content.      |
 
 ## Rationale
 
@@ -55,4 +55,3 @@ The site should demonstrate craft without hiding content behind animation or hea
 - `docs/portfolio_design_system_award_update.md`
 - `docs/portfolio_requirements_technical_spec_award_update.md`
 - `docs/architecture/portfolio_architectural_foundation.md`
-

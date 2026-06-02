@@ -20,8 +20,8 @@ Describe the architectural concern this document defines.
 
 ## Guiding Requirements
 
-| Requirement | Source | Architectural implication |
-|---|---|---|
+| Requirement      | Source                 | Architectural implication                               |
+| ---------------- | ---------------------- | ------------------------------------------------------- |
 | Requirement name | Source document or ADR | What this means for structure, data, or implementation. |
 
 ## System Boundaries
@@ -48,11 +48,11 @@ pages/components -> programs -> services -> domain/schemas
 
 Explain what runs at build time, server/request time, and client time.
 
-| Runtime | Responsibilities | Must not do |
-|---|---|---|
-| Build time |  |  |
-| Server/request time |  |  |
-| Client time |  |  |
+| Runtime             | Responsibilities | Must not do |
+| ------------------- | ---------------- | ----------- |
+| Build time          |                  |             |
+| Server/request time |                  |             |
+| Client time         |                  |             |
 
 ## Data Ownership
 
@@ -62,9 +62,9 @@ Define which layer owns source data, decoded domain data, and page view models.
 
 List side effects and the layer/service responsible for each.
 
-| Side effect | Owner | Notes |
-|---|---|---|
-| Example | Example service | Example constraint. |
+| Side effect | Owner           | Notes               |
+| ----------- | --------------- | ------------------- |
+| Example     | Example service | Example constraint. |
 
 ## Error Strategy
 
@@ -82,4 +82,3 @@ Define required tests and checks.
 
 - `docs/portfolio_design_system_award_update.md`
 - `docs/portfolio_requirements_technical_spec_award_update.md`
-

@@ -33,15 +33,15 @@ Use Atomic Design as a scale taxonomy, but enforce n-layer architecture for depe
 
 ## Component Taxonomy
 
-| Category | Purpose | Examples |
-|---|---|---|
-| Primitive | Lowest-level reusable UI or HTML wrapper. | `Button`, `IconButton`, `TextLink`, `Badge`, `SkipLink` |
-| Atom | Small display element with one clear job. | `SeverityBadge`, `MetricValue`, `RiskMarker`, `CodeLabel` |
-| Molecule | Small composition of atoms/primitives. | `ServiceSummary`, `ProofItem`, `FindingHeader`, `ContactField` |
-| Organism | Larger reusable section or functional UI block. | `ServiceCard`, `EvidencePanel`, `AuditFinding`, `ContactIntake` |
-| Section | Page-level content band. | `HomeHero`, `ServicesComparison`, `SampleAuditRoadmap` |
-| Template | Layout structure for a page family. | `CaseStudyTemplate`, `LabPostTemplate` |
-| Island | Hydrated interactive component. | `HeroSystemMap`, `BeforeAfterToggle`, `ContactIntakeIsland` |
+| Category  | Purpose                                         | Examples                                                        |
+| --------- | ----------------------------------------------- | --------------------------------------------------------------- |
+| Primitive | Lowest-level reusable UI or HTML wrapper.       | `Button`, `IconButton`, `TextLink`, `Badge`, `SkipLink`         |
+| Atom      | Small display element with one clear job.       | `SeverityBadge`, `MetricValue`, `RiskMarker`, `CodeLabel`       |
+| Molecule  | Small composition of atoms/primitives.          | `ServiceSummary`, `ProofItem`, `FindingHeader`, `ContactField`  |
+| Organism  | Larger reusable section or functional UI block. | `ServiceCard`, `EvidencePanel`, `AuditFinding`, `ContactIntake` |
+| Section   | Page-level content band.                        | `HomeHero`, `ServicesComparison`, `SampleAuditRoadmap`          |
+| Template  | Layout structure for a page family.             | `CaseStudyTemplate`, `LabPostTemplate`                          |
+| Island    | Hydrated interactive component.                 | `HeroSystemMap`, `BeforeAfterToggle`, `ContactIntakeIsland`     |
 
 Atomic terms describe scale only. They do not override dependency rules.
 
@@ -185,13 +185,13 @@ Island
 
 ## State Rules
 
-| State type | Owner |
-|---|---|
-| Content/data state | Effect program and page view model. |
-| Form validation state | Contact program; island may mirror field-level interaction. |
-| Hover/focus/open state | Component or island. |
-| Animation state | Component/island, respecting reduced motion. |
-| Async side-effect state | Effect program or endpoint. |
+| State type              | Owner                                                       |
+| ----------------------- | ----------------------------------------------------------- |
+| Content/data state      | Effect program and page view model.                         |
+| Form validation state   | Contact program; island may mirror field-level interaction. |
+| Hover/focus/open state  | Component or island.                                        |
+| Animation state         | Component/island, respecting reduced motion.                |
+| Async side-effect state | Effect program or endpoint.                                 |
 
 ## Accessibility Rules
 
@@ -218,4 +218,3 @@ Island
 - `docs/adrs/ADR-005-client-islands-and-interactions.md`
 - `docs/architecture/portfolio_architectural_foundation.md`
 - `docs/portfolio_design_system_award_update.md`
-

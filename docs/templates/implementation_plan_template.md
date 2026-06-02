@@ -10,8 +10,8 @@ State the implementation outcome.
 
 ## Inputs
 
-| Input | Status | Notes |
-|---|---|---|
+| Input       | Status         | Notes                           |
+| ----------- | -------------- | ------------------------------- |
 | Related ADR | Draft/Accepted | Required before implementation. |
 
 ## Scope
@@ -26,14 +26,14 @@ State the implementation outcome.
 
 ## Work Breakdown
 
-| Step | Description | Verification |
-|---|---|---|
-| 1 | Example task. | Example check. |
+| Step | Description   | Verification   |
+| ---- | ------------- | -------------- |
+| 1    | Example task. | Example check. |
 
 ## File/Module Plan
 
-| Path | Purpose |
-|---|---|
+| Path             | Purpose          |
+| ---------------- | ---------------- |
 | `src/example.ts` | Example purpose. |
 
 ## Acceptance Criteria
@@ -42,8 +42,8 @@ State the implementation outcome.
 
 ## Risks
 
-| Risk | Mitigation |
-|---|---|
+| Risk          | Mitigation          |
+| ------------- | ------------------- |
 | Example risk. | Example mitigation. |
 
 ## Verification Checklist
@@ -58,4 +58,3 @@ State the implementation outcome.
 ## Follow-Up
 
 - Future work not required for this implementation.
-

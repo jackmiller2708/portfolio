@@ -29,16 +29,16 @@ Define the architectural foundation for the portfolio before implementation begi
 
 ## Guiding Requirements
 
-| Requirement | Source | Architectural implication |
-|---|---|---|
+| Requirement               | Source            | Architectural implication                                               |
+| ------------------------- | ----------------- | ----------------------------------------------------------------------- |
 | Fast and accessible craft | Requirements spec | Prefer static rendering, minimal JS, explicit reduced-motion fallbacks. |
-| Content maintainability | Requirements spec | Use content collections, schemas, and page view models. |
-| Proof over claims | Requirements spec | Case studies, audits, and lab notes are typed public proof surfaces. |
-| Signature system map | Design system | Use one focused interactive island with static fallback. |
-| Clear conversion path | Requirements spec | Contact workflow must be reliable, validated, and spam-protected. |
-| Bilingual-ready | Requirements spec | Content models should allow locale-aware expansion. |
-| Privacy-safe proof | Requirements spec | Redaction rules must be part of content validation and review. |
-| Page state coverage | Page specs | Each page defines initial, loading, failure, and transition behavior. |
+| Content maintainability   | Requirements spec | Use content collections, schemas, and page view models.                 |
+| Proof over claims         | Requirements spec | Case studies, audits, and lab notes are typed public proof surfaces.    |
+| Signature system map      | Design system     | Use one focused interactive island with static fallback.                |
+| Clear conversion path     | Requirements spec | Contact workflow must be reliable, validated, and spam-protected.       |
+| Bilingual-ready           | Requirements spec | Content models should allow locale-aware expansion.                     |
+| Privacy-safe proof        | Requirements spec | Redaction rules must be part of content validation and review.          |
+| Page state coverage       | Page specs        | Each page defines initial, loading, failure, and transition behavior.   |
 
 ## System Boundaries
 
@@ -99,11 +99,11 @@ Rules:
 
 ## Runtime Model
 
-| Runtime | Responsibilities | Must not do |
-|---|---|---|
-| Build time | Load public content, validate schemas, create static page data, produce routes. | Hide critical content errors or depend on browser APIs. |
-| Server/request time | Handle contact submission if server endpoints are used. | Expose secrets to client code or return raw internal errors. |
-| Client time | Run local interaction state, progressive form enhancement, system map interaction. | Own core content loading, secret-dependent work, or required navigation. |
+| Runtime             | Responsibilities                                                                   | Must not do                                                              |
+| ------------------- | ---------------------------------------------------------------------------------- | ------------------------------------------------------------------------ |
+| Build time          | Load public content, validate schemas, create static page data, produce routes.    | Hide critical content errors or depend on browser APIs.                  |
+| Server/request time | Handle contact submission if server endpoints are used.                            | Expose secrets to client code or return raw internal errors.             |
+| Client time         | Run local interaction state, progressive form enhancement, system map interaction. | Own core content loading, secret-dependent work, or required navigation. |
 
 ## Proposed Source Layout
 
@@ -164,25 +164,25 @@ src/
 
 ## Data Ownership
 
-| Data | Owner | Notes |
-|---|---|---|
-| Raw content | `src/content` | MDX/frontmatter remains source data only. |
-| Decoded content | schemas/programs | Invalid content fails early. |
-| Domain models | `src/domain` | Stable vocabulary for services, case studies, audits, lab posts, and contact. |
-| Page view models | `src/programs` | Components receive render-ready data. |
-| Client island state | island components | Local interaction only. |
-| Contact input | contact schema/program | Validated before side effects. |
+| Data                | Owner                  | Notes                                                                         |
+| ------------------- | ---------------------- | ----------------------------------------------------------------------------- |
+| Raw content         | `src/content`          | MDX/frontmatter remains source data only.                                     |
+| Decoded content     | schemas/programs       | Invalid content fails early.                                                  |
+| Domain models       | `src/domain`           | Stable vocabulary for services, case studies, audits, lab posts, and contact. |
+| Page view models    | `src/programs`         | Components receive render-ready data.                                         |
+| Client island state | island components      | Local interaction only.                                                       |
+| Contact input       | contact schema/program | Validated before side effects.                                                |
 
 ## Side Effects
 
-| Side effect | Owner | Notes |
-|---|---|---|
-| Read content collections | `ContentRepository` | Can have live and fixture implementations. |
-| Read environment/config | `ConfigService` | Secrets never serialized to client. |
-| Submit contact inquiry | `ContactRepository` | Storage provider can change later. |
-| Send contact notification | `EmailService` | Optional depending on deployment path. |
-| Spam/rate-limit check | `SpamProtection` | Must run before delivery. |
-| Logging/diagnostics | `Logger` | Redact private contact fields. |
+| Side effect               | Owner               | Notes                                      |
+| ------------------------- | ------------------- | ------------------------------------------ |
+| Read content collections  | `ContentRepository` | Can have live and fixture implementations. |
+| Read environment/config   | `ConfigService`     | Secrets never serialized to client.        |
+| Submit contact inquiry    | `ContactRepository` | Storage provider can change later.         |
+| Send contact notification | `EmailService`      | Optional depending on deployment path.     |
+| Spam/rate-limit check     | `SpamProtection`    | Must run before delivery.                  |
+| Logging/diagnostics       | `Logger`            | Redact private contact fields.             |
 
 ## Effect Program Boundaries
 

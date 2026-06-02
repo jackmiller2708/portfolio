@@ -10,22 +10,22 @@ Show technical thinking through privacy-safe project proof, including constraint
 
 ## Route
 
-| Route | Rendering | Data owner |
-|---|---|---|
-| `/case-studies` | Static | `load-case-studies-index-page` |
-| `/case-studies/[slug]` | Static dynamic routes | `load-case-study-page` |
+| Route                  | Rendering             | Data owner                     |
+| ---------------------- | --------------------- | ------------------------------ |
+| `/case-studies`        | Static                | `load-case-studies-index-page` |
+| `/case-studies/[slug]` | Static dynamic routes | `load-case-study-page`         |
 
 ## Content Requirements
 
-| Block | Content | Source | Notes |
-|---|---|---|---|
-| Index intro | Proof framing. | Site metadata. | Explains redacted/synthetic proof. |
-| Case cards | Title, summary, constraints, result, redaction label. | `caseStudies`. | V1.5 minimum two entries. |
-| Detail problem | Context, constraints, problem. | `caseStudies`. | Required by FR-03. |
-| Detail decisions | ADR-style decisions and tradeoffs. | `caseStudies`. | Shows senior reasoning. |
-| Before/after | Architecture comparison. | `caseStudies/systemMap`. | Static fallback required. |
-| Evidence | Diagrams, snippets, findings, metrics. | `caseStudies`. | Privacy-safe. |
-| Result/recommendation | Outcome and next step. | `caseStudies`. | Must be concrete. |
+| Block                 | Content                                               | Source                   | Notes                              |
+| --------------------- | ----------------------------------------------------- | ------------------------ | ---------------------------------- |
+| Index intro           | Proof framing.                                        | Site metadata.           | Explains redacted/synthetic proof. |
+| Case cards            | Title, summary, constraints, result, redaction label. | `caseStudies`.           | V1.5 minimum two entries.          |
+| Detail problem        | Context, constraints, problem.                        | `caseStudies`.           | Required by FR-03.                 |
+| Detail decisions      | ADR-style decisions and tradeoffs.                    | `caseStudies`.           | Shows senior reasoning.            |
+| Before/after          | Architecture comparison.                              | `caseStudies/systemMap`. | Static fallback required.          |
+| Evidence              | Diagrams, snippets, findings, metrics.                | `caseStudies`.           | Privacy-safe.                      |
+| Result/recommendation | Outcome and next step.                                | `caseStudies`.           | Must be concrete.                  |
 
 ## Initial State
 
@@ -97,4 +97,3 @@ Reviewer --> UC3
 - `docs/page-specs/portfolio_page_specs.md`
 - `docs/content-models/portfolio_content_models.md`
 - `docs/data-flows/content-to-page-data-flow.md`
-

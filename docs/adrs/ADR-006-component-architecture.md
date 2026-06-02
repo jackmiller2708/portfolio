@@ -16,12 +16,12 @@ The portfolio will include reusable service cards, evidence panels, audit findin
 
 ## Options Considered
 
-| Option | Summary | Tradeoff |
-|---|---|---|
-| Atomic Design only | Organize atoms, molecules, organisms, templates, pages. | Useful UI taxonomy, but weak for data/program boundaries. |
-| Feature-only folders | Organize by page or feature. | Good locality, but shared design-system primitives can fragment. |
-| n-layer only | Organize by domain/program/component layers. | Strong architecture, but weaker UI scale vocabulary. |
-| Atomic Design + n-layer rules | Use UI taxonomy and explicit import boundaries. | More conventions, but clearer ownership. |
+| Option                        | Summary                                                 | Tradeoff                                                         |
+| ----------------------------- | ------------------------------------------------------- | ---------------------------------------------------------------- |
+| Atomic Design only            | Organize atoms, molecules, organisms, templates, pages. | Useful UI taxonomy, but weak for data/program boundaries.        |
+| Feature-only folders          | Organize by page or feature.                            | Good locality, but shared design-system primitives can fragment. |
+| n-layer only                  | Organize by domain/program/component layers.            | Strong architecture, but weaker UI scale vocabulary.             |
+| Atomic Design + n-layer rules | Use UI taxonomy and explicit import boundaries.         | More conventions, but clearer ownership.                         |
 
 ## Rationale
 
@@ -60,4 +60,3 @@ The portfolio's UI needs reusable polish and strong data discipline. Atomic Desi
 - `docs/architecture/portfolio_architectural_foundation.md`
 - `docs/adrs/ADR-001-stack-boundaries.md`
 - `docs/adrs/ADR-005-client-islands-and-interactions.md`
-

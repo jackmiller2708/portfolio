@@ -10,19 +10,19 @@ Turn technical capabilities into clear, buyable offers with fit guidance and con
 
 ## Route
 
-| Route | Rendering | Data owner |
-|---|---|---|
-| `/services` | Static | `load-services-page` |
+| Route       | Rendering | Data owner           |
+| ----------- | --------- | -------------------- |
+| `/services` | Static    | `load-services-page` |
 
 ## Content Requirements
 
-| Block | Content | Source | Notes |
-|---|---|---|---|
-| Intro | What problems the services solve. | Site metadata/services. | Clear consulting/contractor framing. |
-| Offer comparison | Service cards with pain, output, best fit, CTA. | `services`. | Required by FR-02. |
-| Deliverables | Concrete outputs by service. | `services`. | Avoid vague capability lists. |
-| Best fit / not fit | Qualification criteria. | `services` and site metadata. | Helps conversion quality. |
-| First step | Diagnostic CTA. | Site metadata/contact. | Links to Contact. |
+| Block              | Content                                         | Source                        | Notes                                |
+| ------------------ | ----------------------------------------------- | ----------------------------- | ------------------------------------ |
+| Intro              | What problems the services solve.               | Site metadata/services.       | Clear consulting/contractor framing. |
+| Offer comparison   | Service cards with pain, output, best fit, CTA. | `services`.                   | Required by FR-02.                   |
+| Deliverables       | Concrete outputs by service.                    | `services`.                   | Avoid vague capability lists.        |
+| Best fit / not fit | Qualification criteria.                         | `services` and site metadata. | Helps conversion quality.            |
+| First step         | Diagnostic CTA.                                 | Site metadata/contact.        | Links to Contact.                    |
 
 ## Initial State
 
@@ -84,4 +84,3 @@ Client --> UC4
 - `docs/page-specs/portfolio_page_specs.md`
 - `docs/content-models/portfolio_content_models.md`
 - `docs/data-flows/content-to-page-data-flow.md`
-

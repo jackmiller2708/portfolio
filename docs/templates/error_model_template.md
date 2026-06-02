@@ -17,8 +17,8 @@ Define the errors, defects, fallbacks, and user-facing behavior for a workflow o
 
 ## Error Taxonomy
 
-| Error | Category | Cause | Owner |
-|---|---|---|---|
+| Error          | Category    | Cause          | Owner          |
+| -------------- | ----------- | -------------- | -------------- |
 | `ExampleError` | Recoverable | Example cause. | Example layer. |
 
 ## Error Shapes
@@ -34,9 +34,9 @@ type ExampleError = {
 
 ## Handling Rules
 
-| Error | Handling | User-facing behavior |
-|---|---|---|
-| `ExampleError` | Example handling. | Example response. |
+| Error          | Handling          | User-facing behavior |
+| -------------- | ----------------- | -------------------- |
+| `ExampleError` | Example handling. | Example response.    |
 
 ## Fallbacks
 
@@ -58,4 +58,3 @@ Define what should be logged and what must be redacted.
 - Related ADRs
 - Related data flow
 - Related implementation plan
-

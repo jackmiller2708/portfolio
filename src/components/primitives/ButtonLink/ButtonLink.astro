@@ -1,0 +1,44 @@
+---
+type Props = {
+  href: string;
+  label: string;
+  variant?: "primary" | "secondary";
+};
+
+const { href, label, variant = "primary" } = Astro.props;
+---
+
+<a class:list={["button-link", `button-link--${variant}`]} href={href}>{label}</a>
+
+<style>
+  .button-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    padding: var(--space-3) var(--space-5);
+    border: var(--border-1);
+    border-radius: var(--radius-2);
+    font-weight: 700;
+    text-decoration: none;
+    transition:
+      transform var(--duration-1) var(--ease-standard),
+      border-color var(--duration-1) var(--ease-standard),
+      background var(--duration-1) var(--ease-standard);
+  }
+
+  .button-link:hover {
+    transform: scale(1.01);
+  }
+
+  .button-link--primary {
+    color: #ffffff;
+    background: var(--color-accent);
+    border-color: var(--color-accent);
+  }
+
+  .button-link--secondary {
+    color: var(--color-text);
+    background: var(--color-surface);
+  }
+</style>

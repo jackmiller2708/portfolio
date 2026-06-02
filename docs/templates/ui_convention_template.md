@@ -24,9 +24,9 @@ State the binding rules in direct language.
 
 ## Taxonomy
 
-| Category | Purpose | Examples |
-|---|---|---|
-| Example | Example purpose. | `ExampleComponent` |
+| Category | Purpose          | Examples           |
+| -------- | ---------------- | ------------------ |
+| Example  | Example purpose. | `ExampleComponent` |
 
 ## Naming
 
@@ -57,4 +57,3 @@ Define keyboard, semantic HTML, focus, contrast, labels, and reduced-motion requ
 - Related ADRs
 - Related design system
 - Related architecture docs
-

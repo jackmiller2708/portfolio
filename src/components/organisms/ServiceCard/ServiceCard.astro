@@ -1,0 +1,67 @@
+---
+import ButtonLink from "@components/primitives/ButtonLink/ButtonLink.astro";
+import type { ServiceOffer } from "@domain/service";
+
+type Props = {
+  service: ServiceOffer;
+};
+
+const { service } = Astro.props;
+---
+
+<article class="service-card">
+  <div>
+    <h3>{service.title}</h3>
+    <p>{service.summary}</p>
+  </div>
+  <dl>
+    <div>
+      <dt>Client pain</dt>
+      <dd>{service.clientPain}</dd>
+    </div>
+    <div>
+      <dt>Outputs</dt>
+      <dd>{service.outputs.join(", ")}</dd>
+    </div>
+  </dl>
+  <ButtonLink href={service.cta.href} label={service.cta.label} />
+</article>
+
+<style>
+  .service-card {
+    display: grid;
+    align-content: space-between;
+    gap: var(--space-6);
+    padding: var(--space-6);
+    background: var(--color-surface);
+    border: var(--border-1);
+    border-radius: var(--radius-2);
+  }
+
+  h3 {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: 1.45rem;
+  }
+
+  p {
+    margin: var(--space-3) 0 0;
+    color: var(--color-muted);
+  }
+
+  dl {
+    display: grid;
+    gap: var(--space-4);
+    margin: 0;
+  }
+
+  dt {
+    color: var(--color-text);
+    font-weight: 700;
+  }
+
+  dd {
+    margin: var(--space-1) 0 0;
+    color: var(--color-muted);
+  }
+</style>

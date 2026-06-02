@@ -8,16 +8,16 @@ Documentation should make architecture, design, data flow, and implementation de
 
 ## Document Types
 
-| Type | Template | Use when |
-|---|---|---|
-| ADR | `templates/adr_template.md` | A decision affects architecture, dependencies, data flow, deployment, security, or long-term maintainability. |
-| Architecture Foundation | `templates/architecture_foundation_template.md` | Defining system boundaries, layers, runtime model, and dependency direction. |
-| Data Flow | `templates/data_flow_template.md` | Describing how content, user input, API data, or build-time data moves through the system. |
-| Error Model | `templates/error_model_template.md` | Defining recoverable errors, defects, validation failures, fallback behavior, and user-facing messages. |
-| Content Model | `templates/content_model_template.md` | Defining MDX/content collections, schema fields, redaction rules, and page view models. |
-| UI Convention | `templates/ui_convention_template.md` | Defining component taxonomy, naming, styling, accessibility, and design-system rules. |
-| Page Spec | `templates/page_spec_template.md` | Defining page content, initial/loading/failure states, transitions, and user stories. |
-| Implementation Plan | `templates/implementation_plan_template.md` | Breaking approved architecture into scoped build steps and verification tasks. |
+| Type                    | Template                                        | Use when                                                                                                      |
+| ----------------------- | ----------------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
+| ADR                     | `templates/adr_template.md`                     | A decision affects architecture, dependencies, data flow, deployment, security, or long-term maintainability. |
+| Architecture Foundation | `templates/architecture_foundation_template.md` | Defining system boundaries, layers, runtime model, and dependency direction.                                  |
+| Data Flow               | `templates/data_flow_template.md`               | Describing how content, user input, API data, or build-time data moves through the system.                    |
+| Error Model             | `templates/error_model_template.md`             | Defining recoverable errors, defects, validation failures, fallback behavior, and user-facing messages.       |
+| Content Model           | `templates/content_model_template.md`           | Defining MDX/content collections, schema fields, redaction rules, and page view models.                       |
+| UI Convention           | `templates/ui_convention_template.md`           | Defining component taxonomy, naming, styling, accessibility, and design-system rules.                         |
+| Page Spec               | `templates/page_spec_template.md`               | Defining page content, initial/loading/failure states, transitions, and user stories.                         |
+| Implementation Plan     | `templates/implementation_plan_template.md`     | Breaking approved architecture into scoped build steps and verification tasks.                                |
 
 ## Naming
 

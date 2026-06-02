@@ -1,0 +1,99 @@
+---
+import "@styles/global.css";
+
+type Props = {
+  title: string;
+  description: string;
+};
+
+const { title, description } = Astro.props;
+
+const navItems = [
+  { label: "Services", href: "/services" },
+  { label: "Case Studies", href: "/case-studies" },
+  { label: "Lab", href: "/lab" },
+  { label: "Sample Audit", href: "/sample-audit" },
+  { label: "About", href: "/about" },
+  { label: "Contact", href: "/contact" }
+];
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="description" content={description} />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+  </head>
+  <body>
+    <a class="u-skip-link" href="#main">Skip to content</a>
+    <header class="site-header">
+      <div class="site-header__inner u-container">
+        <a class="site-header__brand" href="/">Frontend Systems</a>
+        <nav class="site-header__nav" aria-label="Primary navigation">
+          {navItems.map((item) => <a href={item.href}>{item.label}</a>)}
+        </nav>
+      </div>
+    </header>
+    <main id="main">
+      <slot />
+    </main>
+  </body>
+</html>
+
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: var(--z-header);
+    background: color-mix(in srgb, var(--color-bg) 92%, transparent);
+    border-bottom: var(--border-1);
+    backdrop-filter: blur(14px);
+  }
+
+  .site-header__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-6);
+    min-height: 72px;
+  }
+
+  .site-header__brand {
+    color: var(--color-text);
+    font-family: var(--font-display);
+    font-weight: 700;
+    text-decoration: none;
+  }
+
+  .site-header__nav {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: var(--space-4);
+  }
+
+  .site-header__nav a {
+    color: var(--color-muted);
+    font-size: 0.94rem;
+    text-decoration: none;
+  }
+
+  .site-header__nav a:hover {
+    color: var(--color-text);
+  }
+
+  @media (max-width: 760px) {
+    .site-header__inner {
+      align-items: flex-start;
+      flex-direction: column;
+      justify-content: center;
+      padding-block: var(--space-4);
+    }
+
+    .site-header__nav {
+      justify-content: flex-start;
+    }
+  }
+</style>

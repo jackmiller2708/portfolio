@@ -10,20 +10,20 @@ Make the audit service tangible through a realistic, privacy-safe Angular audit 
 
 ## Route
 
-| Route | Rendering | Data owner |
-|---|---|---|
-| `/sample-audit` | Static | `load-sample-audit-page` |
+| Route           | Rendering | Data owner               |
+| --------------- | --------- | ------------------------ |
+| `/sample-audit` | Static    | `load-sample-audit-page` |
 
 ## Content Requirements
 
-| Block | Content | Source | Notes |
-|---|---|---|---|
-| Audit intro | What the sample report demonstrates. | Site metadata/audit content. | Make audit tangible. |
-| Severity list | Findings by severity. | `auditFindings`. | Critical/high/medium/low. |
-| Finding detail | Evidence, risk, recommendation. | `auditFindings`. | Required by FR-06. |
-| Risk matrix | Severity and impact visualization. | `auditFindings`. | Static, accessible. |
-| Roadmap | Sprint recommendation. | `auditFindings`. | Shows prioritization. |
-| CTA | Request diagnostic. | Contact metadata. | Links to Contact. |
+| Block          | Content                              | Source                       | Notes                     |
+| -------------- | ------------------------------------ | ---------------------------- | ------------------------- |
+| Audit intro    | What the sample report demonstrates. | Site metadata/audit content. | Make audit tangible.      |
+| Severity list  | Findings by severity.                | `auditFindings`.             | Critical/high/medium/low. |
+| Finding detail | Evidence, risk, recommendation.      | `auditFindings`.             | Required by FR-06.        |
+| Risk matrix    | Severity and impact visualization.   | `auditFindings`.             | Static, accessible.       |
+| Roadmap        | Sprint recommendation.               | `auditFindings`.             | Shows prioritization.     |
+| CTA            | Request diagnostic.                  | Contact metadata.            | Links to Contact.         |
 
 ## Initial State
 
@@ -92,4 +92,3 @@ Client --> UC4
 - `docs/page-specs/portfolio_page_specs.md`
 - `docs/content-models/portfolio_content_models.md`
 - `docs/data-flows/content-to-page-data-flow.md`
-

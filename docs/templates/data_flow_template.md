@@ -10,14 +10,14 @@ Describe the workflow or data path this document covers.
 
 ## Sources
 
-| Source | Type | Owner | Notes |
-|---|---|---|---|
+| Source               | Type            | Owner              | Notes         |
+| -------------------- | --------------- | ------------------ | ------------- |
 | Example content file | MDX/frontmatter | Content collection | Example note. |
 
 ## Target Outputs
 
-| Output | Consumer | Shape |
-|---|---|---|
+| Output             | Consumer             | Shape              |
+| ------------------ | -------------------- | ------------------ |
 | Example view model | Astro page/component | `ExampleViewModel` |
 
 ## Flow
@@ -40,8 +40,8 @@ List important transformations from raw input to domain data to view model.
 
 ## Failure Modes
 
-| Failure | Error type | Fallback or response |
-|---|---|---|
+| Failure       | Error type           | Fallback or response              |
+| ------------- | -------------------- | --------------------------------- |
 | Invalid field | `ExampleDecodeError` | Fail build or show safe fallback. |
 
 ## Privacy And Redaction
@@ -64,4 +64,3 @@ Describe logs, traces, metrics, or build-time reports needed for this flow.
 - Related ADRs
 - Related content model
 - Related implementation plan
-

@@ -1,0 +1,28 @@
+---
+import { Effect } from "effect";
+import BaseLayout from "@layouts/BaseLayout.astro";
+import PageHero from "@components/sections/PageHero/PageHero.astro";
+import AuditFinding from "@components/organisms/AuditFinding/AuditFinding.astro";
+import { loadSampleAuditPage } from "@programs/load-sample-audit-page";
+
+const viewModel = await Effect.runPromise(loadSampleAuditPage);
+---
+
+<BaseLayout title="Sample Audit | Frontend Systems Portfolio" description={viewModel.summary}>
+  <PageHero
+    title={viewModel.title}
+    summary={viewModel.summary}
+    primaryCta={{ label: "Request similar diagnostic", href: "/contact" }}
+  />
+  <section class="audit-section">
+    <div class="u-container u-stack">
+      {viewModel.findings.map((finding) => <AuditFinding finding={finding} />)}
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .audit-section {
+    padding: 0 0 var(--space-16);
+  }
+</style>

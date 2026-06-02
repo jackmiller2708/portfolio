@@ -10,16 +10,16 @@ Help visitors recover from unknown or outdated routes.
 
 ## Route
 
-| Route | Rendering | Data owner |
-|---|---|---|
-| `404` | Static | `load-not-found-page` or static metadata |
+| Route | Rendering | Data owner                               |
+| ----- | --------- | ---------------------------------------- |
+| `404` | Static    | `load-not-found-page` or static metadata |
 
 ## Content Requirements
 
-| Block | Content | Source | Notes |
-|---|---|---|---|
-| 404 message | Clear missing page explanation. | Site metadata. | No distracting joke copy. |
-| Recovery links | Home, Services, Case Studies, Contact. | Navigation metadata. | Helps users recover. |
+| Block          | Content                                | Source               | Notes                     |
+| -------------- | -------------------------------------- | -------------------- | ------------------------- |
+| 404 message    | Clear missing page explanation.        | Site metadata.       | No distracting joke copy. |
+| Recovery links | Home, Services, Case Studies, Contact. | Navigation metadata. | Helps users recover.      |
 
 ## Initial State
 
@@ -73,4 +73,3 @@ Visitor --> UC2
 
 - `docs/page-specs/portfolio_page_specs.md`
 - `docs/architecture/portfolio_architectural_foundation.md`
-

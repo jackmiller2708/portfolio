@@ -1,0 +1,16 @@
+---
+import BaseLayout from "@layouts/BaseLayout.astro";
+import PageHero from "@components/sections/PageHero/PageHero.astro";
+---
+
+<BaseLayout
+  title="About | Frontend Systems Portfolio"
+  description="Working style and architecture philosophy for frontend systems work."
+>
+  <PageHero
+    title="Practical frontend architecture under real delivery constraints."
+    summary="I focus on making ownership, state, data flow, and errors explicit enough that teams can change Angular systems with less guesswork."
+    primaryCta={{ label: "View services", href: "/services" }}
+    secondaryCta={{ label: "Contact", href: "/contact" }}
+  />
+</BaseLayout>

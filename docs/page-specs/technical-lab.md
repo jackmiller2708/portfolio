@@ -10,19 +10,19 @@ Provide public proof of technical thinking through focused notes and demos.
 
 ## Route
 
-| Route | Rendering | Data owner |
-|---|---|---|
-| `/lab` | Static | `load-lab-page` |
+| Route         | Rendering             | Data owner           |
+| ------------- | --------------------- | -------------------- |
+| `/lab`        | Static                | `load-lab-page`      |
 | `/lab/[slug]` | Static dynamic routes | `load-lab-post-page` |
 
 ## Content Requirements
 
-| Block | Content | Source | Notes |
-|---|---|---|---|
-| Lab intro | Technical writing positioning. | Site metadata. | Public proof of thinking. |
-| Topic filters | Angular, RxJS, TypeScript, Architecture. | `labPosts`. | Should work without hiding content from no-JS users. |
-| Lab cards | Title, summary, takeaway, topic. | `labPosts`. | Four initial required topics. |
-| Post detail | Explanation, snippet, outcome, related service. | `labPosts`. | Avoid code flood. |
+| Block         | Content                                         | Source         | Notes                                                |
+| ------------- | ----------------------------------------------- | -------------- | ---------------------------------------------------- |
+| Lab intro     | Technical writing positioning.                  | Site metadata. | Public proof of thinking.                            |
+| Topic filters | Angular, RxJS, TypeScript, Architecture.        | `labPosts`.    | Should work without hiding content from no-JS users. |
+| Lab cards     | Title, summary, takeaway, topic.                | `labPosts`.    | Four initial required topics.                        |
+| Post detail   | Explanation, snippet, outcome, related service. | `labPosts`.    | Avoid code flood.                                    |
 
 ## Initial State
 
@@ -91,4 +91,3 @@ Client --> UC4
 - `docs/page-specs/portfolio_page_specs.md`
 - `docs/content-models/portfolio_content_models.md`
 - `docs/data-flows/content-to-page-data-flow.md`
-

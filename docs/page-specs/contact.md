@@ -10,19 +10,19 @@ Convert good-fit leads through a scoped engineering diagnostic intake flow.
 
 ## Route
 
-| Route | Rendering | Data owner |
-|---|---|---|
+| Route      | Rendering                                | Data owner                                   |
+| ---------- | ---------------------------------------- | -------------------------------------------- |
 | `/contact` | Static page with server/contact workflow | `load-contact-page`, `submit-contact-intake` |
 
 ## Content Requirements
 
-| Block | Content | Source | Notes |
-|---|---|---|---|
-| Intro | Scoped diagnostic framing. | Site metadata/contact rules. | Not a generic message form. |
-| Intake form | Product, Angular version, team size, pain, engagement type, timeline, budget comfort. | Contact schema. | Required by FR-07. |
-| Availability | Timing, constraints, fit rules. | Site metadata. | Set expectations. |
-| Non-fit criteria | Work not accepted. | Site metadata/services. | Reduces poor-fit leads. |
-| Direct contact | Email/social. | Site metadata. | Fallback path. |
+| Block            | Content                                                                               | Source                       | Notes                       |
+| ---------------- | ------------------------------------------------------------------------------------- | ---------------------------- | --------------------------- |
+| Intro            | Scoped diagnostic framing.                                                            | Site metadata/contact rules. | Not a generic message form. |
+| Intake form      | Product, Angular version, team size, pain, engagement type, timeline, budget comfort. | Contact schema.              | Required by FR-07.          |
+| Availability     | Timing, constraints, fit rules.                                                       | Site metadata.               | Set expectations.           |
+| Non-fit criteria | Work not accepted.                                                                    | Site metadata/services.      | Reduces poor-fit leads.     |
+| Direct contact   | Email/social.                                                                         | Site metadata.               | Fallback path.              |
 
 ## Initial State
 
@@ -36,13 +36,13 @@ The visitor sees the diagnostic framing, form fields, availability constraints, 
 
 ## Failure State
 
-| Failure | Behavior |
-|---|---|
-| Field validation failure | Show field-level errors and an error summary. |
-| Missing consent | Keep form values and focus consent/error summary. |
-| Spam blocked | Show generic blocked/unavailable response without exposing spam rules. |
-| Delivery failure | Show retry and direct-email fallback. |
-| Config failure | Show contact temporarily unavailable and direct-email fallback if safe. |
+| Failure                  | Behavior                                                                |
+| ------------------------ | ----------------------------------------------------------------------- |
+| Field validation failure | Show field-level errors and an error summary.                           |
+| Missing consent          | Keep form values and focus consent/error summary.                       |
+| Spam blocked             | Show generic blocked/unavailable response without exposing spam rules.  |
+| Delivery failure         | Show retry and direct-email fallback.                                   |
+| Config failure           | Show contact temporarily unavailable and direct-email fallback if safe. |
 
 ## View Transitions
 
@@ -109,4 +109,3 @@ Bot --> UC6
 - `docs/page-specs/portfolio_page_specs.md`
 - `docs/data-flows/contact-intake-data-flow.md`
 - `docs/error-models/portfolio_error_model.md`
-

@@ -10,13 +10,13 @@ The site should feel like a senior engineer opening the system map and showing e
 
 ## Brand Attributes
 
-| Attribute | Meaning | Interface behavior |
-|---|---|---|
-| Explicit | Nothing important is hidden or vague. | Clear headings, structure, diagrams, CTAs. |
-| Architectural | The work is about systems and boundaries. | Layered cards, grids, flow lines, module maps. |
-| Precise | Senior attention to detail. | Tight typography, consistent spacing, restrained animation. |
-| Practical | Quality under constraints. | Case studies show tradeoffs, budget, timeline, team capacity. |
-| Memorable | Enough signature interaction to stay in mind. | One interactive architecture map and subtle system-flow motion. |
+| Attribute     | Meaning                                       | Interface behavior                                              |
+| ------------- | --------------------------------------------- | --------------------------------------------------------------- |
+| Explicit      | Nothing important is hidden or vague.         | Clear headings, structure, diagrams, CTAs.                      |
+| Architectural | The work is about systems and boundaries.     | Layered cards, grids, flow lines, module maps.                  |
+| Precise       | Senior attention to detail.                   | Tight typography, consistent spacing, restrained animation.     |
+| Practical     | Quality under constraints.                    | Case studies show tradeoffs, budget, timeline, team capacity.   |
+| Memorable     | Enough signature interaction to stay in mind. | One interactive architecture map and subtle system-flow motion. |
 
 ## Core Visual Metaphor
 
@@ -29,18 +29,18 @@ Use frontend systems as the visual language: feature boundaries, stream paths, d
 
 ## Color Tokens
 
-| Token | Light | Dark | Use |
-|---|---|---|---|
-| --color-accent | #E0478B | #E0478B | CTA, focus ring, selected diagram nodes. |
-| --color-bg | #FAFAFC | #0E0F14 | Main background. |
-| --color-surface | #FFFFFF | #171820 | Cards and panels. |
-| --color-surface-2 | #F2F4F8 | #20222C | Code blocks and diagrams. |
-| --color-text | #17171C | #F3F4F8 | Primary text. |
-| --color-muted | #5E606A | #A7AAB8 | Secondary text. |
-| --color-border | #D9DDE7 | #303442 | Borders and separators. |
-| --color-success | #237A57 | #6CE0A6 | Stable/positive states. |
-| --color-warning | #946200 | #FFD166 | Medium risk markers. |
-| --color-danger | #B42318 | #FF8A80 | Critical risk markers. |
+| Token             | Light   | Dark    | Use                                      |
+| ----------------- | ------- | ------- | ---------------------------------------- |
+| --color-accent    | #E0478B | #E0478B | CTA, focus ring, selected diagram nodes. |
+| --color-bg        | #FAFAFC | #0E0F14 | Main background.                         |
+| --color-surface   | #FFFFFF | #171820 | Cards and panels.                        |
+| --color-surface-2 | #F2F4F8 | #20222C | Code blocks and diagrams.                |
+| --color-text      | #17171C | #F3F4F8 | Primary text.                            |
+| --color-muted     | #5E606A | #A7AAB8 | Secondary text.                          |
+| --color-border    | #D9DDE7 | #303442 | Borders and separators.                  |
+| --color-success   | #237A57 | #6CE0A6 | Stable/positive states.                  |
+| --color-warning   | #946200 | #FFD166 | Medium risk markers.                     |
+| --color-danger    | #B42318 | #FF8A80 | Critical risk markers.                   |
 
 ## Typography
 
@@ -61,18 +61,18 @@ Use frontend systems as the visual language: feature boundaries, stream paths, d
 
 ## Component System
 
-| Component | Purpose |
-|---|---|
-| HeroSystemMap | Signature visual that explains system boundaries. |
-| ServiceCard | Turns services into buyable offers. |
-| ProofStrip | Fast credibility scan. |
-| CaseStudyCard | Preview technical depth. |
-| EvidencePanel | Diagrams, snippets, audit findings, metrics. |
-| BeforeAfterToggle | Shows architecture improvement. |
-| DecisionRecord | Shows senior engineering reasoning. |
-| LabSnippet | Technical writing preview. |
-| AuditFinding | Sample audit evidence. |
-| ContactIntake | Pre-qualifies leads. |
+| Component         | Purpose                                           |
+| ----------------- | ------------------------------------------------- |
+| HeroSystemMap     | Signature visual that explains system boundaries. |
+| ServiceCard       | Turns services into buyable offers.               |
+| ProofStrip        | Fast credibility scan.                            |
+| CaseStudyCard     | Preview technical depth.                          |
+| EvidencePanel     | Diagrams, snippets, audit findings, metrics.      |
+| BeforeAfterToggle | Shows architecture improvement.                   |
+| DecisionRecord    | Shows senior engineering reasoning.               |
+| LabSnippet        | Technical writing preview.                        |
+| AuditFinding      | Sample audit evidence.                            |
+| ContactIntake     | Pre-qualifies leads.                              |
 
 ## Motion System
 
@@ -87,15 +87,15 @@ Reduced-motion mode must disable scroll scrubbing, line drawing, parallax, and m
 
 ## Page-Level Specs
 
-| Page | Intent | Blocks |
-|---|---|---|
-| Home | Immediate trust and memorable positioning. | Hero, proof strip, services, selected case studies, map preview, lab preview, CTA. |
-| Services | Turn skills into offers. | Offer comparison, deliverables, best fit, exclusions, first step. |
-| Case Study Detail | Show how you think. | Problem, constraints, map, decisions, tradeoffs, snippets, result, next step. |
-| Technical Lab | Public proof of thinking. | Article/demo cards by Angular, RxJS, TypeScript, Architecture. |
-| Sample Audit | Make audit tangible. | Severity list, findings, risk matrix, roadmap, sprint recommendation. |
-| About | Professional human context. | Working style, constraints, quality philosophy, languages, availability. |
-| Contact | Convert good-fit leads. | Intake form, email/social, availability rules, non-fit criteria. |
+| Page              | Intent                                     | Blocks                                                                             |
+| ----------------- | ------------------------------------------ | ---------------------------------------------------------------------------------- |
+| Home              | Immediate trust and memorable positioning. | Hero, proof strip, services, selected case studies, map preview, lab preview, CTA. |
+| Services          | Turn skills into offers.                   | Offer comparison, deliverables, best fit, exclusions, first step.                  |
+| Case Study Detail | Show how you think.                        | Problem, constraints, map, decisions, tradeoffs, snippets, result, next step.      |
+| Technical Lab     | Public proof of thinking.                  | Article/demo cards by Angular, RxJS, TypeScript, Architecture.                     |
+| Sample Audit      | Make audit tangible.                       | Severity list, findings, risk matrix, roadmap, sprint recommendation.              |
+| About             | Professional human context.                | Working style, constraints, quality philosophy, languages, availability.           |
+| Contact           | Convert good-fit leads.                    | Intake form, email/social, availability rules, non-fit criteria.                   |
 
 ## Signature Interaction: Explicit System Map
 
@@ -107,15 +107,15 @@ Reduced-motion mode must disable scroll scrubbing, line drawing, parallax, and m
 
 ## Do / Do Not
 
-| Do | Do not |
-|---|---|
+| Do                                 | Do not                                            |
+| ---------------------------------- | ------------------------------------------------- |
 | Use one strong technical metaphor. | Add unrelated 3D just because award sites use 3D. |
-| Use animation to explain flows. | Make people wait to read content. |
-| Use case studies as proof. | Use cards that only list tech logos. |
-| Make contact and services obvious. | Hide navigation in experimental UI. |
-| Keep dark mode readable. | Use low-contrast neon everywhere. |
-| Tie code snippets to outcomes. | Flood pages with code. |
-| Design for touch and mobile. | Assume hover is enough. |
+| Use animation to explain flows.    | Make people wait to read content.                 |
+| Use case studies as proof.         | Use cards that only list tech logos.              |
+| Make contact and services obvious. | Hide navigation in experimental UI.               |
+| Keep dark mode readable.           | Use low-contrast neon everywhere.                 |
+| Tie code snippets to outcomes.     | Flood pages with code.                            |
+| Design for touch and mobile.       | Assume hover is enough.                           |
 
 ## Build Phases
 

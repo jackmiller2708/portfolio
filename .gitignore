@@ -1,0 +1,16 @@
+node_modules/
+dist/
+.astro/
+.vercel/
+.netlify/
+.wrangler/
+
+*.local
+.env
+.env.*
+!.env.example
+
+coverage/
+playwright-report/
+test-results/
+

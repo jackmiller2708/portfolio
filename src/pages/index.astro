@@ -1,0 +1,49 @@
+---
+import { Effect } from "effect";
+import BaseLayout from "@layouts/BaseLayout.astro";
+import PageHero from "@components/sections/PageHero/PageHero.astro";
+import SectionHeader from "@components/molecules/SectionHeader/SectionHeader.astro";
+import ServiceCard from "@components/organisms/ServiceCard/ServiceCard.astro";
+import { loadHomePage } from "@programs/load-home-page";
+
+const viewModel = await Effect.runPromise(loadHomePage);
+---
+
+<BaseLayout title="Frontend Systems Portfolio" description={viewModel.hero.summary}>
+  <PageHero
+    eyebrow={viewModel.hero.eyebrow}
+    title={viewModel.hero.title}
+    summary={viewModel.hero.summary}
+    primaryCta={{ label: "Start a diagnostic", href: "/contact" }}
+    secondaryCta={{ label: "View services", href: "/services" }}
+  />
+  <section class="home-section">
+    <div class="u-container u-stack">
+      <SectionHeader
+        eyebrow="Services"
+        title="Scoped ways to make risk visible"
+        summary="Each offer is designed around a concrete engineering outcome, not a vague list of technologies."
+      />
+      <div class="service-grid">
+        {viewModel.services.map((service) => <ServiceCard service={service} />)}
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .home-section {
+    padding: var(--space-12) 0 var(--space-16);
+  }
+
+  .service-grid {
+    display: grid;
+    gap: var(--space-6);
+  }
+
+  @media (min-width: 860px) {
+    .service-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+</style>

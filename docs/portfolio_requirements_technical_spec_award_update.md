@@ -10,12 +10,12 @@ For this Angular contractor portfolio, the goal is not maximum spectacle. The go
 
 ## Award Signals To Translate Into Requirements
 
-| Award signal | What it rewards | Portfolio interpretation |
-|---|---|---|
-| Awwwards scoring | Design, usability, creativity, content | Balance visual polish with clear service positioning. Animation must not block scanning/contact. |
+| Award signal             | What it rewards                             | Portfolio interpretation                                                                                      |
+| ------------------------ | ------------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
+| Awwwards scoring         | Design, usability, creativity, content      | Balance visual polish with clear service positioning. Animation must not block scanning/contact.              |
 | Awwwards Developer Award | Developer craft after SOTD-level evaluation | Show implementation quality through performance, accessibility, progressive enhancement, and technical demos. |
-| CSS Design Awards | UI, UX, Innovation | Refined UI, obvious user path, and one or two original technical interactions. |
-| Portfolio galleries | Creative content showcasing | Services, case studies, demos, proof, and contact are the core experience. |
+| CSS Design Awards        | UI, UX, Innovation                          | Refined UI, obvious user path, and one or two original technical interactions.                                |
+| Portfolio galleries      | Creative content showcasing                 | Services, case studies, demos, proof, and contact are the core experience.                                    |
 
 ## Core Thesis
 
@@ -48,18 +48,18 @@ The visual system should feel architectural, precise, and calm. The interaction 
 
 ## Functional Requirements
 
-| ID | Requirement | Acceptance criteria |
-|---|---|---|
-| FR-01 | Hero positioning | Title, specialization, core outcome, and CTA visible without scrolling on desktop and high-end mobile. |
-| FR-02 | Service cards | Every service includes client pain, output, best fit, and CTA. |
-| FR-03 | Case study template | Includes context, constraints, problem, decision, tradeoffs, before/after, visuals, result, recommendation. |
-| FR-04 | Interactive architecture map | Shows messy vs explicit frontend states with static fallback. |
-| FR-05 | Technical lab | At least four entries: RxJS cleanup, data/error modeling, Hash/Equal, cache semantics. |
-| FR-06 | Sample audit | Fake Angular audit report viewable as page and later downloadable. |
-| FR-07 | Contact flow | Asks product, Angular version, team size, pain, diagnosis vs implementation, timeline, budget comfort. |
-| FR-08 | Responsive support | Usable on mobile, tablet, laptop, desktop, and touch devices. |
-| FR-09 | Bilingual-ready | Supports English-first and future Vietnamese variant. |
-| FR-10 | Privacy-safe proof | Case studies can redact employer/client names and use synthetic diagrams. |
+| ID    | Requirement                  | Acceptance criteria                                                                                         |
+| ----- | ---------------------------- | ----------------------------------------------------------------------------------------------------------- |
+| FR-01 | Hero positioning             | Title, specialization, core outcome, and CTA visible without scrolling on desktop and high-end mobile.      |
+| FR-02 | Service cards                | Every service includes client pain, output, best fit, and CTA.                                              |
+| FR-03 | Case study template          | Includes context, constraints, problem, decision, tradeoffs, before/after, visuals, result, recommendation. |
+| FR-04 | Interactive architecture map | Shows messy vs explicit frontend states with static fallback.                                               |
+| FR-05 | Technical lab                | At least four entries: RxJS cleanup, data/error modeling, Hash/Equal, cache semantics.                      |
+| FR-06 | Sample audit                 | Fake Angular audit report viewable as page and later downloadable.                                          |
+| FR-07 | Contact flow                 | Asks product, Angular version, team size, pain, diagnosis vs implementation, timeline, budget comfort.      |
+| FR-08 | Responsive support           | Usable on mobile, tablet, laptop, desktop, and touch devices.                                               |
+| FR-09 | Bilingual-ready              | Supports English-first and future Vietnamese variant.                                                       |
+| FR-10 | Privacy-safe proof           | Case studies can redact employer/client names and use synthetic diagrams.                                   |
 
 ## Non-Functional Requirements
 
@@ -74,19 +74,19 @@ The visual system should feel architectural, precise, and calm. The interaction 
 
 ## Recommended Tech Stack
 
-| Layer | Recommended tech | Reason |
-|---|---|---|
-| Framework | Astro + TypeScript | Content-heavy, static, fast, MDX, selective interactive islands. |
-| Alternative | Next.js + React | Good for R3F and React ecosystem, but more complexity than needed. |
-| Angular proof | Angular demos or separate demo apps | Show Angular strength through labs/case studies instead of forcing marketing shell to be Angular. |
-| Styling | CSS variables + Tailwind or CSS modules | Design tokens and predictable responsive system. |
-| Content | MDX + typed content schema | Easy case studies and lab notes. |
-| Animation | CSS transitions + GSAP ScrollTrigger | Controlled scroll storytelling. |
-| Optional 3D | Three.js or React Three Fiber island | Only for one signature architecture interaction. |
-| Diagrams | SVG / Mermaid / custom data-driven SVG | Crisp, accessible, maintainable architecture visuals. |
-| Code display | Shiki or Expressive Code | High-quality snippets. |
-| Deployment | Vercel, Netlify, Cloudflare Pages | Static hosting and branch previews. |
-| QA | Lighthouse CI, axe, Playwright | Protect performance, accessibility, and critical flows. |
+| Layer         | Recommended tech                        | Reason                                                                                            |
+| ------------- | --------------------------------------- | ------------------------------------------------------------------------------------------------- |
+| Framework     | Astro + TypeScript                      | Content-heavy, static, fast, MDX, selective interactive islands.                                  |
+| Alternative   | Next.js + React                         | Good for R3F and React ecosystem, but more complexity than needed.                                |
+| Angular proof | Angular demos or separate demo apps     | Show Angular strength through labs/case studies instead of forcing marketing shell to be Angular. |
+| Styling       | CSS variables + Tailwind or CSS modules | Design tokens and predictable responsive system.                                                  |
+| Content       | MDX + typed content schema              | Easy case studies and lab notes.                                                                  |
+| Animation     | CSS transitions + GSAP ScrollTrigger    | Controlled scroll storytelling.                                                                   |
+| Optional 3D   | Three.js or React Three Fiber island    | Only for one signature architecture interaction.                                                  |
+| Diagrams      | SVG / Mermaid / custom data-driven SVG  | Crisp, accessible, maintainable architecture visuals.                                             |
+| Code display  | Shiki or Expressive Code                | High-quality snippets.                                                                            |
+| Deployment    | Vercel, Netlify, Cloudflare Pages       | Static hosting and branch previews.                                                               |
+| QA            | Lighthouse CI, axe, Playwright          | Protect performance, accessibility, and critical flows.                                           |
 
 ## Launch Checklist
 

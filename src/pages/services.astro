@@ -1,0 +1,39 @@
+---
+import { Effect } from "effect";
+import BaseLayout from "@layouts/BaseLayout.astro";
+import PageHero from "@components/sections/PageHero/PageHero.astro";
+import ServiceCard from "@components/organisms/ServiceCard/ServiceCard.astro";
+import { loadServicesPage } from "@programs/load-services-page";
+
+const viewModel = await Effect.runPromise(loadServicesPage);
+---
+
+<BaseLayout title="Services | Frontend Systems Portfolio" description={viewModel.summary}>
+  <PageHero
+    title={viewModel.title}
+    summary={viewModel.summary}
+    primaryCta={{ label: "Start with contact", href: "/contact" }}
+  />
+  <section class="services-section">
+    <div class="u-container service-grid">
+      {viewModel.services.map((service) => <ServiceCard service={service} />)}
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .services-section {
+    padding: 0 0 var(--space-16);
+  }
+
+  .service-grid {
+    display: grid;
+    gap: var(--space-6);
+  }
+
+  @media (min-width: 860px) {
+    .service-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+</style>

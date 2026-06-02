@@ -10,22 +10,22 @@ Introduce the portfolio positioning, make frontend systems expertise visible, an
 
 ## Route
 
-| Route | Rendering | Data owner |
-|---|---|---|
-| `/` | Static with optional interactive island | `load-home-page` |
+| Route | Rendering                               | Data owner       |
+| ----- | --------------------------------------- | ---------------- |
+| `/`   | Static with optional interactive island | `load-home-page` |
 
 ## Content Requirements
 
-| Block | Content | Source | Notes |
-|---|---|---|---|
-| Hero | Specialization, core outcome, primary CTA, secondary CTA. | Site metadata/services/system map. | Must be visible without scrolling on desktop and high-end mobile. |
-| Hero system map | Messy-to-explicit architecture visual. | `systemMap`. | Basic static fallback in V1. |
-| Proof strip | Credibility scan. | Site metadata/case studies/audit findings. | Short, concrete proof points. |
-| Services preview | Buyable offers. | `services`. | Each card links to Services or Contact. |
-| Selected case studies | Technical depth preview. | `caseStudies`. | V1.5 content; V1 may use placeholder proof/audit preview. |
-| Map preview | Architectural metaphor continuation. | `systemMap`. | Avoid duplicate heavy interaction. |
-| Lab preview | Technical writing proof. | `labPosts`. | V1.5 content. |
-| CTA | Diagnostic/contact prompt. | Site metadata/contact rules. | Clear conversion path. |
+| Block                 | Content                                                   | Source                                     | Notes                                                             |
+| --------------------- | --------------------------------------------------------- | ------------------------------------------ | ----------------------------------------------------------------- |
+| Hero                  | Specialization, core outcome, primary CTA, secondary CTA. | Site metadata/services/system map.         | Must be visible without scrolling on desktop and high-end mobile. |
+| Hero system map       | Messy-to-explicit architecture visual.                    | `systemMap`.                               | Basic static fallback in V1.                                      |
+| Proof strip           | Credibility scan.                                         | Site metadata/case studies/audit findings. | Short, concrete proof points.                                     |
+| Services preview      | Buyable offers.                                           | `services`.                                | Each card links to Services or Contact.                           |
+| Selected case studies | Technical depth preview.                                  | `caseStudies`.                             | V1.5 content; V1 may use placeholder proof/audit preview.         |
+| Map preview           | Architectural metaphor continuation.                      | `systemMap`.                               | Avoid duplicate heavy interaction.                                |
+| Lab preview           | Technical writing proof.                                  | `labPosts`.                                | V1.5 content.                                                     |
+| CTA                   | Diagnostic/contact prompt.                                | Site metadata/contact rules.               | Clear conversion path.                                            |
 
 ## Initial State
 
@@ -101,4 +101,3 @@ Reviewer --> UC3
 - `docs/page-specs/portfolio_page_specs.md`
 - `docs/architecture/portfolio_architectural_foundation.md`
 - `docs/content-models/portfolio_content_models.md`
-

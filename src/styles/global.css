@@ -1,0 +1,104 @@
+@import "./tokens.css";
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  line-height: 1.6;
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+}
+
+body,
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+a {
+  color: inherit;
+}
+
+img,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+:focus-visible {
+  outline: 3px solid var(--color-accent);
+  outline-offset: 3px;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--color-accent) 28%, transparent);
+}
+
+.u-container {
+  width: min(100% - 40px, 1200px);
+  margin-inline: auto;
+}
+
+.u-stack {
+  display: grid;
+  gap: var(--space-6);
+}
+
+.u-grid {
+  display: grid;
+  gap: var(--space-6);
+}
+
+.u-visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.u-skip-link {
+  position: fixed;
+  top: var(--space-4);
+  left: var(--space-4);
+  z-index: var(--z-header);
+  padding: var(--space-3) var(--space-4);
+  background: var(--color-surface);
+  border: var(--border-1);
+  transform: translateY(-160%);
+}
+
+.u-skip-link:focus {
+  transform: translateY(0);
+}
+
+@media (min-width: 720px) {
+  .u-container {
+    width: min(100% - 48px, 1200px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}

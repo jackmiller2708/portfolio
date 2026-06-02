@@ -1,0 +1,16 @@
+---
+import BaseLayout from "@layouts/BaseLayout.astro";
+import PageHero from "@components/sections/PageHero/PageHero.astro";
+---
+
+<BaseLayout
+  title="Not Found | Frontend Systems Portfolio"
+  description="The requested page was not found."
+>
+  <PageHero
+    title="This page is not available."
+    summary="Use the navigation to return to the portfolio routes that are currently defined."
+    primaryCta={{ label: "Go home", href: "/" }}
+    secondaryCta={{ label: "Contact", href: "/contact" }}
+  />
+</BaseLayout>

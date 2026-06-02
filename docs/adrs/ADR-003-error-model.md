@@ -14,11 +14,11 @@ The portfolio must be reliable, accessible, spam-protected, privacy-safe, and ma
 
 ## Options Considered
 
-| Option | Summary | Tradeoff |
-|---|---|---|
-| Generic `try/catch` | Catch exceptions where needed. | Fast to write, but errors become inconsistent and hard to test. |
-| Framework-level errors only | Let Astro/runtime handle failures. | Acceptable for defects, poor for domain workflows. |
-| Typed domain errors with Effect | Represent expected failures explicitly. | More upfront modeling, stronger behavior guarantees. |
+| Option                          | Summary                                 | Tradeoff                                                        |
+| ------------------------------- | --------------------------------------- | --------------------------------------------------------------- |
+| Generic `try/catch`             | Catch exceptions where needed.          | Fast to write, but errors become inconsistent and hard to test. |
+| Framework-level errors only     | Let Astro/runtime handle failures.      | Acceptable for defects, poor for domain workflows.              |
+| Typed domain errors with Effect | Represent expected failures explicitly. | More upfront modeling, stronger behavior guarantees.            |
 
 ## Rationale
 
@@ -56,4 +56,3 @@ The site's message is architectural clarity. Hidden failure states undermine tha
 - `docs/error-models/portfolio_error_model.md`
 - `docs/data-flows/contact-intake-data-flow.md`
 - `docs/data-flows/content-to-page-data-flow.md`
-

@@ -1,0 +1,22 @@
+<figure class="system-map" aria-label="Static frontend system map placeholder">
+  <div class="system-map__node">UI</div>
+  <div class="system-map__node">Feature Boundary</div>
+  <div class="system-map__node">Data Access</div>
+  <div class="system-map__node">Error Model</div>
+</figure>
+
+<style>
+  .system-map {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-3);
+    margin: 0;
+  }
+
+  .system-map__node {
+    padding: var(--space-4);
+    background: var(--color-surface-2);
+    border: var(--border-1);
+    border-radius: var(--radius-2);
+  }
+</style>

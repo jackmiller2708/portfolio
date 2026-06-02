@@ -1,0 +1,71 @@
+---
+import BaseLayout from "@layouts/BaseLayout.astro";
+import PageHero from "@components/sections/PageHero/PageHero.astro";
+---
+
+<BaseLayout
+  title="Contact | Frontend Systems Portfolio"
+  description="Start a scoped frontend systems diagnostic."
+>
+  <PageHero
+    title="Start with a scoped engineering diagnostic."
+    summary="Share the product context, Angular version, team shape, current pain, timeline, and budget comfort so the first response can be useful."
+  />
+  <section class="contact-section">
+    <form class="contact-form u-container" method="post">
+      <label>
+        Name
+        <input name="name" autocomplete="name" required />
+      </label>
+      <label>
+        Email
+        <input name="email" type="email" autocomplete="email" required />
+      </label>
+      <label>
+        Main pain
+        <textarea name="pain" rows="5" required></textarea>
+      </label>
+      <button type="submit">Submit inquiry</button>
+    </form>
+  </section>
+</BaseLayout>
+
+<style>
+  .contact-section {
+    padding: 0 0 var(--space-16);
+  }
+
+  .contact-form {
+    display: grid;
+    gap: var(--space-5);
+    max-width: 760px;
+  }
+
+  label {
+    display: grid;
+    gap: var(--space-2);
+    color: var(--color-text);
+    font-weight: 700;
+  }
+
+  input,
+  textarea {
+    width: 100%;
+    padding: var(--space-3);
+    color: var(--color-text);
+    background: var(--color-surface);
+    border: var(--border-1);
+    border-radius: var(--radius-1);
+  }
+
+  button {
+    min-height: 44px;
+    width: fit-content;
+    padding: var(--space-3) var(--space-5);
+    color: #ffffff;
+    background: var(--color-accent);
+    border: 1px solid var(--color-accent);
+    border-radius: var(--radius-2);
+    font-weight: 700;
+  }
+</style>
