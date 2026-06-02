@@ -159,13 +159,21 @@ const seo = buildPageSeo(site, {
   .case-detail__meta,
   .detail-card,
   .scan-grid > article,
-  .before-after > div,
+  .before-after > article,
   .case-detail__cta,
   .recommended-card {
     padding: var(--space-6);
     background: var(--color-surface);
     border: var(--border-1);
     border-radius: var(--radius-2);
+    transition: border-color var(--duration-state) var(--ease-standard);
+  }
+
+  .detail-card:hover,
+  .scan-grid > article:hover,
+  .before-after > article:hover,
+  .recommended-card:hover {
+    border-color: var(--color-accent);
   }
 
   .case-detail__meta {
@@ -222,10 +230,6 @@ const seo = buildPageSeo(site, {
   .recommended-card {
     color: inherit;
     text-decoration: none;
-  }
-
-  .recommended-card:hover {
-    border-color: var(--color-accent);
   }
 
   .recommended-card span {

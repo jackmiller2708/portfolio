@@ -251,10 +251,6 @@ const initialDiagnostic = viewModel.diagnostics[0];
     background: var(--color-surface-2);
   }
 
-  .home-section--cta {
-    padding-top: 0;
-  }
-
   .inspect-strip {
     display: flex;
     flex-wrap: wrap;
@@ -326,6 +322,16 @@ const initialDiagnostic = viewModel.diagnostics[0];
     border-radius: var(--radius-2);
   }
 
+  .diagnostic__result {
+    transition:
+      border-color var(--duration-state) var(--ease-standard),
+      opacity var(--duration-state) var(--ease-standard);
+  }
+
+  .diagnostic__result.is-updating {
+    opacity: 0.72;
+  }
+
   .diagnostic__label,
   .diagnostic__result p,
   .diagnostic__result dl,
@@ -371,6 +377,9 @@ const initialDiagnostic = viewModel.diagnostics[0];
   }
 
   .diagnostic__cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     width: fit-content;
     min-height: 44px;
     padding: var(--space-3) var(--space-5);
@@ -445,61 +454,3 @@ const initialDiagnostic = viewModel.diagnostics[0];
     }
   }
 </style>
-
-<script>
-  const selectors = document.querySelectorAll<HTMLElement>("[data-diagnostic-selector]");
-
-  for (const selector of selectors) {
-    const options = selector.querySelectorAll<HTMLButtonElement>("[data-diagnostic-option]");
-    const result = selector.querySelector<HTMLElement>("[data-diagnostic-result]");
-    const title = selector.querySelector<HTMLElement>("[data-diagnostic-title]");
-    const pain = selector.querySelector<HTMLElement>("[data-diagnostic-pain]");
-    const service = selector.querySelector<HTMLAnchorElement>("[data-diagnostic-service]");
-    const proof = selector.querySelector<HTMLAnchorElement>("[data-diagnostic-proof]");
-    const mapState = selector.querySelector<HTMLElement>("[data-diagnostic-map-state]");
-    const cta = selector.querySelector<HTMLAnchorElement>("[data-diagnostic-cta]");
-
-    const activate = (option: HTMLButtonElement) => {
-      for (const item of options) {
-        const isActive = item === option;
-        item.classList.toggle("is-active", isActive);
-        item.setAttribute("aria-pressed", String(isActive));
-      }
-
-      if (!result || !title || !pain || !service || !proof || !mapState || !cta) {
-        return;
-      }
-
-      title.textContent = option.dataset.label ?? "";
-      pain.textContent = option.dataset.pain ?? "";
-      service.textContent = option.dataset.serviceTitle ?? "";
-      service.href = option.dataset.serviceHref ?? "/services";
-      proof.textContent = option.dataset.auditTitle ?? "";
-      proof.href = option.dataset.auditHref ?? "/sample-audit";
-      mapState.textContent = option.dataset.systemState ?? "";
-      cta.textContent = option.dataset.ctaLabel ?? "Start diagnostic";
-      cta.href = option.dataset.ctaHref ?? "/contact";
-
-      const map = document.querySelector<HTMLElement>("[data-system-map]");
-      const stateButton = map?.querySelector<HTMLButtonElement>(
-        `[data-map-state="${option.dataset.systemState ?? "messy"}"]`
-      );
-      stateButton?.click();
-    };
-
-    for (const option of options) {
-      option.addEventListener("click", () => activate(option));
-      option.addEventListener("keydown", (event) => {
-        if (event.key !== "ArrowRight" && event.key !== "ArrowLeft") {
-          return;
-        }
-
-        event.preventDefault();
-        const current = [...options].indexOf(option);
-        const offset = event.key === "ArrowRight" ? 1 : -1;
-        const next = options[(current + offset + options.length) % options.length];
-        next?.focus();
-      });
-    }
-  }
-</script>

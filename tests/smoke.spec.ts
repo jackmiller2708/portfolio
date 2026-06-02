@@ -33,6 +33,7 @@ test.describe("Smoke Tests", () => {
 
     const toggle = page.getByRole("button", { name: "Switch theme" });
     await expect(toggle).toBeVisible();
+    await expect(toggle.locator("svg")).toHaveCount(2);
 
     const before = await page.locator("html").getAttribute("data-theme");
     await toggle.click();
@@ -40,6 +41,38 @@ test.describe("Smoke Tests", () => {
 
     expect(after).not.toBe(before);
     expect(["light", "dark"]).toContain(after);
+  });
+
+  test("Client-side navigation keeps theme and page interactions initialized", async ({ page }) => {
+    await page.goto("/");
+
+    await page.getByRole("button", { name: "Switch theme" }).click();
+    const selectedTheme = await page.locator("html").getAttribute("data-theme");
+    await page
+      .getByRole("navigation", { name: "Primary navigation" })
+      .getByRole("link", { name: "Sample Audit", exact: true })
+      .click();
+
+    await expect(page).toHaveURL(/\/sample-audit$/);
+    await expect(page.locator("html")).toHaveAttribute("data-theme", selectedTheme ?? "");
+
+    const walkthrough = page.locator("[data-audit-walkthrough]");
+    await walkthrough.getByRole("button", { name: "Risk" }).click();
+    await expect(walkthrough.locator("[data-phase-label]")).toContainText("Risk");
+  });
+
+  test("Reduced motion disables page view-transition animation", async ({ browser }) => {
+    const context = await browser.newContext({ reducedMotion: "reduce" });
+    const page = await context.newPage();
+    await page.goto("/");
+
+    const duration = await page.evaluate(() => {
+      const style = getComputedStyle(document.documentElement, "::view-transition-new(root)");
+      return style.animationDuration;
+    });
+
+    expect(duration).toBe("0s");
+    await context.close();
   });
 
   test("Services page should load and display services", async ({ page }) => {
@@ -77,6 +110,7 @@ test.describe("Smoke Tests", () => {
 
     const form = page.locator("form.contact-form");
     await expect(form).toBeVisible();
+    await expect(form).toHaveAttribute("data-astro-reload", "");
   });
 
   test("Contact advisory selector updates recommendation and form context", async ({ page }) => {

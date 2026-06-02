@@ -206,6 +206,10 @@ const firstWalkthrough = viewModel.walkthrough[0];
     cursor: pointer;
     font-weight: 700;
     text-align: left;
+    transition:
+      background-color var(--duration-state) var(--ease-standard),
+      border-color var(--duration-state) var(--ease-standard),
+      color var(--duration-state) var(--ease-standard);
   }
 
   .audit-walkthrough__finding:hover,
@@ -220,6 +224,13 @@ const firstWalkthrough = viewModel.walkthrough[0];
     background: var(--color-surface-2);
     border: var(--border-1);
     border-radius: var(--radius-1);
+    transition:
+      border-color var(--duration-state) var(--ease-standard),
+      opacity var(--duration-state) var(--ease-standard);
+  }
+
+  .audit-walkthrough__panel.is-updating {
+    opacity: 0.72;
   }
 
   .audit-walkthrough__phases {
@@ -326,59 +337,3 @@ const firstWalkthrough = viewModel.walkthrough[0];
     }
   }
 </style>
-
-<script>
-  const walkthrough = document.querySelector<HTMLElement>("[data-audit-walkthrough]");
-
-  if (walkthrough) {
-    const findings = walkthrough.querySelectorAll<HTMLButtonElement>("[data-walkthrough-finding]");
-    const phases = walkthrough.querySelectorAll<HTMLButtonElement>("[data-phase]");
-    const label = walkthrough.querySelector<HTMLElement>("[data-phase-label]");
-    const title = walkthrough.querySelector<HTMLElement>("[data-walkthrough-title]");
-    const copy = walkthrough.querySelector<HTMLElement>("[data-walkthrough-copy]");
-    let activeFinding = findings[0];
-    let activePhase = "symptom";
-
-    const phaseLabels: Record<string, string> = {
-      symptom: "Symptom",
-      evidence: "Evidence",
-      risk: "Risk",
-      recommendation: "Recommendation",
-      sprint: "Sprint sequence"
-    };
-
-    const updatePanel = () => {
-      if (!activeFinding || !label || !title || !copy) {
-        return;
-      }
-
-      label.textContent = phaseLabels[activePhase] ?? "Symptom";
-      title.textContent = activeFinding.dataset.title ?? "";
-      copy.textContent = activeFinding.dataset[activePhase] ?? "";
-    };
-
-    for (const finding of findings) {
-      finding.addEventListener("click", () => {
-        activeFinding = finding;
-        for (const item of findings) {
-          const isActive = item === finding;
-          item.classList.toggle("is-active", isActive);
-          item.setAttribute("aria-pressed", String(isActive));
-        }
-        updatePanel();
-      });
-    }
-
-    for (const phase of phases) {
-      phase.addEventListener("click", () => {
-        activePhase = phase.dataset.phase ?? "symptom";
-        for (const item of phases) {
-          const isActive = item === phase;
-          item.classList.toggle("is-active", isActive);
-          item.setAttribute("aria-pressed", String(isActive));
-        }
-        updatePanel();
-      });
-    }
-  }
-</script>

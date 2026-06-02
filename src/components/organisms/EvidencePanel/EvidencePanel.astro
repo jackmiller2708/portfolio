@@ -58,6 +58,11 @@ const { eyebrow, title, summary, evidence, risk, recommendation, cta } = Astro.p
     background: var(--color-surface);
     border: var(--border-1);
     border-radius: var(--radius-2);
+    transition: border-color var(--duration-state) var(--ease-standard);
+  }
+
+  .evidence-panel:hover {
+    border-color: var(--color-accent);
   }
 
   .evidence-panel__header {

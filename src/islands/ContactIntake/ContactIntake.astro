@@ -130,7 +130,7 @@ const fields = [
     </p>
   </div>
 
-  <form class="contact-form" method="post" aria-describedby="contact-fallback">
+  <form class="contact-form" method="post" aria-describedby="contact-fallback" data-astro-reload>
     <p class="contact-form__availability">{viewModel.availability}</p>
     {
       fields.map((field) => (
@@ -221,6 +221,10 @@ const fields = [
     border-radius: var(--radius-1);
     cursor: pointer;
     text-align: left;
+    transition:
+      background-color var(--duration-state) var(--ease-standard),
+      border-color var(--duration-state) var(--ease-standard),
+      color var(--duration-state) var(--ease-standard);
   }
 
   .advisory-flow__option:hover,
@@ -243,6 +247,13 @@ const fields = [
     background: var(--color-surface-2);
     border: var(--border-1);
     border-radius: var(--radius-1);
+    transition:
+      border-color var(--duration-state) var(--ease-standard),
+      opacity var(--duration-state) var(--ease-standard);
+  }
+
+  .advisory-flow__result.is-updating {
+    opacity: 0.72;
   }
 
   .advisory-flow__label {
@@ -315,6 +326,16 @@ const fields = [
     background: var(--color-surface);
     border: var(--border-1);
     border-radius: var(--radius-1);
+    transition:
+      background-color var(--duration-state) var(--ease-standard),
+      border-color var(--duration-state) var(--ease-standard),
+      color var(--duration-state) var(--ease-standard);
+  }
+
+  input:focus,
+  select:focus,
+  textarea:focus {
+    border-color: var(--color-accent);
   }
 
   .contact-form__checkbox {
@@ -335,7 +356,12 @@ const fields = [
     background: var(--color-accent);
     border: 1px solid var(--color-accent);
     border-radius: var(--radius-2);
+    cursor: pointer;
     font-weight: 700;
+    transition:
+      background-color var(--duration-state) var(--ease-standard),
+      border-color var(--duration-state) var(--ease-standard),
+      color var(--duration-state) var(--ease-standard);
   }
 
   @media (min-width: 760px) {
@@ -349,36 +375,3 @@ const fields = [
     }
   }
 </style>
-
-<script>
-  const advisoryFlow = document.querySelector<HTMLElement>("[data-advisory-flow]");
-
-  if (advisoryFlow) {
-    const options = advisoryFlow.querySelectorAll<HTMLButtonElement>("[data-advisory-option]");
-    const title = advisoryFlow.querySelector<HTMLElement>("[data-advisory-title]");
-    const reason = advisoryFlow.querySelector<HTMLElement>("[data-advisory-reason]");
-    const link = advisoryFlow.querySelector<HTMLAnchorElement>("[data-advisory-link]");
-    const pain = document.querySelector<HTMLTextAreaElement>("#pain");
-    const engagementType = document.querySelector<HTMLSelectElement>("#engagementType");
-
-    const activate = (option: HTMLButtonElement) => {
-      for (const item of options) {
-        const isActive = item === option;
-        item.classList.toggle("is-active", isActive);
-        item.setAttribute("aria-pressed", String(isActive));
-      }
-
-      if (title) title.textContent = option.dataset.serviceTitle ?? "";
-      if (reason) reason.textContent = option.dataset.reason ?? "";
-      if (link) link.href = option.dataset.contactHref ?? "/contact";
-      if (pain) pain.value = `${option.dataset.label ?? ""}: ${option.dataset.pain ?? ""}`;
-      if (engagementType) {
-        engagementType.value = option.dataset.id === "refactor-planning" ? "advisory" : "diagnosis";
-      }
-    };
-
-    for (const option of options) {
-      option.addEventListener("click", () => activate(option));
-    }
-  }
-</script>

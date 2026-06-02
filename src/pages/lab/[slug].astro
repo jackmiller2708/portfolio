@@ -105,6 +105,7 @@ const seo = buildPageSeo(site, {
     background: var(--color-surface);
     border: var(--border-1);
     border-radius: var(--radius-2);
+    transition: border-color var(--duration-state) var(--ease-standard);
   }
 
   .lab-detail__meta {
@@ -176,6 +177,7 @@ const seo = buildPageSeo(site, {
     text-decoration: none;
   }
 
+  .related-card:hover,
   .recommended-card:hover {
     border-color: var(--color-accent);
   }

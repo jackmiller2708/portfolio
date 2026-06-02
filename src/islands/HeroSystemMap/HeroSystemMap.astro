@@ -373,6 +373,13 @@ const decisionByNode = new Map(map.decisionMarkers.map((marker) => [marker.nodeI
     background: var(--color-surface-2);
     border: var(--border-1);
     border-radius: var(--radius-1);
+    transition:
+      border-color var(--duration-state) var(--ease-standard),
+      opacity var(--duration-state) var(--ease-standard);
+  }
+
+  .system-map__details.is-updating {
+    opacity: 0.72;
   }
 
   .system-map__details h2 {
@@ -452,64 +459,3 @@ const decisionByNode = new Map(map.decisionMarkers.map((marker) => [marker.nodeI
     min-height: 210px;
   }
 </style>
-
-<script>
-  const maps = document.querySelectorAll<HTMLElement>("[data-system-map]");
-
-  for (const map of maps) {
-    const stateButtons = map.querySelectorAll<HTMLButtonElement>("[data-map-state]");
-    const stateCopy = map.querySelectorAll<HTMLElement>("[data-state-copy]");
-    const nodes = map.querySelectorAll<HTMLButtonElement>("[data-node-id]");
-    const details = map.querySelector<HTMLElement>("[data-map-details]");
-
-    const setState = (state: string) => {
-      map.dataset.state = state;
-      for (const button of stateButtons) {
-        button.classList.toggle("is-active", button.dataset.mapState === state);
-        button.setAttribute("aria-pressed", String(button.dataset.mapState === state));
-      }
-      for (const copy of stateCopy) {
-        copy.hidden = copy.dataset.stateCopy !== state;
-      }
-    };
-
-    const showNode = (node: HTMLButtonElement) => {
-      for (const item of nodes) {
-        item.classList.toggle("is-active", item === node);
-      }
-
-      if (!details) {
-        return;
-      }
-
-      const risk = node.dataset.risk;
-      const decision = node.dataset.decision;
-      const markers = [risk && `Risk hotspot: ${risk}`, decision && `Decision overlay: ${decision}`]
-        .filter(Boolean)
-        .join(" ");
-
-      details.innerHTML = `<h2>${node.dataset.nodeLabel}</h2><p>${node.dataset.nodeDescription} ${markers}</p>`;
-    };
-
-    for (const button of stateButtons) {
-      button.addEventListener("click", () => setState(button.dataset.mapState ?? "messy"));
-    }
-
-    for (const node of nodes) {
-      node.addEventListener("click", () => showNode(node));
-      node.addEventListener("keydown", (event) => {
-        if (event.key !== "ArrowRight" && event.key !== "ArrowLeft") {
-          return;
-        }
-
-        event.preventDefault();
-        const current = [...nodes].indexOf(node);
-        const offset = event.key === "ArrowRight" ? 1 : -1;
-        const next = nodes[(current + offset + nodes.length) % nodes.length];
-        next?.focus();
-      });
-    }
-
-    setState("messy");
-  }
-</script>

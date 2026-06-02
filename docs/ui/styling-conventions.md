@@ -203,7 +203,11 @@ Appearance can change later; purpose should remain stable.
 
 - Non-essential motion must respect `prefers-reduced-motion`.
 - Reduced motion disables scroll scrubbing, line drawing, parallax, and morphing.
-- Micro-interaction scale must stay at or below `1.02`.
+- Page transitions must use Astro client routing with opacity-only root view transitions. Unsupported browsers should fall back to instant swaps.
+- Text-heavy pages must not use per-paragraph entrance animation, scroll-triggered reveals, parallax, bounce, or decorative motion.
+- UI state transitions should stay on `color`, `background-color`, `border-color`, focus outlines, and `opacity`.
+- State-panel updates may use a short opacity fade only when the content is being swapped and only when reduced motion is not requested.
+- Do not use scale, movement, or transform-based hover states in the portfolio proof UI.
 - Motion should explain state or flow, not delay reading.
 
 Baseline reduced-motion rule:
@@ -222,6 +226,14 @@ Baseline reduced-motion rule:
 ```
 
 Use component-specific reduced-motion rules for diagrams and scroll-linked interactions.
+
+## Icon Rules
+
+- Use `lucide-astro` for UI icons.
+- Keep icon imports explicit in the component or page that renders them.
+- Use icons for controls, CTAs, current-state affordances, and compact proof/read links only.
+- Do not replace OG images, favicon, submission diagrams, or system-map fallback SVGs with Lucide icons.
+- Icons must be `aria-hidden="true"` when adjacent text already names the control.
 
 ## Accessibility State Rules
 

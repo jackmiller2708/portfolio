@@ -31,7 +31,10 @@
   --border-1: 1px solid var(--color-border);
   --duration-1: 140ms;
   --duration-2: 260ms;
+  --duration-page: 180ms;
+  --duration-state: 140ms;
   --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --ease-page: cubic-bezier(0.2, 0, 0, 1);
   --z-header: 10;
 }
 

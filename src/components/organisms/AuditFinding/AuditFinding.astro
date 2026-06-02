@@ -26,6 +26,11 @@ const { finding } = Astro.props;
     background: var(--color-surface);
     border: var(--border-1);
     border-radius: var(--radius-2);
+    transition: border-color var(--duration-state) var(--ease-standard);
+  }
+
+  .audit-finding:hover {
+    border-color: var(--color-accent);
   }
 
   .audit-finding__header {

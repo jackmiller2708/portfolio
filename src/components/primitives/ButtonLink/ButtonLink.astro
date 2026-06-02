@@ -1,20 +1,44 @@
 ---
+import { ArrowRight, ExternalLink, Mail } from "lucide-astro";
+
 type Props = {
   href: string;
   label: string;
   variant?: "primary" | "secondary";
+  icon?: "arrow-right" | "mail" | "external-link";
+  iconPosition?: "start" | "end";
 };
 
-const { href, label, variant = "primary" } = Astro.props;
+const {
+  href,
+  label,
+  variant = "primary",
+  icon = "arrow-right",
+  iconPosition = "end"
+} = Astro.props;
+const icons = {
+  "arrow-right": ArrowRight,
+  mail: Mail,
+  "external-link": ExternalLink
+};
+const Icon = icons[icon];
 ---
 
-<a class:list={["button-link", `button-link--${variant}`]} href={href}>{label}</a>
+<a
+  class:list={["button-link", `button-link--${variant}`, `button-link--icon-${iconPosition}`]}
+  href={href}
+>
+  {iconPosition === "start" && <Icon class="button-link__icon" size={16} aria-hidden="true" />}
+  <span>{label}</span>
+  {iconPosition === "end" && <Icon class="button-link__icon" size={16} aria-hidden="true" />}
+</a>
 
 <style>
   .button-link {
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    gap: var(--space-2);
     min-height: 44px;
     padding: var(--space-3) var(--space-5);
     border: var(--border-1);
@@ -24,7 +48,12 @@ const { href, label, variant = "primary" } = Astro.props;
     text-decoration: none;
     transition:
       border-color var(--duration-1) var(--ease-standard),
-      background var(--duration-1) var(--ease-standard);
+      background-color var(--duration-1) var(--ease-standard),
+      color var(--duration-1) var(--ease-standard);
+  }
+
+  .button-link__icon {
+    flex: 0 0 auto;
   }
 
   .button-link:hover {

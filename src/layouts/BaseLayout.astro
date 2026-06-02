@@ -1,5 +1,7 @@
 ---
 import "@styles/global.css";
+import { ClientRouter } from "astro:transitions";
+import { Moon, Sun } from "lucide-astro";
 import type { PageSeo } from "@domain/site";
 
 type Props = {
@@ -36,6 +38,7 @@ const navItems = [
     {seo && <meta property="og:url" content={seo.ogUrl} />}
     {seo && <meta property="og:type" content="website" />}
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <ClientRouter fallback="swap" />
     <script is:inline>
       const storedTheme = localStorage.getItem("theme");
       if (storedTheme === "light" || storedTheme === "dark") {
@@ -74,6 +77,16 @@ const navItems = [
           data-theme-toggle
           aria-label="Switch theme"
         >
+          <Sun
+            class="site-header__theme-icon site-header__theme-icon--sun"
+            size={16}
+            aria-hidden="true"
+          />
+          <Moon
+            class="site-header__theme-icon site-header__theme-icon--moon"
+            size={16}
+            aria-hidden="true"
+          />
           <span data-theme-label>Theme</span>
         </button>
       </div>
@@ -143,6 +156,9 @@ const navItems = [
   }
 
   .site-header__theme {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
     min-height: 38px;
     padding: var(--space-2) var(--space-3);
     color: var(--color-text);
@@ -156,6 +172,29 @@ const navItems = [
 
   .site-header__theme:hover {
     border-color: var(--color-accent);
+  }
+
+  .site-header__theme-icon {
+    flex: 0 0 auto;
+    opacity: 0;
+    transition: opacity var(--duration-state) var(--ease-standard);
+  }
+
+  .site-header__theme-icon--moon {
+    display: none;
+  }
+
+  .site-header__theme[data-theme-state="light"] .site-header__theme-icon--sun,
+  .site-header__theme[data-theme-state="dark"] .site-header__theme-icon--moon {
+    opacity: 1;
+  }
+
+  .site-header__theme[data-theme-state="dark"] .site-header__theme-icon--sun {
+    display: none;
+  }
+
+  .site-header__theme[data-theme-state="dark"] .site-header__theme-icon--moon {
+    display: block;
   }
 
   @media (max-width: 760px) {
@@ -173,26 +212,60 @@ const navItems = [
 </style>
 
 <script>
-  const themeToggle = document.querySelector<HTMLButtonElement>("[data-theme-toggle]");
-  const themeLabel = document.querySelector<HTMLElement>("[data-theme-label]");
+  import "../scripts/interactions";
+</script>
+
+<script>
   const systemPrefersDark = window.matchMedia("(prefers-color-scheme: dark)");
+
+  const applyStoredTheme = () => {
+    const storedTheme = localStorage.getItem("theme");
+
+    if (storedTheme === "light" || storedTheme === "dark") {
+      document.documentElement.dataset.theme = storedTheme;
+    }
+  };
 
   const getResolvedTheme = () =>
     document.documentElement.dataset.theme || (systemPrefersDark.matches ? "dark" : "light");
 
-  const setThemeLabel = () => {
+  const setThemeLabel = (themeToggle: HTMLButtonElement) => {
+    const themeLabel = themeToggle.querySelector<HTMLElement>("[data-theme-label]");
+    const resolvedTheme = getResolvedTheme();
+
+    themeToggle.dataset.themeState = resolvedTheme;
+
     if (themeLabel) {
-      themeLabel.textContent = getResolvedTheme() === "dark" ? "Light" : "Dark";
+      themeLabel.textContent = resolvedTheme === "dark" ? "Light" : "Dark";
     }
   };
 
-  themeToggle?.addEventListener("click", () => {
-    const nextTheme = getResolvedTheme() === "dark" ? "light" : "dark";
-    document.documentElement.dataset.theme = nextTheme;
-    localStorage.setItem("theme", nextTheme);
-    setThemeLabel();
-  });
+  const initThemeToggle = () => {
+    const themeToggle = document.querySelector<HTMLButtonElement>("[data-theme-toggle]");
 
-  systemPrefersDark.addEventListener("change", setThemeLabel);
-  setThemeLabel();
+    if (!themeToggle) {
+      return;
+    }
+
+    setThemeLabel(themeToggle);
+
+    if (themeToggle.dataset.themeReady === "true") {
+      return;
+    }
+
+    themeToggle.dataset.themeReady = "true";
+    themeToggle.addEventListener("click", () => {
+      const nextTheme = getResolvedTheme() === "dark" ? "light" : "dark";
+      document.documentElement.dataset.theme = nextTheme;
+      localStorage.setItem("theme", nextTheme);
+      setThemeLabel(themeToggle);
+    });
+  };
+
+  systemPrefersDark.addEventListener("change", initThemeToggle);
+  document.addEventListener("astro:after-swap", applyStoredTheme);
+  document.addEventListener("DOMContentLoaded", initThemeToggle);
+  document.addEventListener("astro:page-load", initThemeToggle);
+  applyStoredTheme();
+  initThemeToggle();
 </script>

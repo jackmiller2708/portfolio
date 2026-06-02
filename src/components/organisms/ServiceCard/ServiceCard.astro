@@ -36,6 +36,11 @@ const { service } = Astro.props;
     background: var(--color-surface);
     border: var(--border-1);
     border-radius: var(--radius-2);
+    transition: border-color var(--duration-state) var(--ease-standard);
+  }
+
+  .service-card:hover {
+    border-color: var(--color-accent);
   }
 
   h2 {
