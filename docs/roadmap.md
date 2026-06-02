@@ -4,7 +4,7 @@ Version 1.0 - June 2026
 
 ## Purpose
 
-Track the portfolio from documentation foundation through V1 launch, V1.5 proof, V2 signature interaction, and V3 award polish.
+Track the portfolio from documentation foundation through V1 launch, V1.5 proof, V2 signature interaction, V3 award polish, and post-V3 UX consulting proof.
 
 ## Current Status
 
@@ -126,8 +126,85 @@ Latest commits:
 - [x] Run final Lighthouse and accessibility pass.
 - [x] Run final privacy-safe content review.
 
+## Phase 8: UX QA Polish
+
+Source: `ui-ux-pro-max` accessibility, performance, and professional UI checks.
+
+- [ ] Add favicon and confirm no Lighthouse console errors on Home.
+- [ ] Fix Home heading order around the system-map detail heading.
+- [ ] Improve dark-mode accent contrast for labels and severity markers.
+- [ ] Add active navigation state without adding visual clutter.
+- [ ] Confirm all interactive controls have pointer affordance, visible focus, and stable hover states.
+- [ ] Re-run `npm run quality`, `npm run verify:ui`, and production-preview `npm run verify:perf`.
+
+## Phase 9: Interactive Diagnostic Experience
+
+Goal: Let visitors experience the consulting value before contacting.
+
+- [ ] Add a compact Home diagnostic selector for common frontend-system pains: unclear state, unreliable cache/data behavior, weak error recovery, and refactor planning.
+- [ ] Connect each diagnostic option to a recommended service, relevant sample audit finding, system-map state, and route-specific CTA.
+- [ ] Keep the interaction minimal, keyboard-accessible, and reduced-motion safe.
+- [ ] Add a typed diagnostic content model or view model so options are not hard-coded in the template.
+- [ ] Add unit coverage for diagnostic selection data.
+- [ ] Add Playwright coverage for selector states and CTA updates.
+
+## Phase 10: Proof-First Home Flow
+
+Source: `ui-ux-pro-max` portfolio-grid and before-after transformation patterns, adapted for technical proof rather than visual masonry.
+
+- [ ] Reorder the Home proof path around system map, case studies, sample audit, and lab notes.
+- [ ] Add a compact "what you can inspect" strip near the hero.
+- [ ] Add proof cards that summarize problem, decision, and result for each case study.
+- [ ] Make the primary path lead from diagnostic selector to proof artifact to contact.
+- [ ] Reduce same-weight card grids where progressive disclosure would scan better.
+
+## Phase 11: Guided Sample Audit Walkthrough
+
+Goal: Demonstrate UX consulting through clearer technical information design.
+
+- [ ] Convert the sample audit from a static report page into a guided walkthrough.
+- [ ] Let visitors step through symptom, evidence, risk, recommendation, and sprint sequence.
+- [ ] Preserve the full report view for scanning.
+- [ ] Add route-specific CTA copy for audit scoping.
+- [ ] Add keyboard and touch support for walkthrough controls.
+- [ ] Add axe and smoke coverage for the walkthrough.
+
+## Phase 12: Case Study Experience Upgrade
+
+- [ ] Add stronger before/after architecture comparison blocks to detail pages.
+- [ ] Make constraints, decisions, tradeoffs, evidence, result, and recommendation easier to scan.
+- [ ] Add "recommended next read" links at the bottom of case-study and lab detail pages.
+- [ ] Add contact CTA variants that reference each case study's constraints.
+- [ ] Keep all proof synthetic, redacted, or public-safe.
+
+## Phase 13: Advisory Contact Flow
+
+- [ ] Add a lightweight "what I would ask first" advisory flow before or within Contact.
+- [ ] Recommend audit, stabilization, or advisory based on user-provided context.
+- [ ] Keep form fields minimal and avoid a heavy quote-builder experience.
+- [ ] Add accessible loading, validation, and fallback states for the new flow.
+- [ ] Add tests for advisory recommendation logic.
+
+## Phase 14: Performance And Asset Maturity
+
+Source: `ui-ux-pro-max` Astro performance guidance.
+
+- [ ] Add route-specific OG assets for major proof routes.
+- [ ] Add an asset and client-JS budget check for future interaction growth.
+- [ ] Keep Astro island hydration limited to genuinely interactive components.
+- [ ] Consider critical CSS or component CSS consolidation only if render-blocking savings become material after added interactions.
+- [ ] Add production-preview performance verification to the release checklist.
+
+## Phase 15: Visual System Tightening
+
+- [ ] Keep the minimal visual language, but make interactive proof states more discoverable.
+- [ ] Evaluate whether typography needs a readability-first adjustment after user feedback.
+- [ ] Avoid a masonry/gallery redesign unless more visual proof assets become available.
+- [ ] Avoid luxury/gold or generic SaaS-blue palette drift; preserve the current technical brand.
+- [ ] Document any token changes in styling conventions.
+
 ## Immediate Next Milestone
 
-V3 award-polish pass is complete. Future work should stay scoped to content updates or submission-specific adjustments.
+Begin **Phase 8: UX QA Polish**, then move into **Phase 9: Interactive Diagnostic Experience**.
 
-Implementation plan: `docs/implementation/v3-award-polish-implementation-plan.md`.
+Next implementation plan to draft: `docs/implementation/v4-ux-consulting-proof-implementation-plan.md`.
