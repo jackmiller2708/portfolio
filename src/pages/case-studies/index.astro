@@ -24,6 +24,7 @@ const viewModel = await Effect.runPromise(loadCaseStudiesPage);
             <p class="case-card__label">{caseStudy.redactionStatus}</p>
             <h2>{caseStudy.title}</h2>
             <p>{caseStudy.summary}</p>
+            <a href={`/case-studies/${caseStudy.slug}`}>Read case study</a>
           </article>
         ))
       }
@@ -67,5 +68,12 @@ const viewModel = await Effect.runPromise(loadCaseStudiesPage);
   h2 + p {
     margin-top: var(--space-3);
     color: var(--color-muted);
+  }
+
+  a {
+    display: inline-block;
+    margin-top: var(--space-5);
+    color: var(--color-text);
+    font-weight: 700;
   }
 </style>

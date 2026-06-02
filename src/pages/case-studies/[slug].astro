@@ -1,5 +1,227 @@
 ---
-export function getStaticPaths() {
-  return [];
+import { Effect } from "effect";
+import { getCollection, render } from "astro:content";
+import BaseLayout from "@layouts/BaseLayout.astro";
+import ButtonLink from "@components/primitives/ButtonLink/ButtonLink.astro";
+import PageHero from "@components/sections/PageHero/PageHero.astro";
+import HeroSystemMap from "@islands/HeroSystemMap/HeroSystemMap.astro";
+import { loadCaseStudyPage } from "@programs/load-case-study-page";
+import { astroContentRepository } from "@services/AstroContentRepository";
+import { buildPageSeo } from "@utils/seo";
+
+export async function getStaticPaths() {
+  const entries = await getCollection("case-studies");
+
+  return entries.map((entry) => ({
+    params: { slug: entry.id },
+    props: { entry }
+  }));
 }
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+const viewModel = await Effect.runPromise(loadCaseStudyPage(entry.id));
+const { caseStudy, systemMap } = viewModel;
+const site = await Effect.runPromise(astroContentRepository.getSiteMeta);
+const seo = buildPageSeo(site, {
+  path: `/case-studies/${caseStudy.slug}`,
+  title: caseStudy.title,
+  description: caseStudy.summary
+});
 ---
+
+<BaseLayout seo={seo}>
+  <PageHero
+    title={caseStudy.title}
+    summary={caseStudy.summary}
+    primaryCta={{ label: "Start contact", href: viewModel.cta.href }}
+    secondaryCta={{ label: "Back to cases", href: "/case-studies" }}
+  />
+  <article class="case-detail">
+    <div class="u-container case-detail__layout">
+      <aside class="case-detail__meta" aria-label="Case study context">
+        <p class="case-detail__label">{caseStudy.redactionStatus}</p>
+        <h2>Context</h2>
+        <p>{caseStudy.context}</p>
+        <h2>Constraints</h2>
+        <ul>{caseStudy.constraints.map((item) => <li>{item}</li>)}</ul>
+      </aside>
+      <div class="case-detail__main">
+        <section>
+          <h2>Problem</h2>
+          <p>{caseStudy.problem}</p>
+        </section>
+        <section>
+          <h2>Decisions</h2>
+          <div class="detail-grid">
+            {
+              caseStudy.decisions.map((decision) => (
+                <article class="detail-card">
+                  <h3>{decision.title}</h3>
+                  <p>{decision.rationale}</p>
+                </article>
+              ))
+            }
+          </div>
+        </section>
+        <section>
+          <h2>Tradeoffs</h2>
+          <ul>{caseStudy.tradeoffs.map((item) => <li>{item}</li>)}</ul>
+        </section>
+        <section>
+          <h2>Before and after</h2>
+          <div class="before-after">
+            <div>
+              <h3>Before</h3>
+              <ul>{caseStudy.beforeAfter.before.map((item) => <li>{item}</li>)}</ul>
+            </div>
+            <div>
+              <h3>After</h3>
+              <ul>{caseStudy.beforeAfter.after.map((item) => <li>{item}</li>)}</ul>
+            </div>
+          </div>
+        </section>
+        <section>
+          <h2>{systemMap.title}</h2>
+          <p>{systemMap.summary}</p>
+          <HeroSystemMap
+            label={systemMap.fallbackLabel}
+            nodes={systemMap.nodes.map((node) => node.label)}
+          />
+        </section>
+        <section>
+          <h2>Evidence</h2>
+          <div class="detail-grid">
+            {
+              caseStudy.evidence.map((item) => (
+                <article class="detail-card">
+                  <h3>{item.label}</h3>
+                  <p>{item.detail}</p>
+                </article>
+              ))
+            }
+          </div>
+        </section>
+        <section>
+          <h2>Result</h2>
+          <p>{caseStudy.result}</p>
+        </section>
+        <section>
+          <h2>Recommendation</h2>
+          <p>{caseStudy.recommendation}</p>
+        </section>
+        <section class="case-detail__body">
+          <Content />
+        </section>
+        <section class="case-detail__cta">
+          <div>
+            <h2>{viewModel.cta.title}</h2>
+            <p>{viewModel.cta.summary}</p>
+          </div>
+          <ButtonLink href={viewModel.cta.href} label={viewModel.cta.label} />
+        </section>
+      </div>
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  .case-detail {
+    padding: 0 0 var(--space-16);
+  }
+
+  .case-detail__layout {
+    display: grid;
+    gap: var(--space-8);
+  }
+
+  .case-detail__meta,
+  .detail-card,
+  .before-after > div,
+  .case-detail__cta {
+    padding: var(--space-6);
+    background: var(--color-surface);
+    border: var(--border-1);
+    border-radius: var(--radius-2);
+  }
+
+  .case-detail__meta {
+    align-self: start;
+  }
+
+  .case-detail__label {
+    width: fit-content;
+    padding: var(--space-1) var(--space-3);
+    color: var(--color-accent);
+    border: 1px solid color-mix(in srgb, var(--color-accent) 40%, transparent);
+    border-radius: var(--radius-1);
+    font-weight: 700;
+    text-transform: capitalize;
+  }
+
+  .case-detail__main,
+  section,
+  .detail-grid,
+  .before-after,
+  .case-detail__cta {
+    display: grid;
+    gap: var(--space-5);
+  }
+
+  .case-detail__main {
+    min-width: 0;
+  }
+
+  h2,
+  h3,
+  p {
+    margin: 0;
+  }
+
+  h2 {
+    font-family: var(--font-display);
+    font-size: 2rem;
+    line-height: 1.15;
+  }
+
+  h3 {
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+  }
+
+  p,
+  li {
+    color: var(--color-muted);
+  }
+
+  ul {
+    display: grid;
+    gap: var(--space-2);
+    margin: 0;
+  }
+
+  .case-detail__body :global(h2) {
+    margin: var(--space-6) 0 var(--space-3);
+  }
+
+  .case-detail__body :global(p) {
+    margin: 0 0 var(--space-4);
+    color: var(--color-muted);
+  }
+
+  @media (min-width: 980px) {
+    .case-detail__layout {
+      grid-template-columns: 320px minmax(0, 1fr);
+    }
+
+    .detail-grid,
+    .before-after {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .case-detail__cta {
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: center;
+    }
+  }
+</style>

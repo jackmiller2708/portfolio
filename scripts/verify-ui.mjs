@@ -5,7 +5,15 @@ import path from "node:path";
 
 const baseUrl = process.env.UI_BASE_URL ?? "http://127.0.0.1:4321";
 const outputDir = path.join(process.cwd(), "test-results", "ui-verification");
-const routes = ["/", "/services", "/sample-audit", "/contact", "/about"];
+const routes = [
+  "/",
+  "/services",
+  "/sample-audit",
+  "/contact",
+  "/about",
+  "/case-studies/checkout-stabilization",
+  "/lab/rxjs-cleanup"
+];
 const viewports = [
   { name: "desktop", width: 1280, height: 900 },
   { name: "laptop", width: 1024, height: 768 },
@@ -13,7 +21,8 @@ const viewports = [
   { name: "mobile", width: 360, height: 800 }
 ];
 
-const getRouteName = (route) => (route === "/" ? "home" : route.replace(/^\//, ""));
+const getRouteName = (route) =>
+  route === "/" ? "home" : route.replace(/^\//, "").replaceAll("/", "-");
 
 const inspectPage = async (page, route, viewport) =>
   page.evaluate(

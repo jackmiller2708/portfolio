@@ -25,6 +25,7 @@ const viewModel = await Effect.runPromise(loadLabPage);
             <h2>{post.title}</h2>
             <p>{post.summary}</p>
             <p class="lab-card__takeaway">{post.takeaway}</p>
+            <a href={`/lab/${post.slug}`}>Read note</a>
           </article>
         ))
       }
@@ -67,6 +68,13 @@ const viewModel = await Effect.runPromise(loadLabPage);
 
   .lab-card__takeaway {
     margin-top: var(--space-4);
+    color: var(--color-text);
+    font-weight: 700;
+  }
+
+  a {
+    display: inline-block;
+    margin-top: var(--space-5);
     color: var(--color-text);
     font-weight: 700;
   }

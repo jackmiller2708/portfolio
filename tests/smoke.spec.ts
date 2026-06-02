@@ -42,6 +42,20 @@ test.describe("Smoke Tests", () => {
     await expect(heroHeading).toBeVisible();
   });
 
+  test("Case study detail page should load", async ({ page }) => {
+    await page.goto("/case-studies/checkout-stabilization");
+    await expect(page).toHaveTitle(/Checkout Stabilization/);
+    await expect(page.locator("main h1")).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Problem" })).toBeVisible();
+  });
+
+  test("Lab detail page should load", async ({ page }) => {
+    await page.goto("/lab/rxjs-cleanup");
+    await expect(page).toHaveTitle(/RxJS Cleanup/);
+    await expect(page.locator("main h1")).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Related services" })).toBeVisible();
+  });
+
   test("404 page should render correctly", async ({ page }) => {
     const response = await page.goto("/non-existent-page");
     expect(response?.status()).toBe(404);

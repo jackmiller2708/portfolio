@@ -1,0 +1,108 @@
+{
+  "title": "Frontend system boundary map",
+  "summary": "A basic V1.5 map showing how messy frontend ownership becomes explicit through feature, data, error, and testing boundaries.",
+  "fallbackLabel": "Static frontend system map with UI shell, feature boundary, data access, error model, tests, and delivery roadmap nodes.",
+  "groups": [
+    {
+      "id": "interface",
+      "label": "Interface"
+    },
+    {
+      "id": "boundary",
+      "label": "Boundary"
+    },
+    {
+      "id": "delivery",
+      "label": "Delivery"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "ui-shell",
+      "label": "UI shell",
+      "group": "interface",
+      "description": "Routes, layout, and screen composition."
+    },
+    {
+      "id": "feature-boundary",
+      "label": "Feature boundary",
+      "group": "boundary",
+      "description": "Ownership for feature state and user-facing behavior."
+    },
+    {
+      "id": "data-access",
+      "label": "Data access",
+      "group": "boundary",
+      "description": "Request, normalization, cache, and mutation behavior."
+    },
+    {
+      "id": "error-model",
+      "label": "Error model",
+      "group": "boundary",
+      "description": "Named failure states and recovery paths."
+    },
+    {
+      "id": "tests",
+      "label": "Tests",
+      "group": "delivery",
+      "description": "Checks for risky behavior and public routes."
+    },
+    {
+      "id": "roadmap",
+      "label": "Delivery roadmap",
+      "group": "delivery",
+      "description": "Sequenced stabilization and refactor work."
+    }
+  ],
+  "edges": [
+    {
+      "from": "ui-shell",
+      "to": "feature-boundary",
+      "label": "delegates state ownership"
+    },
+    {
+      "from": "feature-boundary",
+      "to": "data-access",
+      "label": "requests normalized data"
+    },
+    {
+      "from": "data-access",
+      "to": "error-model",
+      "label": "maps failures"
+    },
+    {
+      "from": "error-model",
+      "to": "tests",
+      "label": "pins recovery behavior"
+    },
+    {
+      "from": "tests",
+      "to": "roadmap",
+      "label": "supports sequencing"
+    }
+  ],
+  "riskMarkers": [
+    {
+      "nodeId": "feature-boundary",
+      "label": "Implicit ownership creates regressions."
+    },
+    {
+      "nodeId": "data-access",
+      "label": "Unclear cache rules create stale UI."
+    }
+  ],
+  "decisionMarkers": [
+    {
+      "nodeId": "error-model",
+      "label": "Name failures by recovery path."
+    },
+    {
+      "nodeId": "roadmap",
+      "label": "Sequence by visible system risk."
+    }
+  ],
+  "states": {
+    "messy": "State, data, errors, and tests are coupled through component behavior.",
+    "explicit": "Feature ownership, data access, error states, and checks are named and sequenced."
+  }
+}

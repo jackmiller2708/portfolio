@@ -15,6 +15,8 @@ Latest commits:
 - `900e713 docs: establish portfolio planning foundation`
 - `3d30698 feat: scaffold astro portfolio foundation`
 - `86db7f3 feat: wire portfolio content foundation`
+- `6d3e31e test: add v1 quality gate`
+- `1d444b8 docs: update readme`
 
 ## Phase 0: Planning Foundation
 
@@ -91,13 +93,13 @@ Latest commits:
 
 ## Phase 5: V1.5 Proof
 
-- [ ] Expand two case studies beyond placeholders.
-- [ ] Add case study detail route implementation.
-- [ ] Add four technical lab entries with real content.
-- [ ] Add lab detail route implementation.
-- [ ] Add basic system map content model.
-- [ ] Add basic static/interactive system map.
-- [ ] Add privacy/redaction review checklist for case studies.
+- [x] Expand two case studies beyond placeholders.
+- [x] Add case study detail route implementation.
+- [x] Add four technical lab entries with real content.
+- [x] Add lab detail route implementation.
+- [x] Add basic system map content model.
+- [x] Add basic static/interactive system map.
+- [x] Add privacy/redaction review checklist for case studies.
 
 ## Phase 6: V2 Signature Interaction
 
@@ -124,6 +126,6 @@ Latest commits:
 
 ## Immediate Next Milestone
 
-Finish **Phase 5: V1.5 Proof**.
+Begin **Phase 6: V2 Signature Interaction**.
 
-Implementation plan: `docs/implementation/v1-5-proof-implementation-plan.md`
+Implementation plan: draft `docs/implementation/v2-signature-interaction-implementation-plan.md`.

@@ -7,4 +7,6 @@ export type LabPost = {
   readonly summary: string;
   readonly topic: LabTopic;
   readonly takeaway: string;
+  readonly codeLanguage?: string;
+  readonly relatedServices?: readonly string[];
 };

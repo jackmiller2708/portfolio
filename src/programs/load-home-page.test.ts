@@ -22,6 +22,36 @@ const repository: ContentRepository = {
   listAuditFindings: Effect.succeed([]),
   listLabPosts: Effect.succeed([]),
   listCaseStudies: Effect.succeed([]),
+  getCaseStudyBySlug: () =>
+    Effect.sync(() => {
+      throw new Error("Not used in this test");
+    }),
+  getLabPostBySlug: () =>
+    Effect.sync(() => {
+      throw new Error("Not used in this test");
+    }),
+  getSystemMap: Effect.succeed({
+    id: "main",
+    title: "System map",
+    summary: "Shows the bounded system.",
+    fallbackLabel: "System flow",
+    groups: [{ id: "input", label: "Input" }],
+    nodes: [
+      {
+        id: "intake",
+        label: "Intake",
+        group: "input",
+        description: "Requests enter the system."
+      }
+    ],
+    edges: [],
+    riskMarkers: [],
+    decisionMarkers: [],
+    states: {
+      messy: "Implicit coupling",
+      explicit: "Explicit ownership"
+    }
+  }),
   getSiteMeta: Effect.succeed({
     title: "Site",
     description: "Description",

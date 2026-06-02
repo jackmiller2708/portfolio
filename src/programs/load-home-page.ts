@@ -38,6 +38,7 @@ export const loadHomePageFromRepository = (
     const services = yield* repository.listServices;
     const auditFindings = yield* repository.listAuditFindings;
     const labPosts = yield* repository.listLabPosts;
+    const systemMap = yield* repository.getSystemMap;
 
     return {
       hero: {
@@ -55,16 +56,8 @@ export const loadHomePageFromRepository = (
       },
       labPreview: labPosts.slice(0, 3),
       heroMap: {
-        label:
-          "Static map showing UI, feature boundaries, data access, and error handling moving from implicit coupling to explicit contracts.",
-        nodes: [
-          "UI shell",
-          "Feature boundary",
-          "Data access",
-          "Error model",
-          "Tests",
-          "Delivery roadmap"
-        ]
+        label: systemMap.fallbackLabel,
+        nodes: systemMap.nodes.map((node) => node.label)
       },
       cta: {
         title: "Start with a scoped diagnostic.",
