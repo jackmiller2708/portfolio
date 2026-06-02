@@ -1,23 +1,126 @@
 ---
+import type { SystemMap } from "@domain/system-map";
+
 type Props = {
-  label: string;
-  nodes: readonly string[];
+  map: SystemMap;
 };
 
-const { label, nodes } = Astro.props;
+const { map } = Astro.props;
+const riskByNode = new Map(map.riskMarkers.map((marker) => [marker.nodeId, marker]));
+const decisionByNode = new Map(map.decisionMarkers.map((marker) => [marker.nodeId, marker]));
 ---
 
-<figure class="system-map" aria-label={label}>
-  <figcaption class="u-visually-hidden">{label}</figcaption>
-  {nodes.map((node) => <div class="system-map__node">{node}</div>)}
+<figure class="system-map" aria-label={map.fallbackLabel} data-system-map>
+  <figcaption>
+    <strong>{map.title}</strong>
+    <span>{map.summary}</span>
+  </figcaption>
+  <div class="system-map__toolbar" role="group" aria-label="Architecture state">
+    <button class="system-map__state is-active" type="button" data-map-state="messy">
+      Messy
+    </button>
+    <button class="system-map__state" type="button" data-map-state="explicit"> Bounded </button>
+  </div>
+  <div class="system-map__states" aria-live="polite">
+    <p data-state-copy="messy">{map.states.messy}</p>
+    <p data-state-copy="explicit" hidden>{map.states.explicit}</p>
+  </div>
+  <div class="system-map__stage" data-map-stage>
+    <svg
+      class="system-map__fallback"
+      viewBox="0 0 720 210"
+      role="img"
+      aria-label={map.fallbackLabel}
+      preserveAspectRatio="none"
+    >
+      <polyline
+        points="64,104 190,104 316,104 442,104 568,104 666,104"
+        fill="none"
+        vector-effect="non-scaling-stroke"></polyline>
+      {
+        map.nodes.map((node, index) => (
+          <g>
+            <rect x={24 + index * 116} y="72" width="96" height="64" rx="4" />
+            <text x={72 + index * 116} y="108" text-anchor="middle">
+              {node.label}
+            </text>
+          </g>
+        ))
+      }
+    </svg>
+    <noscript>
+      <svg
+        class="system-map__noscript"
+        viewBox="0 0 720 210"
+        role="img"
+        aria-label={map.fallbackLabel}
+        preserveAspectRatio="none"
+      >
+        <polyline
+          points="64,104 190,104 316,104 442,104 568,104 666,104"
+          fill="none"
+          vector-effect="non-scaling-stroke"></polyline>
+        {
+          map.nodes.map((node, index) => (
+            <g>
+              <rect x={24 + index * 116} y="72" width="96" height="64" rx="4" />
+              <text x={72 + index * 116} y="108" text-anchor="middle">
+                {node.label}
+              </text>
+            </g>
+          ))
+        }
+      </svg>
+    </noscript>
+    <div class="system-map__nodes">
+      {
+        map.nodes.map((node) => {
+          const risk = riskByNode.get(node.id);
+          const decision = decisionByNode.get(node.id);
+
+          return (
+            <button
+              class:list={["system-map__node", risk && "has-risk", decision && "has-decision"]}
+              type="button"
+              data-node-id={node.id}
+              data-node-label={node.label}
+              data-node-description={node.description}
+              data-risk={risk?.label}
+              data-decision={decision?.label}
+            >
+              <span>{node.label}</span>
+              <em>{map.groups.find((group) => group.id === node.group)?.label}</em>
+            </button>
+          );
+        })
+      }
+    </div>
+  </div>
+  <div class="system-map__details" aria-live="polite" data-map-details>
+    <h3>Map details</h3>
+    <p>Select a node to read its risk or decision marker.</p>
+  </div>
+  <details class="system-map__text">
+    <summary>Accessible map text</summary>
+    <ul>
+      {
+        map.edges.map((edge) => (
+          <li>
+            {edge.from} to {edge.to}: {edge.label}
+          </li>
+        ))
+      }
+      {map.riskMarkers.map((marker) => <li>Risk: {marker.label}</li>)}
+      {map.decisionMarkers.map((marker) => <li>Decision: {marker.label}</li>)}
+    </ul>
+  </details>
 </figure>
 
 <style>
   .system-map {
     position: relative;
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: var(--space-3);
+    gap: var(--space-4);
     margin: 0;
     padding: var(--space-4);
     background: var(--color-surface);
@@ -25,17 +128,271 @@ const { label, nodes } = Astro.props;
     border-radius: var(--radius-2);
   }
 
+  figcaption,
+  .system-map__toolbar,
+  .system-map__states,
+  .system-map__details,
+  .system-map__text {
+    position: relative;
+    z-index: 1;
+  }
+
+  figcaption {
+    display: grid;
+    gap: var(--space-2);
+  }
+
+  figcaption strong,
+  .system-map__details h3 {
+    font-family: var(--font-display);
+    line-height: 1.2;
+  }
+
+  figcaption span,
+  .system-map__states p,
+  .system-map__details p,
+  .system-map__text {
+    margin: 0;
+    color: var(--color-muted);
+  }
+
+  .system-map__toolbar {
+    display: flex;
+    gap: var(--space-2);
+  }
+
+  .system-map__state {
+    min-height: 40px;
+    padding: var(--space-2) var(--space-3);
+    color: var(--color-text);
+    background: var(--color-surface);
+    border: var(--border-1);
+    border-radius: var(--radius-1);
+    cursor: pointer;
+  }
+
+  .system-map__state.is-active {
+    color: var(--color-surface);
+    background: var(--color-text);
+    border-color: var(--color-text);
+  }
+
+  .system-map__stage {
+    position: relative;
+    min-height: 360px;
+    overflow: hidden;
+    border: var(--border-1);
+    border-radius: var(--radius-1);
+    background:
+      linear-gradient(var(--color-border) 1px, transparent 1px),
+      linear-gradient(90deg, var(--color-border) 1px, transparent 1px), var(--color-surface-2);
+    background-size: 56px 56px;
+  }
+
+  .system-map__stage::before {
+    position: absolute;
+    inset: 48% 8% auto;
+    height: 1px;
+    background: var(--color-muted);
+    content: "";
+    opacity: 0.45;
+  }
+
+  .system-map__fallback,
+  .system-map__noscript {
+    display: none;
+  }
+
+  .system-map__fallback polyline,
+  .system-map__fallback rect,
+  .system-map__noscript polyline,
+  .system-map__noscript rect {
+    stroke: var(--color-muted);
+    stroke-width: 1.5;
+  }
+
+  .system-map__fallback rect,
+  .system-map__noscript rect {
+    fill: var(--color-surface);
+  }
+
+  .system-map__fallback text,
+  .system-map__noscript text {
+    fill: var(--color-text);
+    font: 13px var(--font-body);
+  }
+
+  .system-map__nodes {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-3);
+    padding: var(--space-4);
+  }
+
   .system-map__node {
+    display: grid;
+    gap: var(--space-2);
+    min-height: 92px;
+    padding: var(--space-4);
+    color: var(--color-text);
+    background: var(--color-surface-2);
+    border: var(--border-1);
+    border-radius: var(--radius-1);
+    text-align: left;
+    cursor: pointer;
+    transition:
+      background-color var(--duration-1) var(--ease-standard),
+      border-color var(--duration-1) var(--ease-standard);
+  }
+
+  .system-map[data-state="explicit"] .system-map__node {
+    background: var(--color-surface);
+  }
+
+  .system-map__node.is-active,
+  .system-map__node:hover {
+    border-color: var(--color-accent);
+  }
+
+  .system-map__node span {
+    font-weight: 700;
+  }
+
+  .system-map__node em {
+    color: var(--color-muted);
+    font-style: normal;
+    font-size: 0.9rem;
+  }
+
+  .system-map__node.has-risk::after,
+  .system-map__node.has-decision::before {
+    display: inline-block;
+    width: fit-content;
+    padding: 0 var(--space-2);
+    border: var(--border-1);
+    border-radius: var(--radius-1);
+    font-size: 0.82rem;
+    line-height: 1.7;
+  }
+
+  .system-map__node.has-risk::after {
+    color: var(--color-danger);
+    content: "Risk";
+  }
+
+  .system-map__node.has-decision::before {
+    color: var(--color-success);
+    content: "Decision";
+  }
+
+  .system-map__details {
+    display: grid;
+    gap: var(--space-2);
     padding: var(--space-4);
     background: var(--color-surface-2);
     border: var(--border-1);
     border-radius: var(--radius-1);
+  }
+
+  .system-map__details h3 {
+    margin: 0;
+    font-size: 1.05rem;
+  }
+
+  .system-map__text summary {
+    cursor: pointer;
+    color: var(--color-text);
     font-weight: 700;
   }
 
+  .system-map__text ul {
+    display: grid;
+    gap: var(--space-2);
+    padding-left: var(--space-5);
+  }
+
   @media (min-width: 720px) {
-    .system-map {
+    .system-map__nodes {
       grid-template-columns: repeat(3, minmax(0, 1fr));
     }
   }
+
+  @media (prefers-reduced-motion: reduce) {
+    .system-map__toolbar {
+      display: none;
+    }
+
+    .system-map__states [hidden] {
+      display: block;
+    }
+  }
+
+  noscript .system-map__noscript {
+    display: block;
+    width: 100%;
+    min-height: 210px;
+  }
 </style>
+
+<script>
+  const maps = document.querySelectorAll<HTMLElement>("[data-system-map]");
+
+  for (const map of maps) {
+    const stateButtons = map.querySelectorAll<HTMLButtonElement>("[data-map-state]");
+    const stateCopy = map.querySelectorAll<HTMLElement>("[data-state-copy]");
+    const nodes = map.querySelectorAll<HTMLButtonElement>("[data-node-id]");
+    const details = map.querySelector<HTMLElement>("[data-map-details]");
+
+    const setState = (state: string) => {
+      map.dataset.state = state;
+      for (const button of stateButtons) {
+        button.classList.toggle("is-active", button.dataset.mapState === state);
+        button.setAttribute("aria-pressed", String(button.dataset.mapState === state));
+      }
+      for (const copy of stateCopy) {
+        copy.hidden = copy.dataset.stateCopy !== state;
+      }
+    };
+
+    const showNode = (node: HTMLButtonElement) => {
+      for (const item of nodes) {
+        item.classList.toggle("is-active", item === node);
+      }
+
+      if (!details) {
+        return;
+      }
+
+      const risk = node.dataset.risk;
+      const decision = node.dataset.decision;
+      const markers = [risk && `Risk hotspot: ${risk}`, decision && `Decision overlay: ${decision}`]
+        .filter(Boolean)
+        .join(" ");
+
+      details.innerHTML = `<h3>${node.dataset.nodeLabel}</h3><p>${node.dataset.nodeDescription} ${markers}</p>`;
+    };
+
+    for (const button of stateButtons) {
+      button.addEventListener("click", () => setState(button.dataset.mapState ?? "messy"));
+    }
+
+    for (const node of nodes) {
+      node.addEventListener("click", () => showNode(node));
+      node.addEventListener("keydown", (event) => {
+        if (event.key !== "ArrowRight" && event.key !== "ArrowLeft") {
+          return;
+        }
+
+        event.preventDefault();
+        const current = [...nodes].indexOf(node);
+        const offset = event.key === "ArrowRight" ? 1 : -1;
+        const next = nodes[(current + offset + nodes.length) % nodes.length];
+        next?.focus();
+      });
+    }
+
+    setState("messy");
+  }
+</script>

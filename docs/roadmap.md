@@ -17,6 +17,7 @@ Latest commits:
 - `86db7f3 feat: wire portfolio content foundation`
 - `6d3e31e test: add v1 quality gate`
 - `1d444b8 docs: update readme`
+- `189f88e feat: add v1.5 proof content`
 
 ## Phase 0: Planning Foundation
 
@@ -103,15 +104,15 @@ Latest commits:
 
 ## Phase 6: V2 Signature Interaction
 
-- [ ] Implement explicit system map messy state.
-- [ ] Implement explicit system map bounded state.
-- [ ] Add risk hotspot interactions.
-- [ ] Add ADR/decision overlay.
-- [ ] Add keyboard and touch interaction support.
-- [ ] Add static SVG fallback.
-- [ ] Add before/after architecture toggle.
-- [ ] Add reduced-motion-specific static experience.
-- [ ] Add visual regression or screenshot checks for the map.
+- [x] Implement explicit system map messy state.
+- [x] Implement explicit system map bounded state.
+- [x] Add risk hotspot interactions.
+- [x] Add ADR/decision overlay.
+- [x] Add keyboard and touch interaction support.
+- [x] Add static SVG fallback.
+- [x] Add before/after architecture toggle.
+- [x] Add reduced-motion-specific static experience.
+- [x] Add visual regression or screenshot checks for the map.
 
 ## Phase 7: V3 Award Polish
 
@@ -126,6 +127,6 @@ Latest commits:
 
 ## Immediate Next Milestone
 
-Begin **Phase 6: V2 Signature Interaction**.
+Begin **Phase 7: V3 Award Polish**.
 
-Implementation plan: draft `docs/implementation/v2-signature-interaction-implementation-plan.md`.
+Implementation plan: draft `docs/implementation/v3-award-polish-implementation-plan.md`.

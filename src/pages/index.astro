@@ -31,7 +31,7 @@ const seo = buildPageSeo(site, {
           secondaryCta={{ label: "View services", href: "/services" }}
         />
       </div>
-      <HeroSystemMap label={viewModel.heroMap.label} nodes={viewModel.heroMap.nodes} />
+      <HeroSystemMap map={viewModel.heroMap} />
     </div>
   </section>
   <ProofStrip points={viewModel.proofPoints} />

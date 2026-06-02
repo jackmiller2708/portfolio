@@ -3,6 +3,7 @@ import type { AuditFinding } from "@domain/audit";
 import type { LabPost } from "@domain/lab";
 import type { ServiceOffer } from "@domain/service";
 import type { SiteMeta } from "@domain/site";
+import type { SystemMap } from "@domain/system-map";
 import type { ContentRepository } from "@services/ContentRepository";
 
 export type HomePageViewModel = {
@@ -18,10 +19,7 @@ export type HomePageViewModel = {
     readonly findings: readonly AuditFinding[];
   };
   readonly labPreview: readonly LabPost[];
-  readonly heroMap: {
-    readonly label: string;
-    readonly nodes: readonly string[];
-  };
+  readonly heroMap: SystemMap;
   readonly cta: {
     readonly title: string;
     readonly summary: string;
@@ -55,10 +53,7 @@ export const loadHomePageFromRepository = (
         findings: auditFindings.slice(0, 2)
       },
       labPreview: labPosts.slice(0, 3),
-      heroMap: {
-        label: systemMap.fallbackLabel,
-        nodes: systemMap.nodes.map((node) => node.label)
-      },
+      heroMap: systemMap,
       cta: {
         title: "Start with a scoped diagnostic.",
         summary:

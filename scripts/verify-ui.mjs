@@ -119,6 +119,9 @@ const inspectPage = async (page, route, viewport) =>
         .filter(isVisible)
         .map((element) => element.textContent?.trim().replace(/\s+/g, " ") ?? "");
 
+      const systemMap = document.querySelector("[data-system-map]");
+      const systemMapRect = systemMap?.getBoundingClientRect();
+
       const h1 = document.querySelector("h1");
       const main = document.querySelector("main");
       const h1Rect = h1?.getBoundingClientRect();
@@ -150,7 +153,15 @@ const inspectPage = async (page, route, viewport) =>
         roundedElements,
         transformedControls,
         decorativeEffects,
-        contactStates
+        contactStates,
+        systemMap: systemMapRect
+          ? {
+              width: Math.round(systemMapRect.width),
+              height: Math.round(systemMapRect.height),
+              nodes: document.querySelectorAll("[data-system-map] [data-node-id]").length,
+              states: document.querySelectorAll("[data-system-map] [data-map-state]").length
+            }
+          : null
       };
     },
     { route, viewport: viewport.name }
@@ -213,6 +224,16 @@ for (const result of results) {
     issues.push(
       `${label}: expected 6 visible contact states, found ${result.contactStates.length}`
     );
+  }
+
+  if (result.route === "/" && result.systemMap) {
+    if (result.systemMap.nodes < 6 || result.systemMap.states < 2) {
+      issues.push(`${label}: system map missing expected nodes or states`);
+    }
+
+    if (result.systemMap.height < 360) {
+      issues.push(`${label}: system map height is too small`);
+    }
   }
 }
 

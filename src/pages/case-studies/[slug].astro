@@ -84,10 +84,7 @@ const seo = buildPageSeo(site, {
         <section>
           <h2>{systemMap.title}</h2>
           <p>{systemMap.summary}</p>
-          <HeroSystemMap
-            label={systemMap.fallbackLabel}
-            nodes={systemMap.nodes.map((node) => node.label)}
-          />
+          <HeroSystemMap map={systemMap} />
         </section>
         <section>
           <h2>Evidence</h2>

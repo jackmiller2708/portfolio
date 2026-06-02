@@ -83,5 +83,6 @@ describe("loadHomePage", () => {
     expect(viewModel.hero.title).toContain("frontend systems");
     expect(viewModel.services).toHaveLength(1);
     expect(viewModel.proofPoints).toHaveLength(1);
+    expect(viewModel.heroMap.states.explicit).toBe("Explicit ownership");
   });
 });
