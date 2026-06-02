@@ -64,14 +64,14 @@ const seo = buildPageSeo(site, {
         <div class="fit-panel__items">
           {
             viewModel.services.map((service) => (
-              <section class="fit-card" aria-labelledby={`${service.id}-best-fit`}>
-                <h3 id={`${service.id}-best-fit`}>{service.title}</h3>
+              <div class="fit-card">
+                <h3>{service.title}</h3>
                 <ul>
                   {service.bestFit.map((item) => (
                     <li>{item}</li>
                   ))}
                 </ul>
-              </section>
+              </div>
             ))
           }
         </div>
@@ -85,20 +85,20 @@ const seo = buildPageSeo(site, {
           </p>
         </div>
         <div class="fit-panel__items">
-          <section class="fit-card" aria-labelledby="site-exclusions">
-            <h3 id="site-exclusions">Site-level exclusions</h3>
+          <div class="fit-card">
+            <h3>Site-level exclusions</h3>
             <ul>{viewModel.nonFitCriteria.map((item) => <li>{item}</li>)}</ul>
-          </section>
+          </div>
           {
             viewModel.services.map((service) => (
-              <section class="fit-card" aria-labelledby={`${service.id}-not-fit`}>
-                <h3 id={`${service.id}-not-fit`}>{service.title}</h3>
+              <div class="fit-card">
+                <h3>{service.title}</h3>
                 <ul>
                   {service.notFit.map((item) => (
                     <li>{item}</li>
                   ))}
                 </ul>
-              </section>
+              </div>
             ))
           }
         </div>

@@ -1,6 +1,5 @@
 ![reversal](https://capsule-render.vercel.app/api?type=waving&height=300&text=Jack%20Miller&textBg=false&fontAlign=50&animation=fadeIn&section=header&desc=The%20Web%20Developer&descAlignY=55&fontAlignY=40&stroke=fff&strokeWidth=1&theme=onedark)
 
-
 > **"Make complex frontend systems explicit, safer, and easier to evolve."**
 
 Hi, I'm a Frontend Systems Engineer. While most portfolios are built to showcase flashy 3D spectacles or experimental UI trends, I built this space to reflect how I actually approach software engineering in production: with intent, predictability, and a deep respect for constraints.
