@@ -237,6 +237,14 @@ Interactive components must define:
 
 Focus rings should use the accent token and remain visible against light and dark backgrounds.
 
+## Interactive Proof Rules
+
+- Proof controls should use plain buttons, links, and panels with stable dimensions.
+- Selected states should use border or text contrast, not layout movement or scale.
+- Diagram state differences should be carried by actual layout/content changes, not decorative pseudo-elements alone.
+- Dark/light theme switching should rely on semantic tokens and preserve system preference as the default fallback.
+- Route-specific OG assets should match the same restrained palette and avoid gradients or decorative imagery.
+
 ## CSS Review Checklist
 
 - No raw color values outside token files.

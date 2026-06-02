@@ -15,7 +15,8 @@ const viewModel = await Effect.runPromise(loadHomePageFromRepository(astroConten
 const site = await Effect.runPromise(astroContentRepository.getSiteMeta);
 const seo = buildPageSeo(site, {
   path: "/",
-  description: viewModel.hero.summary
+  description: viewModel.hero.summary,
+  ogImage: "/og/home.svg"
 });
 
 const initialDiagnostic = viewModel.diagnostics[0];

@@ -6,6 +6,7 @@ type Props = {
 };
 
 const { viewModel } = Astro.props;
+const firstRecommendation = viewModel.advisoryRecommendations[0];
 const fields = [
   {
     id: "name",
@@ -42,6 +43,48 @@ const fields = [
 ---
 
 <div class="contact-intake">
+  {
+    firstRecommendation && (
+      <section class="advisory-flow" aria-labelledby="advisory-flow-title" data-advisory-flow>
+        <div>
+          <h2 id="advisory-flow-title">What I would ask first</h2>
+          <p>
+            Pick the closest pain. The recommendation will keep the inquiry scoped before the form.
+          </p>
+        </div>
+        <div class="advisory-flow__layout">
+          <div class="advisory-flow__options" aria-label="Advisory starting points">
+            {viewModel.advisoryRecommendations.map((recommendation, index) => (
+              <button
+                class:list={["advisory-flow__option", index === 0 && "is-active"]}
+                type="button"
+                aria-pressed={index === 0 ? "true" : "false"}
+                data-advisory-option
+                data-id={recommendation.id}
+                data-label={recommendation.label}
+                data-pain={recommendation.pain}
+                data-service-title={recommendation.recommendedServiceTitle}
+                data-reason={recommendation.reason}
+                data-contact-href={recommendation.contactHref}
+              >
+                <span>{recommendation.label}</span>
+                <small>{recommendation.pain}</small>
+              </button>
+            ))}
+          </div>
+          <article class="advisory-flow__result" aria-live="polite">
+            <p class="advisory-flow__label">Recommended first step</p>
+            <h3 data-advisory-title>{firstRecommendation.recommendedServiceTitle}</h3>
+            <p data-advisory-reason>{firstRecommendation.reason}</p>
+            <a href={firstRecommendation.contactHref} data-advisory-link>
+              Use this context
+            </a>
+          </article>
+        </div>
+      </section>
+    )
+  }
+
   <div class="contact-intake__status-grid" aria-label="Contact form states">
     <p class={`contact-intake__status contact-intake__status--${viewModel.states.initial.kind}`}>
       <strong>Initial</strong>
@@ -134,6 +177,82 @@ const fields = [
     max-width: 900px;
   }
 
+  .advisory-flow {
+    display: grid;
+    gap: var(--space-5);
+    padding: var(--space-6);
+    background: var(--color-surface);
+    border: var(--border-1);
+    border-radius: var(--radius-2);
+  }
+
+  .advisory-flow h2,
+  .advisory-flow h3,
+  .advisory-flow p {
+    margin: 0;
+  }
+
+  .advisory-flow h2,
+  .advisory-flow h3 {
+    font-family: var(--font-display);
+    line-height: 1.15;
+  }
+
+  .advisory-flow p,
+  .advisory-flow small {
+    color: var(--color-muted);
+  }
+
+  .advisory-flow__layout,
+  .advisory-flow__options,
+  .advisory-flow__result {
+    display: grid;
+    gap: var(--space-4);
+  }
+
+  .advisory-flow__option {
+    display: grid;
+    gap: var(--space-2);
+    min-height: 96px;
+    padding: var(--space-4);
+    color: var(--color-text);
+    background: var(--color-surface);
+    border: var(--border-1);
+    border-radius: var(--radius-1);
+    cursor: pointer;
+    text-align: left;
+  }
+
+  .advisory-flow__option:hover,
+  .advisory-flow__option.is-active {
+    border-color: var(--color-accent);
+  }
+
+  .advisory-flow__option span,
+  .advisory-flow__label,
+  .advisory-flow__result a {
+    font-weight: 700;
+  }
+
+  .advisory-flow__option small {
+    font-size: 0.95rem;
+  }
+
+  .advisory-flow__result {
+    padding: var(--space-5);
+    background: var(--color-surface-2);
+    border: var(--border-1);
+    border-radius: var(--radius-1);
+  }
+
+  .advisory-flow__label {
+    color: var(--color-accent);
+  }
+
+  .advisory-flow__result a {
+    color: var(--color-text);
+  }
+
   .contact-intake__status-grid {
     display: grid;
     gap: var(--space-3);
@@ -220,8 +339,46 @@ const fields = [
   }
 
   @media (min-width: 760px) {
+    .advisory-flow__layout {
+      grid-template-columns: minmax(0, 1fr) minmax(280px, 0.85fr);
+      align-items: start;
+    }
+
     .contact-intake__status-grid {
       grid-template-columns: repeat(2, minmax(0, 1fr));
     }
   }
 </style>
+
+<script>
+  const advisoryFlow = document.querySelector<HTMLElement>("[data-advisory-flow]");
+
+  if (advisoryFlow) {
+    const options = advisoryFlow.querySelectorAll<HTMLButtonElement>("[data-advisory-option]");
+    const title = advisoryFlow.querySelector<HTMLElement>("[data-advisory-title]");
+    const reason = advisoryFlow.querySelector<HTMLElement>("[data-advisory-reason]");
+    const link = advisoryFlow.querySelector<HTMLAnchorElement>("[data-advisory-link]");
+    const pain = document.querySelector<HTMLTextAreaElement>("#pain");
+    const engagementType = document.querySelector<HTMLSelectElement>("#engagementType");
+
+    const activate = (option: HTMLButtonElement) => {
+      for (const item of options) {
+        const isActive = item === option;
+        item.classList.toggle("is-active", isActive);
+        item.setAttribute("aria-pressed", String(isActive));
+      }
+
+      if (title) title.textContent = option.dataset.serviceTitle ?? "";
+      if (reason) reason.textContent = option.dataset.reason ?? "";
+      if (link) link.href = option.dataset.contactHref ?? "/contact";
+      if (pain) pain.value = `${option.dataset.label ?? ""}: ${option.dataset.pain ?? ""}`;
+      if (engagementType) {
+        engagementType.value = option.dataset.id === "refactor-planning" ? "advisory" : "diagnosis";
+      }
+    };
+
+    for (const option of options) {
+      option.addEventListener("click", () => activate(option));
+    }
+  }
+</script>

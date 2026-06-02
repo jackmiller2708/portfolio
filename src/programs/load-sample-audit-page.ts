@@ -1,11 +1,17 @@
 import { Effect } from "effect";
 import { astroContentRepository } from "@services/AstroContentRepository";
 import type { ContentRepository } from "@services/ContentRepository";
-import { buildRiskMatrix, buildSprintRoadmap, groupFindingsBySeverity } from "@utils/audit-view";
+import {
+  buildAuditWalkthrough,
+  buildRiskMatrix,
+  buildSprintRoadmap,
+  groupFindingsBySeverity
+} from "@utils/audit-view";
 
 export const loadSampleAuditPageFromRepository = (repository: ContentRepository) =>
   Effect.gen(function* () {
     const findings = yield* repository.listAuditFindings;
+    const roadmap = buildSprintRoadmap(findings);
 
     return {
       title: "Sample Audit",
@@ -14,7 +20,8 @@ export const loadSampleAuditPageFromRepository = (repository: ContentRepository)
       findings,
       severityGroups: groupFindingsBySeverity(findings),
       riskMatrix: buildRiskMatrix(findings),
-      roadmap: buildSprintRoadmap(findings),
+      roadmap,
+      walkthrough: buildAuditWalkthrough(findings, roadmap),
       cta: {
         title: "Want this shape of review on your system?",
         summary:

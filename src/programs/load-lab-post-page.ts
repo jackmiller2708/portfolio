@@ -1,10 +1,12 @@
 import { Effect } from "effect";
 import type { ContentRepository } from "@services/ContentRepository";
+import { buildLabRecommendedReads } from "@utils/recommended-read";
 
 export const loadLabPostPageFromRepository = (repository: ContentRepository, slug: string) =>
   Effect.gen(function* () {
     const post = yield* repository.getLabPostBySlug(slug);
     const services = yield* repository.listServices;
+    const caseStudies = yield* repository.listCaseStudies;
 
     const relatedServices = services.filter((service) =>
       post.relatedServices?.includes(service.id)
@@ -12,7 +14,8 @@ export const loadLabPostPageFromRepository = (repository: ContentRepository, slu
 
     return {
       post,
-      relatedServices
+      relatedServices,
+      recommendedReads: buildLabRecommendedReads(post, services, caseStudies)
     };
   });
 

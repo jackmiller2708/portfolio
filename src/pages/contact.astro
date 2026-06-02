@@ -12,7 +12,8 @@ const site = await Effect.runPromise(astroContentRepository.getSiteMeta);
 const seo = buildPageSeo(site, {
   path: "/contact",
   title: "Contact",
-  description: "Start a scoped frontend systems diagnostic."
+  description: "Start a scoped frontend systems diagnostic.",
+  ogImage: "/og/contact.svg"
 });
 ---
 

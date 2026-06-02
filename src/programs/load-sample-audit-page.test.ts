@@ -1,6 +1,11 @@
 import { describe, expect, it } from "vitest";
 import type { AuditFinding } from "@domain/audit";
-import { buildRiskMatrix, buildSprintRoadmap, groupFindingsBySeverity } from "@utils/audit-view";
+import {
+  buildAuditWalkthrough,
+  buildRiskMatrix,
+  buildSprintRoadmap,
+  groupFindingsBySeverity
+} from "@utils/audit-view";
 
 const findings: readonly AuditFinding[] = [
   {
@@ -39,5 +44,20 @@ describe("sample audit view helpers", () => {
       areas: ["errors"]
     });
     expect(buildSprintRoadmap(findings).map((step) => step.sprint)).toEqual([1, 2]);
+  });
+
+  it("builds walkthrough steps from findings and sprint sequence", () => {
+    const roadmap = buildSprintRoadmap(findings);
+    const walkthrough = buildAuditWalkthrough(findings, roadmap);
+
+    expect(walkthrough).toHaveLength(2);
+    expect(walkthrough[0]).toMatchObject({
+      findingId: "a",
+      symptom: "Unhandled errors",
+      evidence: "Errors leak.",
+      risk: "Users get stuck.",
+      recommendation: "Add explicit handling.",
+      sprintTitle: "Sprint 1"
+    });
   });
 });

@@ -13,9 +13,11 @@ const site = await Effect.runPromise(astroContentRepository.getSiteMeta);
 const seo = buildPageSeo(site, {
   path: "/sample-audit",
   title: viewModel.title,
-  description: viewModel.summary
+  description: viewModel.summary,
+  ogImage: "/og/sample-audit.svg"
 });
 const formatSeverity = (severity: string) => `${severity[0]?.toUpperCase()}${severity.slice(1)}`;
+const firstWalkthrough = viewModel.walkthrough[0];
 ---
 
 <BaseLayout seo={seo}>
@@ -26,6 +28,68 @@ const formatSeverity = (severity: string) => `${severity[0]?.toUpperCase()}${sev
   />
   <section class="audit-section">
     <div class="u-container u-stack">
+      {
+        firstWalkthrough && (
+          <section class="audit-walkthrough" aria-labelledby="audit-walkthrough-title">
+            <div class="audit-walkthrough__header">
+              <h2 id="audit-walkthrough-title">Guided audit walkthrough</h2>
+              <p>
+                Step through one finding as symptom, evidence, risk, recommendation, and sprint
+                sequence.
+              </p>
+            </div>
+            <div class="audit-walkthrough__layout" data-audit-walkthrough>
+              <div class="audit-walkthrough__findings" aria-label="Audit findings">
+                {viewModel.walkthrough.map((step, index) => (
+                  <button
+                    class:list={["audit-walkthrough__finding", index === 0 && "is-active"]}
+                    type="button"
+                    aria-pressed={index === 0 ? "true" : "false"}
+                    data-walkthrough-finding
+                    data-title={step.title}
+                    data-symptom={step.symptom}
+                    data-evidence={step.evidence}
+                    data-risk={step.risk}
+                    data-recommendation={step.recommendation}
+                    data-sprint={step.sprintTitle}
+                  >
+                    {step.title}
+                  </button>
+                ))}
+              </div>
+              <article class="audit-walkthrough__panel" aria-live="polite">
+                <div class="audit-walkthrough__phases" role="group" aria-label="Walkthrough phase">
+                  <button class="is-active" type="button" aria-pressed="true" data-phase="symptom">
+                    Symptom
+                  </button>
+                  <button type="button" aria-pressed="false" data-phase="evidence">
+                    Evidence
+                  </button>
+                  <button type="button" aria-pressed="false" data-phase="risk">
+                    Risk
+                  </button>
+                  <button type="button" aria-pressed="false" data-phase="recommendation">
+                    Recommendation
+                  </button>
+                  <button type="button" aria-pressed="false" data-phase="sprint">
+                    Sprint sequence
+                  </button>
+                </div>
+                <p class="audit-walkthrough__label" data-phase-label>
+                  Symptom
+                </p>
+                <h3 data-walkthrough-title>{firstWalkthrough.title}</h3>
+                <p data-walkthrough-copy>{firstWalkthrough.symptom}</p>
+                <ButtonLink href="/contact?context=sample-audit" label="Scope an audit" />
+              </article>
+            </div>
+          </section>
+        )
+      }
+      <section class="full-report" aria-labelledby="full-report-title">
+        <h2 id="full-report-title">Full report view</h2>
+        <p>Scan all findings, severity groups, and the sprint sequence without using the guide.</p>
+      </section>
       <div class="matrix-grid" aria-label="Risk matrix summary">
         {
           viewModel.riskMatrix.map((row) => (
@@ -80,6 +144,93 @@ const formatSeverity = (severity: string) => `${severity[0]?.toUpperCase()}${sev
 <style>
   .audit-section {
     padding: 0 0 var(--space-16);
+  }
+
+  .audit-walkthrough,
+  .full-report {
+    display: grid;
+    gap: var(--space-5);
+  }
+
+  .audit-walkthrough {
+    padding: var(--space-6);
+    background: var(--color-surface);
+    border: var(--border-1);
+    border-radius: var(--radius-2);
+  }
+
+  .audit-walkthrough__header,
+  .audit-walkthrough__layout,
+  .audit-walkthrough__findings,
+  .audit-walkthrough__panel {
+    display: grid;
+    gap: var(--space-4);
+  }
+
+  .audit-walkthrough__header h2,
+  .full-report h2,
+  .audit-walkthrough__panel h3,
+  .audit-walkthrough__header p,
+  .full-report p,
+  .audit-walkthrough__label,
+  .audit-walkthrough__panel p {
+    margin: 0;
+  }
+
+  .audit-walkthrough__header h2,
+  .full-report h2,
+  .audit-walkthrough__panel h3 {
+    font-family: var(--font-display);
+    line-height: 1.15;
+  }
+
+  .audit-walkthrough__header h2,
+  .full-report h2 {
+    font-size: 2rem;
+  }
+
+  .audit-walkthrough__header p,
+  .full-report p,
+  .audit-walkthrough__panel p {
+    color: var(--color-muted);
+  }
+
+  .audit-walkthrough__finding,
+  .audit-walkthrough__phases button {
+    min-height: 42px;
+    padding: var(--space-2) var(--space-3);
+    color: var(--color-text);
+    background: var(--color-surface);
+    border: var(--border-1);
+    border-radius: var(--radius-1);
+    cursor: pointer;
+    font-weight: 700;
+    text-align: left;
+  }
+
+  .audit-walkthrough__finding:hover,
+  .audit-walkthrough__finding.is-active,
+  .audit-walkthrough__phases button:hover,
+  .audit-walkthrough__phases button.is-active {
+    border-color: var(--color-accent);
+  }
+
+  .audit-walkthrough__panel {
+    padding: var(--space-5);
+    background: var(--color-surface-2);
+    border: var(--border-1);
+    border-radius: var(--radius-1);
+  }
+
+  .audit-walkthrough__phases {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+
+  .audit-walkthrough__label {
+    color: var(--color-accent);
+    font-weight: 700;
   }
 
   .matrix-grid,
@@ -157,6 +308,11 @@ const formatSeverity = (severity: string) => `${severity[0]?.toUpperCase()}${sev
   }
 
   @media (min-width: 760px) {
+    .audit-walkthrough__layout {
+      grid-template-columns: 280px minmax(0, 1fr);
+      align-items: start;
+    }
+
     .matrix-grid {
       grid-template-columns: repeat(3, minmax(0, 1fr));
     }
@@ -170,3 +326,59 @@ const formatSeverity = (severity: string) => `${severity[0]?.toUpperCase()}${sev
     }
   }
 </style>
+
+<script>
+  const walkthrough = document.querySelector<HTMLElement>("[data-audit-walkthrough]");
+
+  if (walkthrough) {
+    const findings = walkthrough.querySelectorAll<HTMLButtonElement>("[data-walkthrough-finding]");
+    const phases = walkthrough.querySelectorAll<HTMLButtonElement>("[data-phase]");
+    const label = walkthrough.querySelector<HTMLElement>("[data-phase-label]");
+    const title = walkthrough.querySelector<HTMLElement>("[data-walkthrough-title]");
+    const copy = walkthrough.querySelector<HTMLElement>("[data-walkthrough-copy]");
+    let activeFinding = findings[0];
+    let activePhase = "symptom";
+
+    const phaseLabels: Record<string, string> = {
+      symptom: "Symptom",
+      evidence: "Evidence",
+      risk: "Risk",
+      recommendation: "Recommendation",
+      sprint: "Sprint sequence"
+    };
+
+    const updatePanel = () => {
+      if (!activeFinding || !label || !title || !copy) {
+        return;
+      }
+
+      label.textContent = phaseLabels[activePhase] ?? "Symptom";
+      title.textContent = activeFinding.dataset.title ?? "";
+      copy.textContent = activeFinding.dataset[activePhase] ?? "";
+    };
+
+    for (const finding of findings) {
+      finding.addEventListener("click", () => {
+        activeFinding = finding;
+        for (const item of findings) {
+          const isActive = item === finding;
+          item.classList.toggle("is-active", isActive);
+          item.setAttribute("aria-pressed", String(isActive));
+        }
+        updatePanel();
+      });
+    }
+
+    for (const phase of phases) {
+      phase.addEventListener("click", () => {
+        activePhase = phase.dataset.phase ?? "symptom";
+        for (const item of phases) {
+          const isActive = item === phase;
+          item.classList.toggle("is-active", isActive);
+          item.setAttribute("aria-pressed", String(isActive));
+        }
+        updatePanel();
+      });
+    }
+  }
+</script>

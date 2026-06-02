@@ -20,6 +20,7 @@ Latest commits:
 - `189f88e feat: add v1.5 proof content`
 - `2905c28 feat: add signature system map`
 - `67b2df6 Complete home page diagnostic view model`
+- `06cb9e2 Stabilize interactive UI polish`
 
 ## Phase 0: Planning Foundation
 
@@ -163,49 +164,49 @@ Source: `ui-ux-pro-max` portfolio-grid and before-after transformation patterns,
 
 Goal: Demonstrate UX consulting through clearer technical information design.
 
-- [ ] Convert the sample audit from a static report page into a guided walkthrough.
-- [ ] Let visitors step through symptom, evidence, risk, recommendation, and sprint sequence.
-- [ ] Preserve the full report view for scanning.
-- [ ] Add route-specific CTA copy for audit scoping.
-- [ ] Add keyboard and touch support for walkthrough controls.
-- [ ] Add axe and smoke coverage for the walkthrough.
+- [x] Convert the sample audit from a static report page into a guided walkthrough.
+- [x] Let visitors step through symptom, evidence, risk, recommendation, and sprint sequence.
+- [x] Preserve the full report view for scanning.
+- [x] Add route-specific CTA copy for audit scoping.
+- [x] Add keyboard and touch support for walkthrough controls.
+- [x] Add axe and smoke coverage for the walkthrough.
 
 ## Phase 12: Case Study Experience Upgrade
 
-- [ ] Add stronger before/after architecture comparison blocks to detail pages.
-- [ ] Make constraints, decisions, tradeoffs, evidence, result, and recommendation easier to scan.
-- [ ] Add "recommended next read" links at the bottom of case-study and lab detail pages.
-- [ ] Add contact CTA variants that reference each case study's constraints.
-- [ ] Keep all proof synthetic, redacted, or public-safe.
+- [x] Add stronger before/after architecture comparison blocks to detail pages.
+- [x] Make constraints, decisions, tradeoffs, evidence, result, and recommendation easier to scan.
+- [x] Add "recommended next read" links at the bottom of case-study and lab detail pages.
+- [x] Add contact CTA variants that reference each case study's constraints.
+- [x] Keep all proof synthetic, redacted, or public-safe.
 
 ## Phase 13: Advisory Contact Flow
 
-- [ ] Add a lightweight "what I would ask first" advisory flow before or within Contact.
-- [ ] Recommend audit, stabilization, or advisory based on user-provided context.
-- [ ] Keep form fields minimal and avoid a heavy quote-builder experience.
-- [ ] Add accessible loading, validation, and fallback states for the new flow.
-- [ ] Add tests for advisory recommendation logic.
+- [x] Add a lightweight "what I would ask first" advisory flow before or within Contact.
+- [x] Recommend audit, stabilization, or advisory based on user-provided context.
+- [x] Keep form fields minimal and avoid a heavy quote-builder experience.
+- [x] Add accessible loading, validation, and fallback states for the new flow.
+- [x] Add tests for advisory recommendation logic.
 
 ## Phase 14: Performance And Asset Maturity
 
 Source: `ui-ux-pro-max` Astro performance guidance.
 
-- [ ] Add route-specific OG assets for major proof routes.
-- [ ] Add an asset and client-JS budget check for future interaction growth.
-- [ ] Keep Astro island hydration limited to genuinely interactive components.
-- [ ] Consider critical CSS or component CSS consolidation only if render-blocking savings become material after added interactions.
-- [ ] Add production-preview performance verification to the release checklist.
+- [x] Add route-specific OG assets for major proof routes.
+- [x] Add an asset and client-JS budget check for future interaction growth.
+- [x] Keep Astro island hydration limited to genuinely interactive components.
+- [x] Consider critical CSS or component CSS consolidation only if render-blocking savings become material after added interactions.
+- [x] Add production-preview performance verification to the release checklist.
 
 ## Phase 15: Visual System Tightening
 
-- [ ] Keep the minimal visual language, but make interactive proof states more discoverable.
-- [ ] Evaluate whether typography needs a readability-first adjustment after user feedback.
-- [ ] Avoid a masonry/gallery redesign unless more visual proof assets become available.
-- [ ] Avoid luxury/gold or generic SaaS-blue palette drift; preserve the current technical brand.
-- [ ] Document any token changes in styling conventions.
+- [x] Keep the minimal visual language, but make interactive proof states more discoverable.
+- [x] Evaluate whether typography needs a readability-first adjustment after user feedback.
+- [x] Avoid a masonry/gallery redesign unless more visual proof assets become available.
+- [x] Avoid luxury/gold or generic SaaS-blue palette drift; preserve the current technical brand.
+- [x] Document any token changes in styling conventions.
 
 ## Immediate Next Milestone
 
-Begin **Phase 11: Guided Sample Audit Walkthrough**.
+Prepare final release review and deployment.
 
-Next implementation plan to draft: `docs/implementation/v5-guided-sample-audit-implementation-plan.md`.
+Next implementation plan to draft: post-launch feedback and iteration plan.

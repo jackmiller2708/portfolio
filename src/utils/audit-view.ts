@@ -19,6 +19,17 @@ export type AuditRoadmapStep = {
   readonly findings: readonly AuditFinding[];
 };
 
+export type AuditWalkthroughStep = {
+  readonly id: string;
+  readonly findingId: string;
+  readonly title: string;
+  readonly symptom: string;
+  readonly evidence: string;
+  readonly risk: string;
+  readonly recommendation: string;
+  readonly sprintTitle: string;
+};
+
 export const groupFindingsBySeverity = (
   findings: readonly AuditFinding[]
 ): readonly AuditSeverityGroup[] =>
@@ -53,3 +64,24 @@ export const buildSprintRoadmap = (
     findings: findings.filter((finding) => finding.sprint === sprint)
   }));
 };
+
+export const buildAuditWalkthrough = (
+  findings: readonly AuditFinding[],
+  roadmap: readonly AuditRoadmapStep[]
+): readonly AuditWalkthroughStep[] =>
+  findings.map((finding) => {
+    const sprint = roadmap.find((step) =>
+      step.findings.some((roadmapFinding) => roadmapFinding.id === finding.id)
+    );
+
+    return {
+      id: `walkthrough-${finding.id}`,
+      findingId: finding.id,
+      title: finding.title,
+      symptom: finding.title,
+      evidence: finding.evidence,
+      risk: finding.risk,
+      recommendation: finding.recommendation,
+      sprintTitle: sprint?.title ?? "Sprint sequence"
+    };
+  });

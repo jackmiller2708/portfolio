@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { Effect } from "effect";
 import type { CaseStudy } from "@domain/case-study";
+import type { LabPost } from "@domain/lab";
 import type { SystemMap } from "@domain/system-map";
 import type { ContentRepository } from "@services/ContentRepository";
 import { loadCaseStudyPageFromRepository } from "./load-case-study-page";
@@ -48,11 +49,28 @@ const systemMap: SystemMap = {
   }
 };
 
+const otherCaseStudy: CaseStudy = {
+  ...caseStudy,
+  id: "admin-refactor",
+  slug: "admin-refactor",
+  title: "Admin Refactor",
+  summary: "Synthetic admin refactor case."
+};
+
+const labPost: LabPost = {
+  id: "cache-semantics",
+  slug: "cache-semantics",
+  title: "Cache Semantics",
+  summary: "A note about cache ownership.",
+  topic: "Architecture",
+  takeaway: "Name cache rules."
+};
+
 const repository: ContentRepository = {
   listServices: Effect.succeed([]),
   listAuditFindings: Effect.succeed([]),
-  listLabPosts: Effect.succeed([]),
-  listCaseStudies: Effect.succeed([caseStudy]),
+  listLabPosts: Effect.succeed([labPost]),
+  listCaseStudies: Effect.succeed([caseStudy, otherCaseStudy]),
   getCaseStudyBySlug: (slug) =>
     slug === caseStudy.slug
       ? Effect.succeed(caseStudy)
@@ -79,6 +97,10 @@ describe("loadCaseStudyPage", () => {
     expect(viewModel.caseStudy.beforeAfter.after).toContain("Named state transitions");
     expect(viewModel.systemMap.nodes).toHaveLength(1);
     expect(viewModel.cta.href).toContain("checkout-stabilization");
+    expect(viewModel.recommendedReads.map((read) => read.title)).toEqual([
+      "Admin Refactor",
+      "Cache Semantics"
+    ]);
   });
 
   it("fails when the case study slug is missing", async () => {

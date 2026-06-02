@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
+  <title id="title">Sample Audit</title>
+  <desc id="desc">A guided frontend systems audit walkthrough.</desc>
+  <rect width="1200" height="630" fill="#fafafc"/>
+  <rect x="72" y="72" width="1056" height="486" fill="#ffffff" stroke="#d9dde7" stroke-width="2" rx="8"/>
+  <text x="112" y="154" fill="#17171c" font-family="Space Grotesk, Arial, sans-serif" font-size="54" font-weight="700">Sample Audit</text>
+  <text x="112" y="212" fill="#5e606a" font-family="Inter, Arial, sans-serif" font-size="28">Symptom, evidence, risk, recommendation, and sprint sequence.</text>
+  <g font-family="Inter, Arial, sans-serif" font-size="22" font-weight="700">
+    <rect x="112" y="310" width="180" height="88" fill="#f2f4f8" stroke="#c72c73" rx="6"/>
+    <text x="136" y="362" fill="#17171c">Evidence</text>
+    <rect x="324" y="310" width="180" height="88" fill="#f2f4f8" stroke="#d9dde7" rx="6"/>
+    <text x="348" y="362" fill="#17171c">Risk</text>
+    <rect x="536" y="310" width="240" height="88" fill="#f2f4f8" stroke="#d9dde7" rx="6"/>
+    <text x="560" y="362" fill="#17171c">Recommendation</text>
+    <rect x="808" y="310" width="180" height="88" fill="#f2f4f8" stroke="#d9dde7" rx="6"/>
+    <text x="832" y="362" fill="#17171c">Sprint</text>
+  </g>
+  <text x="112" y="508" fill="#c72c73" font-family="Inter, Arial, sans-serif" font-size="24" font-weight="700">A report shape built around evidence and sequence.</text>
+</svg>
+

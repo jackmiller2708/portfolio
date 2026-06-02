@@ -1,6 +1,8 @@
 import { Effect } from "effect";
 import { astroContentRepository } from "@services/AstroContentRepository";
 import type { ContentRepository } from "@services/ContentRepository";
+import type { AdvisoryRecommendation } from "@domain/advisory";
+import { buildAdvisoryRecommendations } from "@utils/advisory";
 import {
   initialContactState,
   submittingContactState,
@@ -18,6 +20,7 @@ export type ContactPageViewModel = {
   readonly availability: string;
   readonly contactEmail: string;
   readonly nonFitCriteria: readonly string[];
+  readonly advisoryRecommendations: readonly AdvisoryRecommendation[];
   readonly states: {
     readonly initial: ContactStateByKind<"initial">;
     readonly submitting: ContactStateByKind<"submitting">;
@@ -31,6 +34,7 @@ export type ContactPageViewModel = {
 export const loadContactPageFromRepository = (repository: ContentRepository) =>
   Effect.gen(function* () {
     const site = yield* repository.getSiteMeta;
+    const services = yield* repository.listServices;
 
     return {
       title: "Start with a scoped engineering diagnostic.",
@@ -39,6 +43,7 @@ export const loadContactPageFromRepository = (repository: ContentRepository) =>
       availability: site.availability,
       contactEmail: site.contactEmail,
       nonFitCriteria: site.nonFitCriteria,
+      advisoryRecommendations: buildAdvisoryRecommendations(services),
       states: {
         initial: initialContactState,
         submitting: submittingContactState,

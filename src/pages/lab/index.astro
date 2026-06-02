@@ -3,14 +3,20 @@ import { Effect } from "effect";
 import BaseLayout from "@layouts/BaseLayout.astro";
 import PageHero from "@components/sections/PageHero/PageHero.astro";
 import { loadLabPage } from "@programs/load-lab-page";
+import { astroContentRepository } from "@services/AstroContentRepository";
+import { buildPageSeo } from "@utils/seo";
 
 const viewModel = await Effect.runPromise(loadLabPage);
+const site = await Effect.runPromise(astroContentRepository.getSiteMeta);
+const seo = buildPageSeo(site, {
+  path: "/lab",
+  title: viewModel.title,
+  description: viewModel.summary,
+  ogImage: "/og/lab.svg"
+});
 ---
 
-<BaseLayout
-  title={`${viewModel.title} | Frontend Systems Portfolio`}
-  description={viewModel.summary}
->
+<BaseLayout seo={seo}>
   <PageHero
     title={viewModel.title}
     summary={viewModel.summary}

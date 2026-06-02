@@ -26,7 +26,8 @@ const site = await Effect.runPromise(astroContentRepository.getSiteMeta);
 const seo = buildPageSeo(site, {
   path: `/case-studies/${caseStudy.slug}`,
   title: caseStudy.title,
-  description: caseStudy.summary
+  description: caseStudy.summary,
+  ogImage: "/og/case-studies.svg"
 });
 ---
 
@@ -43,13 +44,28 @@ const seo = buildPageSeo(site, {
         <p class="case-detail__label">{caseStudy.redactionStatus}</p>
         <h2>Context</h2>
         <p>{caseStudy.context}</p>
-        <h2>Constraints</h2>
-        <ul>{caseStudy.constraints.map((item) => <li>{item}</li>)}</ul>
       </aside>
       <div class="case-detail__main">
+        <section class="scan-section" aria-labelledby="case-scan-title">
+          <h2 id="case-scan-title">Proof scan</h2>
+          <div class="scan-grid">
+            <article>
+              <h3>Problem</h3>
+              <p>{caseStudy.problem}</p>
+            </article>
+            <article>
+              <h3>Result</h3>
+              <p>{caseStudy.result}</p>
+            </article>
+            <article>
+              <h3>Recommendation</h3>
+              <p>{caseStudy.recommendation}</p>
+            </article>
+          </div>
+        </section>
         <section>
-          <h2>Problem</h2>
-          <p>{caseStudy.problem}</p>
+          <h2>Constraints</h2>
+          <ul>{caseStudy.constraints.map((item) => <li>{item}</li>)}</ul>
         </section>
         <section>
           <h2>Decisions</h2>
@@ -69,7 +85,7 @@ const seo = buildPageSeo(site, {
           <ul>{caseStudy.tradeoffs.map((item) => <li>{item}</li>)}</ul>
         </section>
         <section>
-          <h2>Before and after</h2>
+          <h2>Before and after architecture</h2>
           <div class="before-after">
             <div>
               <h3>Before</h3>
@@ -81,8 +97,8 @@ const seo = buildPageSeo(site, {
             </div>
           </div>
         </section>
-        <section>
-          <h2>{systemMap.title}</h2>
+        <section aria-labelledby="case-system-map">
+          <h2 id="case-system-map">{systemMap.title}</h2>
           <p>{systemMap.summary}</p>
           <HeroSystemMap map={systemMap} />
         </section>
@@ -99,17 +115,25 @@ const seo = buildPageSeo(site, {
             }
           </div>
         </section>
-        <section>
-          <h2>Result</h2>
-          <p>{caseStudy.result}</p>
-        </section>
-        <section>
-          <h2>Recommendation</h2>
-          <p>{caseStudy.recommendation}</p>
-        </section>
         <section class="case-detail__body">
           <Content />
         </section>
+        {
+          viewModel.recommendedReads.length > 0 && (
+            <section class="recommended-reads" aria-labelledby="case-next-read">
+              <h2 id="case-next-read">Recommended next reads</h2>
+              <div class="recommended-grid">
+                {viewModel.recommendedReads.map((read) => (
+                  <a class="recommended-card" href={read.href}>
+                    <span>{read.label}</span>
+                    <h3>{read.title}</h3>
+                    <p>{read.summary}</p>
+                  </a>
+                ))}
+              </div>
+            </section>
+          )
+        }
         <section class="case-detail__cta">
           <div>
             <h2>{viewModel.cta.title}</h2>
@@ -134,8 +158,10 @@ const seo = buildPageSeo(site, {
 
   .case-detail__meta,
   .detail-card,
+  .scan-grid > article,
   .before-after > div,
-  .case-detail__cta {
+  .case-detail__cta,
+  .recommended-card {
     padding: var(--space-6);
     background: var(--color-surface);
     border: var(--border-1);
@@ -159,8 +185,10 @@ const seo = buildPageSeo(site, {
   .case-detail__main,
   section,
   .detail-grid,
+  .scan-grid,
   .before-after,
-  .case-detail__cta {
+  .case-detail__cta,
+  .recommended-grid {
     display: grid;
     gap: var(--space-5);
   }
@@ -191,6 +219,20 @@ const seo = buildPageSeo(site, {
     color: var(--color-muted);
   }
 
+  .recommended-card {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .recommended-card:hover {
+    border-color: var(--color-accent);
+  }
+
+  .recommended-card span {
+    color: var(--color-accent);
+    font-weight: 700;
+  }
+
   ul {
     display: grid;
     gap: var(--space-2);
@@ -212,6 +254,8 @@ const seo = buildPageSeo(site, {
     }
 
     .detail-grid,
+    .scan-grid,
+    .recommended-grid,
     .before-after {
       grid-template-columns: repeat(2, minmax(0, 1fr));
     }

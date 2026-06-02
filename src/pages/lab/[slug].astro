@@ -25,7 +25,8 @@ const site = await Effect.runPromise(astroContentRepository.getSiteMeta);
 const seo = buildPageSeo(site, {
   path: `/lab/${post.slug}`,
   title: post.title,
-  description: post.summary
+  description: post.summary,
+  ogImage: "/og/lab.svg"
 });
 ---
 
@@ -66,6 +67,22 @@ const seo = buildPageSeo(site, {
             </section>
           )
         }
+        {
+          viewModel.recommendedReads.length > 0 && (
+            <section class="recommended-reads" aria-labelledby="lab-next-read">
+              <h2 id="lab-next-read">Recommended next reads</h2>
+              <div class="recommended-grid">
+                {viewModel.recommendedReads.map((read) => (
+                  <a class="recommended-card" href={read.href}>
+                    <span>{read.label}</span>
+                    <h3>{read.title}</h3>
+                    <p>{read.summary}</p>
+                  </a>
+                ))}
+              </div>
+            </section>
+          )
+        }
       </div>
     </div>
   </article>
@@ -82,7 +99,8 @@ const seo = buildPageSeo(site, {
   }
 
   .lab-detail__meta,
-  .related-card {
+  .related-card,
+  .recommended-card {
     padding: var(--space-6);
     background: var(--color-surface);
     border: var(--border-1);
@@ -104,6 +122,8 @@ const seo = buildPageSeo(site, {
 
   .lab-detail__meta h2,
   .lab-detail__meta p,
+  .recommended-card h3,
+  .recommended-card p,
   .related-card h3,
   .related-card p {
     margin: 0;
@@ -115,7 +135,8 @@ const seo = buildPageSeo(site, {
   }
 
   .lab-detail__body :global(h2),
-  .related-services h2 {
+  .related-services h2,
+  .recommended-reads h2 {
     margin: var(--space-8) 0 var(--space-3);
     font-family: var(--font-display);
     font-size: 2rem;
@@ -124,6 +145,7 @@ const seo = buildPageSeo(site, {
 
   .lab-detail__body :global(p),
   .lab-detail__meta p,
+  .recommended-card p,
   .related-card p {
     color: var(--color-muted);
   }
@@ -137,19 +159,39 @@ const seo = buildPageSeo(site, {
     border-radius: var(--radius-2);
   }
 
-  .related-grid {
+  .related-grid,
+  .recommended-grid {
     display: grid;
     gap: var(--space-5);
   }
 
-  .related-card {
+  .related-card,
+  .recommended-card {
     display: grid;
     gap: var(--space-4);
+  }
+
+  .recommended-card {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .recommended-card:hover {
+    border-color: var(--color-accent);
+  }
+
+  .recommended-card span {
+    color: var(--color-accent);
+    font-weight: 700;
   }
 
   @media (min-width: 980px) {
     .lab-detail__layout {
       grid-template-columns: 280px minmax(0, 1fr);
+    }
+
+    .recommended-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
     }
   }
 </style>

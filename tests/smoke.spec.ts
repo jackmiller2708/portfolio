@@ -59,6 +59,16 @@ test.describe("Smoke Tests", () => {
     await expect(heroHeading).toBeVisible();
   });
 
+  test("Sample Audit walkthrough updates visible phase content", async ({ page }) => {
+    await page.goto("/sample-audit");
+
+    const walkthrough = page.locator("[data-audit-walkthrough]");
+    await expect(walkthrough).toBeVisible();
+    await walkthrough.getByRole("button", { name: "Risk" }).click();
+    await expect(walkthrough.locator("[data-phase-label]")).toContainText("Risk");
+    await expect(page.getByRole("heading", { name: "Full report view" })).toBeVisible();
+  });
+
   test("Contact page should load and display intake form", async ({ page }) => {
     await page.goto("/contact");
     await expect(page).toHaveTitle(/Contact \| Frontend Systems Portfolio/);
@@ -67,6 +77,17 @@ test.describe("Smoke Tests", () => {
 
     const form = page.locator("form.contact-form");
     await expect(form).toBeVisible();
+  });
+
+  test("Contact advisory selector updates recommendation and form context", async ({ page }) => {
+    await page.goto("/contact");
+
+    const advisory = page.locator("[data-advisory-flow]");
+    await expect(advisory).toBeVisible();
+    await advisory.getByRole("button", { name: /Refactor planning/ }).click();
+    await expect(advisory.locator("[data-advisory-title]")).toContainText("Architecture Advisory");
+    await expect(page.locator("#engagementType")).toHaveValue("advisory");
+    await expect(page.locator("#pain")).toHaveValue(/Refactor planning/);
   });
 
   test("About page should load", async ({ page }) => {
@@ -81,6 +102,7 @@ test.describe("Smoke Tests", () => {
     await expect(page).toHaveTitle(/Checkout flow stabilization/);
     await expect(page.locator("main h1")).toBeVisible();
     await expect(page.getByRole("heading", { name: "Problem" })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Recommended next reads" })).toBeVisible();
   });
 
   test("Lab detail page should load", async ({ page }) => {
@@ -88,6 +110,7 @@ test.describe("Smoke Tests", () => {
     await expect(page).toHaveTitle(/RxJS cleanup without hiding ownership/);
     await expect(page.locator("main h1")).toBeVisible();
     await expect(page.getByRole("heading", { name: "Related services" })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Recommended next reads" })).toBeVisible();
   });
 
   test("404 page should render correctly", async ({ page }) => {
