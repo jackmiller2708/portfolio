@@ -1,15 +1,73 @@
 ---
+import { Effect } from "effect";
 import BaseLayout from "@layouts/BaseLayout.astro";
 import PageHero from "@components/sections/PageHero/PageHero.astro";
+import { loadLabPage } from "@programs/load-lab-page";
+
+const viewModel = await Effect.runPromise(loadLabPage);
 ---
 
 <BaseLayout
-  title="Technical Lab | Frontend Systems Portfolio"
-  description="Technical notes on Angular, RxJS, TypeScript, and architecture."
+  title={`${viewModel.title} | Frontend Systems Portfolio`}
+  description={viewModel.summary}
 >
   <PageHero
-    title="Technical lab notes will make implementation reasoning public."
-    summary="This route is scaffolded for the V1.5 proof phase."
+    title={viewModel.title}
+    summary={viewModel.summary}
     primaryCta={{ label: "View services", href: "/services" }}
   />
+  <section class="lab-section">
+    <div class="u-container lab-grid">
+      {
+        viewModel.posts.map((post) => (
+          <article class="lab-card">
+            <p class="lab-card__topic">{post.topic}</p>
+            <h2>{post.title}</h2>
+            <p>{post.summary}</p>
+            <p class="lab-card__takeaway">{post.takeaway}</p>
+          </article>
+        ))
+      }
+    </div>
+  </section>
 </BaseLayout>
+
+<style>
+  .lab-section {
+    padding: 0 0 var(--space-16);
+  }
+
+  .lab-grid {
+    display: grid;
+    gap: var(--space-6);
+  }
+
+  .lab-card {
+    padding: var(--space-6);
+    background: var(--color-surface);
+    border: var(--border-1);
+    border-radius: var(--radius-2);
+  }
+
+  .lab-card__topic {
+    margin: 0 0 var(--space-3);
+    color: var(--color-accent);
+    font-weight: 700;
+  }
+
+  h2,
+  p {
+    margin: 0;
+  }
+
+  h2 + p {
+    margin-top: var(--space-3);
+    color: var(--color-muted);
+  }
+
+  .lab-card__takeaway {
+    margin-top: var(--space-4);
+    color: var(--color-text);
+    font-weight: 700;
+  }
+</style>

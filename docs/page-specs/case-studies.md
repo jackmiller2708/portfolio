@@ -1,6 +1,6 @@
 # Page Spec: Case Studies
 
-Status: Proposed
+Status: Accepted
 
 Date: 2026-06-02
 

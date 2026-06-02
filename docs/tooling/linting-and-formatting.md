@@ -1,6 +1,6 @@
 # Tooling: Linting And Formatting
 
-Status: Proposed
+Status: Accepted
 
 Date: 2026-06-02
 

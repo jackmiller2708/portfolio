@@ -1,15 +1,71 @@
 ---
+import { Effect } from "effect";
 import BaseLayout from "@layouts/BaseLayout.astro";
 import PageHero from "@components/sections/PageHero/PageHero.astro";
+import { loadCaseStudiesPage } from "@programs/load-case-studies-page";
+
+const viewModel = await Effect.runPromise(loadCaseStudiesPage);
 ---
 
 <BaseLayout
-  title="Case Studies | Frontend Systems Portfolio"
-  description="Redacted and synthetic proof of frontend architecture work."
+  title={`${viewModel.title} | Frontend Systems Portfolio`}
+  description={viewModel.summary}
 >
   <PageHero
-    title="Case studies will show the constraints, decisions, tradeoffs, and outcomes."
-    summary="This route is scaffolded for the V1.5 proof phase."
+    title={viewModel.title}
+    summary={viewModel.summary}
     primaryCta={{ label: "View sample audit", href: "/sample-audit" }}
   />
+  <section class="case-section">
+    <div class="u-container case-grid">
+      {
+        viewModel.caseStudies.map((caseStudy) => (
+          <article class="case-card">
+            <p class="case-card__label">{caseStudy.redactionStatus}</p>
+            <h2>{caseStudy.title}</h2>
+            <p>{caseStudy.summary}</p>
+          </article>
+        ))
+      }
+    </div>
+  </section>
 </BaseLayout>
+
+<style>
+  .case-section {
+    padding: 0 0 var(--space-16);
+  }
+
+  .case-grid {
+    display: grid;
+    gap: var(--space-6);
+  }
+
+  .case-card {
+    padding: var(--space-6);
+    background: var(--color-surface);
+    border: var(--border-1);
+    border-radius: var(--radius-2);
+  }
+
+  .case-card__label {
+    width: fit-content;
+    margin: 0 0 var(--space-3);
+    padding: var(--space-1) var(--space-3);
+    color: var(--color-accent);
+    border: 1px solid color-mix(in srgb, var(--color-accent) 40%, transparent);
+    border-radius: var(--radius-1);
+    font-weight: 700;
+    text-transform: capitalize;
+  }
+
+  h2,
+  p {
+    margin: 0;
+  }
+
+  h2 + p {
+    margin-top: var(--space-3);
+    color: var(--color-muted);
+  }
+</style>

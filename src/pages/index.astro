@@ -4,9 +4,10 @@ import BaseLayout from "@layouts/BaseLayout.astro";
 import PageHero from "@components/sections/PageHero/PageHero.astro";
 import SectionHeader from "@components/molecules/SectionHeader/SectionHeader.astro";
 import ServiceCard from "@components/organisms/ServiceCard/ServiceCard.astro";
-import { loadHomePage } from "@programs/load-home-page";
+import { loadHomePageFromRepository } from "@programs/load-home-page";
+import { astroContentRepository } from "@services/AstroContentRepository";
 
-const viewModel = await Effect.runPromise(loadHomePage);
+const viewModel = await Effect.runPromise(loadHomePageFromRepository(astroContentRepository));
 ---
 
 <BaseLayout title="Frontend Systems Portfolio" description={viewModel.hero.summary}>

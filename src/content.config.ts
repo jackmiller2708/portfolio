@@ -1,8 +1,9 @@
 import { defineCollection } from "astro:content";
+import { glob } from "astro/loaders";
 import { z } from "astro/zod";
 
 const services = defineCollection({
-  type: "content",
+  loader: glob({ pattern: "**/*.md", base: "./src/content/services" }),
   schema: z.object({
     title: z.string(),
     summary: z.string(),
@@ -19,7 +20,7 @@ const services = defineCollection({
 });
 
 const caseStudies = defineCollection({
-  type: "content",
+  loader: glob({ pattern: "**/*.md", base: "./src/content/case-studies" }),
   schema: z.object({
     title: z.string(),
     summary: z.string(),
@@ -28,7 +29,7 @@ const caseStudies = defineCollection({
 });
 
 const labPosts = defineCollection({
-  type: "content",
+  loader: glob({ pattern: "**/*.md", base: "./src/content/lab-posts" }),
   schema: z.object({
     title: z.string(),
     summary: z.string(),
@@ -38,20 +39,32 @@ const labPosts = defineCollection({
 });
 
 const auditFindings = defineCollection({
-  type: "content",
+  loader: glob({ pattern: "**/*.md", base: "./src/content/audit-findings" }),
   schema: z.object({
     title: z.string(),
     severity: z.enum(["critical", "high", "medium", "low"]),
     area: z.enum(["state", "data access", "errors", "performance", "architecture", "testing"]),
     evidence: z.string(),
     risk: z.string(),
-    recommendation: z.string()
+    recommendation: z.string(),
+    sprint: z.number().optional()
+  })
+});
+
+const siteMeta = defineCollection({
+  loader: glob({ pattern: "*.json", base: "./src/content/site-meta" }),
+  schema: z.object({
+    title: z.string(),
+    description: z.string(),
+    availability: z.string(),
+    contactEmail: z.email()
   })
 });
 
 export const collections = {
   services,
-  caseStudies,
-  labPosts,
-  auditFindings
+  "case-studies": caseStudies,
+  "lab-posts": labPosts,
+  "audit-findings": auditFindings,
+  "site-meta": siteMeta
 };

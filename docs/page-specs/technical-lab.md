@@ -1,6 +1,6 @@
 # Page Spec: Technical Lab
 
-Status: Proposed
+Status: Accepted
 
 Date: 2026-06-02
 

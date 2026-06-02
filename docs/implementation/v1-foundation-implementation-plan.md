@@ -1,6 +1,6 @@
 # Implementation Plan: V1 Foundation
 
-Status: Proposed
+Status: Accepted
 
 Date: 2026-06-02
 

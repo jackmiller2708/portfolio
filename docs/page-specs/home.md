@@ -1,6 +1,6 @@
 # Page Spec: Home
 
-Status: Proposed
+Status: Accepted
 
 Date: 2026-06-02
 
