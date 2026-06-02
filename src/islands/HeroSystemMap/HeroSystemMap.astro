@@ -191,11 +191,21 @@ const decisionByNode = new Map(map.decisionMarkers.map((marker) => [marker.nodeI
 
   .system-map__stage::before {
     position: absolute;
-    inset: 48% 8% auto;
+    inset: 48% auto auto 8%;
+    width: 84%;
     height: 1px;
     background: var(--color-muted);
     content: "";
     opacity: 0.45;
+    transform-origin: left;
+    transition:
+      opacity var(--duration-2) var(--ease-standard),
+      width var(--duration-2) var(--ease-standard);
+  }
+
+  .system-map[data-state="explicit"] .system-map__stage::before {
+    width: 88%;
+    opacity: 0.7;
   }
 
   .system-map__fallback,
@@ -326,6 +336,32 @@ const decisionByNode = new Map(map.decisionMarkers.map((marker) => [marker.nodeI
 
     .system-map__states [hidden] {
       display: block;
+    }
+  }
+
+  @media (prefers-color-scheme: dark) {
+    .system-map__stage {
+      background:
+        linear-gradient(
+          color-mix(in srgb, var(--color-border) 72%, transparent) 1px,
+          transparent 1px
+        ),
+        linear-gradient(
+          90deg,
+          color-mix(in srgb, var(--color-border) 72%, transparent) 1px,
+          transparent 1px
+        ),
+        var(--color-surface);
+      background-size: 56px 56px;
+    }
+
+    .system-map__stage::before {
+      background: var(--color-text);
+      opacity: 0.34;
+    }
+
+    .system-map[data-state="explicit"] .system-map__stage::before {
+      opacity: 0.52;
     }
   }
 

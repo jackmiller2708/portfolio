@@ -21,7 +21,7 @@ const { title, summary } = Astro.props;
   h2 {
     margin: 0;
     font-family: var(--font-display);
-    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-size: 2rem;
     line-height: 1.08;
   }
 
@@ -30,5 +30,11 @@ const { title, summary } = Astro.props;
     color: var(--color-muted);
     font-size: 1.1rem;
     max-width: 68ch;
+  }
+
+  @media (min-width: 720px) {
+    h2 {
+      font-size: 3.25rem;
+    }
   }
 </style>

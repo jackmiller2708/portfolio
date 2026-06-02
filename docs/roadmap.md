@@ -18,6 +18,7 @@ Latest commits:
 - `6d3e31e test: add v1 quality gate`
 - `1d444b8 docs: update readme`
 - `189f88e feat: add v1.5 proof content`
+- `2905c28 feat: add signature system map`
 
 ## Phase 0: Planning Foundation
 
@@ -116,17 +117,17 @@ Latest commits:
 
 ## Phase 7: V3 Award Polish
 
-- [ ] Refine editorial rhythm across pages.
-- [ ] Refine motion timing and transitions.
-- [ ] Add subtle system-flow line drawing where useful.
-- [ ] Improve dark-mode diagram readability.
-- [ ] Add final OG image.
-- [ ] Add submission screenshots/assets.
-- [ ] Run final Lighthouse and accessibility pass.
-- [ ] Run final privacy-safe content review.
+- [x] Refine editorial rhythm across pages.
+- [x] Refine motion timing and transitions.
+- [x] Add subtle system-flow line drawing where useful.
+- [x] Improve dark-mode diagram readability.
+- [x] Add final OG image.
+- [x] Add submission screenshots/assets.
+- [x] Run final Lighthouse and accessibility pass.
+- [x] Run final privacy-safe content review.
 
 ## Immediate Next Milestone
 
-Begin **Phase 7: V3 Award Polish**.
+V3 award-polish pass is complete. Future work should stay scoped to content updates or submission-specific adjustments.
 
-Implementation plan: draft `docs/implementation/v3-award-polish-implementation-plan.md`.
+Implementation plan: `docs/implementation/v3-award-polish-implementation-plan.md`.

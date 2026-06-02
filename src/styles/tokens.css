@@ -29,8 +29,8 @@
   --radius-1: 4px;
   --radius-2: 8px;
   --border-1: 1px solid var(--color-border);
-  --duration-1: 160ms;
-  --duration-2: 420ms;
+  --duration-1: 140ms;
+  --duration-2: 260ms;
   --ease-standard: cubic-bezier(0.2, 0, 0, 1);
   --z-header: 10;
 }

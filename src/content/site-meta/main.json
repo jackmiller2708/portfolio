@@ -2,7 +2,7 @@
   "title": "Frontend Systems Portfolio",
   "description": "Angular frontend systems engineering for audits, refactors, and stabilization.",
   "siteUrl": "https://frontend-systems.example.com",
-  "ogImage": "/og/default.png",
+  "ogImage": "/og/default.svg",
   "availability": "Available for scoped diagnostics and focused architecture engagements.",
   "contactEmail": "hello@example.com",
   "proofPoints": [
