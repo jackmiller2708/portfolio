@@ -69,7 +69,7 @@ const repository: ContentRepository = {
     ogImage: "/og/default.png",
     availability: "Available",
     contactEmail: "hello@example.com",
-    proofPoints: [
+    credibilityPoints: [
       {
         label: "Focus",
         value: "Angular",
@@ -92,11 +92,11 @@ describe("loadHomePage", () => {
 
     expect(viewModel.hero.title).toContain("frontend systems");
     expect(viewModel.services).toHaveLength(1);
-    expect(viewModel.proofPoints).toHaveLength(1);
+    expect(viewModel.credibilityPoints).toHaveLength(1);
     expect(viewModel.heroMap.states.explicit).toBe("Explicit ownership");
   });
 
-  it("returns diagnostic options connected to services, audit proof, and map state", async () => {
+  it("returns diagnostic options connected to services, reference findings, and map state", async () => {
     const viewModel = await Effect.runPromise(loadHomePageFromRepository(repository));
     const diagnostic = viewModel.diagnostics[0];
 

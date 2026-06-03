@@ -1,24 +1,24 @@
 ---
-type ProofPoint = {
+type CredibilityPoint = {
   readonly label: string;
   readonly value: string;
   readonly detail: string;
 };
 
 type Props = {
-  points: readonly ProofPoint[];
+  points: readonly CredibilityPoint[];
 };
 
 const { points } = Astro.props;
 ---
 
-<section class="proof-strip" aria-label="Proof points">
-  <div class="proof-strip__inner u-container">
+<section class="credibility-strip" aria-label="Credibility signals">
+  <div class="credibility-strip__inner u-container">
     <ul>
       {
         points.map((point) => (
           <li>
-            <p class="proof-strip__label">{point.label}</p>
+            <p class="credibility-strip__label">{point.label}</p>
             <strong>{point.value}</strong>
             <p>{point.detail}</p>
           </li>
@@ -29,7 +29,7 @@ const { points } = Astro.props;
 </section>
 
 <style>
-  .proof-strip {
+  .credibility-strip {
     padding: var(--space-8) 0;
     background: var(--color-surface);
     border-block: var(--border-1);
@@ -48,13 +48,13 @@ const { points } = Astro.props;
     gap: var(--space-2);
   }
 
-  .proof-strip__label,
+  .credibility-strip__label,
   p {
     margin: 0;
     color: var(--color-muted);
   }
 
-  .proof-strip__label {
+  .credibility-strip__label {
     color: var(--color-muted);
     font-size: 0.95rem;
     font-weight: 600;

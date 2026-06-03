@@ -43,7 +43,7 @@ export const buildLabRecommendedReads = (
       href: service.cta.href
     },
     caseStudy && {
-      label: "Proof artifact",
+      label: "Reference engagement",
       title: caseStudy.title,
       summary: caseStudy.summary,
       href: `/case-studies/${caseStudy.slug}`

@@ -5,7 +5,7 @@ export type SiteMeta = {
   readonly ogImage: string;
   readonly availability: string;
   readonly contactEmail: string;
-  readonly proofPoints: readonly {
+  readonly credibilityPoints: readonly {
     readonly label: string;
     readonly value: string;
     readonly detail: string;

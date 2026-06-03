@@ -130,7 +130,7 @@ const siteMeta = defineCollection({
     ogImage: z.string(),
     availability: z.string(),
     contactEmail: z.email(),
-    proofPoints: z.array(
+    credibilityPoints: z.array(
       z.object({
         label: z.string(),
         value: z.string(),

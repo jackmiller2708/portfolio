@@ -5,7 +5,7 @@
   "ogImage": "/og/default.svg",
   "availability": "Available for scoped diagnostics and focused architecture engagements.",
   "contactEmail": "hello@example.com",
-  "proofPoints": [
+  "credibilityPoints": [
     {
       "label": "Primary focus",
       "value": "Angular systems",

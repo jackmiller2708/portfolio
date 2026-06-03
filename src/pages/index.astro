@@ -3,7 +3,7 @@ import { Effect } from "effect";
 import BaseLayout from "@layouts/BaseLayout.astro";
 import EvidencePanel from "@components/organisms/EvidencePanel/EvidencePanel.astro";
 import PageHero from "@components/sections/PageHero/PageHero.astro";
-import ProofStrip from "@components/sections/ProofStrip/ProofStrip.astro";
+import CredibilityStrip from "@components/sections/CredibilityStrip/CredibilityStrip.astro";
 import SectionHeader from "@components/molecules/SectionHeader/SectionHeader.astro";
 import ServiceCard from "@components/organisms/ServiceCard/ServiceCard.astro";
 import HeroSystemMap from "@islands/HeroSystemMap/HeroSystemMap.astro";
@@ -36,17 +36,17 @@ const initialDiagnostic = viewModel.diagnostics[0];
       </div>
     </div>
   </section>
-  <ProofStrip points={viewModel.proofPoints} />
+  <CredibilityStrip points={viewModel.credibilityPoints} />
 
-  <nav class="inspect-strip u-container" aria-label="Proof artifacts">
-    {viewModel.inspectStrip.map((item) => <a href={item.href}>{item.label}</a>)}
+  <nav class="exploration-strip u-container" aria-label="Reference sections">
+    {viewModel.explorationStrip.map((item) => <a href={item.href}>{item.label}</a>)}
   </nav>
 
   <section class="home-section home-section--diagnostic" id="diagnostic">
     <div class="u-container u-stack">
       <SectionHeader
         title="Start with a scoped diagnostic"
-        summary="Pick the frontend-system pain that is closest to the current risk. The recommendation updates to a service, an audit proof point, and the map state to inspect next."
+        summary="Pick the frontend-system pain that is closest to the current risk. The recommendation updates to a service, a reference finding, and the map state to explore next."
       />
       <div class="diagnostic" data-diagnostic-selector>
         <div class="diagnostic__options" aria-label="Frontend system pains">
@@ -65,7 +65,7 @@ const initialDiagnostic = viewModel.diagnostics[0];
                 data-audit-title={option.auditFinding.title}
                 data-audit-href={option.auditFinding.href}
                 data-system-state={option.systemMapState}
-                data-proof-href={option.proofHref}
+                data-reference-href={option.referenceHref}
                 data-cta-label={option.cta.label}
                 data-cta-href={option.cta.href}
               >
@@ -91,9 +91,9 @@ const initialDiagnostic = viewModel.diagnostics[0];
                   </dd>
                 </div>
                 <div>
-                  <dt>Proof</dt>
+                  <dt>Example</dt>
                   <dd>
-                    <a href={initialDiagnostic.auditFinding.href} data-diagnostic-proof>
+                    <a href={initialDiagnostic.auditFinding.href} data-diagnostic-reference>
                       {initialDiagnostic.auditFinding.title}
                     </a>
                   </dd>
@@ -116,23 +116,23 @@ const initialDiagnostic = viewModel.diagnostics[0];
   <section class="home-section home-section--surface" id="system-map">
     <div class="u-container u-stack">
       <SectionHeader
-        title="Inspect the architecture proof"
+        title="The architecture in context"
         summary="The map shows the before/after boundary work behind the diagnostic recommendation."
       />
       <HeroSystemMap map={viewModel.heroMap} />
     </div>
   </section>
 
-  <section class="home-section" id="case-proof">
+  <section class="home-section" id="past-work">
     <div class="u-container u-stack">
       <SectionHeader
-        title="Case proof before the service list"
+        title="How past engagements have gone"
         summary="Each case study summarizes the problem, the architectural decision, and the result without exposing private client data."
       />
-      <div class="proof-card-list">
+      <div class="reference-card-list">
         {
-          viewModel.proofCards.map((card) => (
-            <a class="proof-card" href={card.href}>
+          viewModel.referenceCards.map((card) => (
+            <a class="reference-card" href={card.href}>
               <span>{card.title}</span>
               <dl>
                 <div>
@@ -157,10 +157,7 @@ const initialDiagnostic = viewModel.diagnostics[0];
 
   <section class="home-section home-section--surface">
     <div class="u-container u-stack">
-      <SectionHeader
-        title="A report shape built around evidence and sequence"
-        summary={viewModel.auditPreview.summary}
-      />
+      <SectionHeader title="What a finding looks like" summary={viewModel.auditPreview.summary} />
       <div class="panel-grid">
         {
           viewModel.auditPreview.findings.map((finding) => (
@@ -251,7 +248,7 @@ const initialDiagnostic = viewModel.diagnostics[0];
     background: var(--color-surface-2);
   }
 
-  .inspect-strip {
+  .exploration-strip {
     display: flex;
     flex-wrap: wrap;
     gap: var(--space-3);
@@ -260,7 +257,7 @@ const initialDiagnostic = viewModel.diagnostics[0];
     border-bottom: var(--border-1);
   }
 
-  .inspect-strip a {
+  .exploration-strip a {
     color: var(--color-muted);
     font-size: 0.95rem;
     font-weight: 700;
@@ -268,7 +265,7 @@ const initialDiagnostic = viewModel.diagnostics[0];
     transition: color var(--duration-1) var(--ease-standard);
   }
 
-  .inspect-strip a:hover {
+  .exploration-strip a:hover {
     color: var(--color-text);
   }
 
@@ -313,7 +310,7 @@ const initialDiagnostic = viewModel.diagnostics[0];
   }
 
   .diagnostic__result,
-  .proof-card {
+  .reference-card {
     display: grid;
     gap: var(--space-4);
     padding: var(--space-6);
@@ -336,8 +333,8 @@ const initialDiagnostic = viewModel.diagnostics[0];
   .diagnostic__result p,
   .diagnostic__result dl,
   .diagnostic__result dd,
-  .proof-card dl,
-  .proof-card dd {
+  .reference-card dl,
+  .reference-card dd {
     margin: 0;
   }
 
@@ -355,24 +352,24 @@ const initialDiagnostic = viewModel.diagnostics[0];
 
   .diagnostic__result p,
   .diagnostic__result dd,
-  .proof-card dd {
+  .reference-card dd {
     color: var(--color-muted);
   }
 
   .diagnostic__result dl,
-  .proof-card dl {
+  .reference-card dl {
     display: grid;
     gap: var(--space-3);
   }
 
   .diagnostic__result dt,
-  .proof-card dt {
+  .reference-card dt {
     color: var(--color-text);
     font-weight: 700;
   }
 
   .diagnostic__result a,
-  .proof-card {
+  .reference-card {
     color: var(--color-text);
   }
 
@@ -414,21 +411,21 @@ const initialDiagnostic = viewModel.diagnostics[0];
     gap: var(--space-6);
   }
 
-  .proof-card-list {
+  .reference-card-list {
     display: grid;
     gap: var(--space-4);
   }
 
-  .proof-card {
+  .reference-card {
     text-decoration: none;
     transition: border-color var(--duration-1) var(--ease-standard);
   }
 
-  .proof-card:hover {
+  .reference-card:hover {
     border-color: var(--color-accent);
   }
 
-  .proof-card span {
+  .reference-card span {
     font-family: var(--font-display);
     font-size: 1.2rem;
     font-weight: 700;

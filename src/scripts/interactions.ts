@@ -27,7 +27,7 @@ const initDiagnosticSelectors = () => {
     const title = selector.querySelector<HTMLElement>("[data-diagnostic-title]");
     const pain = selector.querySelector<HTMLElement>("[data-diagnostic-pain]");
     const service = selector.querySelector<HTMLAnchorElement>("[data-diagnostic-service]");
-    const proof = selector.querySelector<HTMLAnchorElement>("[data-diagnostic-proof]");
+    const reference = selector.querySelector<HTMLAnchorElement>("[data-diagnostic-reference]");
     const mapState = selector.querySelector<HTMLElement>("[data-diagnostic-map-state]");
     const cta = selector.querySelector<HTMLAnchorElement>("[data-diagnostic-cta]");
 
@@ -38,7 +38,7 @@ const initDiagnosticSelectors = () => {
         item.setAttribute("aria-pressed", String(isActive));
       }
 
-      if (!result || !title || !pain || !service || !proof || !mapState || !cta) {
+      if (!result || !title || !pain || !service || !reference || !mapState || !cta) {
         return;
       }
 
@@ -47,8 +47,8 @@ const initDiagnosticSelectors = () => {
         pain.textContent = option.dataset.pain ?? "";
         service.textContent = option.dataset.serviceTitle ?? "";
         service.href = option.dataset.serviceHref ?? "/services";
-        proof.textContent = option.dataset.auditTitle ?? "";
-        proof.href = option.dataset.auditHref ?? "/sample-audit";
+        reference.textContent = option.dataset.auditTitle ?? "";
+        reference.href = option.dataset.auditHref ?? "/sample-audit";
         mapState.textContent = option.dataset.systemState ?? "";
         cta.textContent = option.dataset.ctaLabel ?? "Start diagnostic";
         cta.href = option.dataset.ctaHref ?? "/contact";

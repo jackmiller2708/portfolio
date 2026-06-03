@@ -16,7 +16,7 @@ const diagnosticSeeds: readonly DiagnosticOptionSeed[] = [
     serviceId: "angular-system-audit",
     auditFindingId: "implicit-state",
     systemMapState: "messy",
-    ctaLabel: "Scope state risk"
+    ctaLabel: "Explore this"
   },
   {
     id: "cache-data",
@@ -75,7 +75,7 @@ const buildDiagnostics = (
         href: finding ? `/sample-audit#${finding.id}` : "/sample-audit"
       },
       systemMapState: seed.systemMapState,
-      proofHref: finding ? `/sample-audit#${finding.id}` : "/sample-audit",
+      referenceHref: finding ? `/sample-audit#${finding.id}` : "/sample-audit",
       cta: {
         label: seed.ctaLabel,
         href: `/contact?diagnostic=${seed.id}`
@@ -83,7 +83,7 @@ const buildDiagnostics = (
     };
   });
 
-const buildProofCards = (caseStudies: readonly CaseStudy[]) =>
+const buildReferenceCards = (caseStudies: readonly CaseStudy[]) =>
   caseStudies.slice(0, 2).map((caseStudy) => ({
     slug: caseStudy.slug,
     title: caseStudy.title,
@@ -99,18 +99,18 @@ export type HomePageViewModel = {
     readonly title: string;
     readonly summary: string;
   };
-  readonly proofPoints: SiteMeta["proofPoints"];
+  readonly credibilityPoints: SiteMeta["credibilityPoints"];
   readonly services: readonly ServiceOffer[];
   readonly auditPreview: {
     readonly summary: string;
     readonly findings: readonly AuditFinding[];
   };
   readonly diagnostics: readonly DiagnosticOption[];
-  readonly inspectStrip: readonly {
+  readonly explorationStrip: readonly {
     readonly label: string;
     readonly href: string;
   }[];
-  readonly proofCards: ReturnType<typeof buildProofCards>;
+  readonly referenceCards: ReturnType<typeof buildReferenceCards>;
   readonly labPreview: readonly LabPost[];
   readonly heroMap: SystemMap;
   readonly cta: {
@@ -139,7 +139,7 @@ export const loadHomePageFromRepository = (
         summary:
           "Architecture audits, refactors, and stabilization work for Angular teams dealing with unclear state, data flow, ownership, and errors."
       },
-      proofPoints: site.proofPoints,
+      credibilityPoints: site.credibilityPoints,
       services: services.slice(0, 3),
       auditPreview: {
         summary:
@@ -147,13 +147,13 @@ export const loadHomePageFromRepository = (
         findings: auditFindings.slice(0, 2)
       },
       diagnostics: buildDiagnostics(services, auditFindings),
-      inspectStrip: [
+      explorationStrip: [
         { label: "System map", href: "#system-map" },
-        { label: "Case proof", href: "#case-proof" },
+        { label: "Past work", href: "#past-work" },
         { label: "Audit findings", href: "/sample-audit" },
         { label: "Lab notes", href: "/lab" }
       ],
-      proofCards: buildProofCards(caseStudies),
+      referenceCards: buildReferenceCards(caseStudies),
       labPreview: labPosts.slice(0, 3),
       heroMap: systemMap,
       cta: {

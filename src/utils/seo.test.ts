@@ -9,7 +9,7 @@ const site: SiteMeta = {
   ogImage: "/og/default.png",
   availability: "Available",
   contactEmail: "hello@example.com",
-  proofPoints: [],
+  credibilityPoints: [],
   nonFitCriteria: [],
   about: {
     context: "Context",

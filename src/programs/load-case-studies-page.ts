@@ -8,7 +8,8 @@ export const loadCaseStudiesPageFromRepository = (repository: ContentRepository)
 
     return {
       title: "Case Studies",
-      summary: "Redacted and synthetic proof of constraints, decisions, tradeoffs, and outcomes.",
+      summary:
+        "Anonymized examples of past engagements: constraints, decisions, tradeoffs, and outcomes.",
       caseStudies
     };
   });

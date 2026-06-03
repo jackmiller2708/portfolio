@@ -13,7 +13,7 @@ export type DiagnosticOption = {
     readonly href: string;
   };
   readonly systemMapState: "messy" | "explicit";
-  readonly proofHref: string;
+  readonly referenceHref: string;
   readonly cta: {
     readonly label: string;
     readonly href: string;

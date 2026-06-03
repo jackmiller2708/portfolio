@@ -8,7 +8,7 @@ test.describe("Smoke Tests", () => {
     await expect(heroHeading).toBeVisible();
   });
 
-  test("Home diagnostic selector updates proof path and CTA", async ({ page }) => {
+  test("Home diagnostic selector updates reference path and CTA", async ({ page }) => {
     await page.goto("/");
 
     const diagnostic = page.locator("[data-diagnostic-selector]");
@@ -18,7 +18,7 @@ test.describe("Smoke Tests", () => {
     await expect(diagnostic.locator("[data-diagnostic-service]")).toContainText(
       "Frontend Stabilization"
     );
-    await expect(diagnostic.locator("[data-diagnostic-proof]")).toContainText(
+    await expect(diagnostic.locator("[data-diagnostic-reference]")).toContainText(
       "Cache semantics are undocumented"
     );
     await expect(diagnostic.locator("[data-diagnostic-map-state]")).toContainText("explicit");

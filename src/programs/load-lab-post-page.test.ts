@@ -35,7 +35,7 @@ const caseStudy: CaseStudy = {
   id: "checkout-stabilization",
   slug: "checkout-stabilization",
   title: "Checkout Stabilization",
-  summary: "Synthetic checkout proof.",
+  summary: "Synthetic checkout example.",
   redactionStatus: "synthetic",
   context: "Checkout context.",
   constraints: ["Synthetic"],
