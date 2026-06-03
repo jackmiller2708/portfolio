@@ -3,7 +3,7 @@ import { chromium } from "@playwright/test";
 import { mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 
-const baseUrl = process.env.UI_BASE_URL ?? "http://127.0.0.1:4321";
+const baseUrl = process.env.UI_BASE_URL ?? "http://localhost:4321";
 const outputDir = path.join(process.cwd(), "test-results", "ui-verification");
 const routes = [
   "/",
