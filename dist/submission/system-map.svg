@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="900" viewBox="0 0 1440 900" role="img" aria-labelledby="title desc">
+  <title id="title">Signature system map submission asset</title>
+  <desc id="desc">Static asset showing the bounded frontend architecture map used in the portfolio.</desc>
+  <rect width="1440" height="900" fill="#fafafc"/>
+  <rect x="96" y="96" width="1248" height="708" fill="#ffffff" stroke="#d9dde7" stroke-width="2" rx="8"/>
+  <text x="144" y="166" fill="#17171c" font-family="Space Grotesk, Arial, sans-serif" font-size="42" font-weight="700">Frontend system boundary map</text>
+  <text x="144" y="216" fill="#5e606a" font-family="Inter, Arial, sans-serif" font-size="22">Messy ownership becomes named boundaries, data rules, error states, tests, and sequence.</text>
+  <path d="M194 482 H1246" fill="none" stroke="#5e606a" stroke-width="3"/>
+  <g font-family="Inter, Arial, sans-serif" font-size="20" font-weight="700" text-anchor="middle">
+    <rect x="144" y="410" width="160" height="144" fill="#f2f4f8" stroke="#d9dde7" rx="6"/>
+    <text x="224" y="488" fill="#17171c">UI shell</text>
+    <rect x="350" y="410" width="160" height="144" fill="#f2f4f8" stroke="#c72c73" rx="6"/>
+    <text x="430" y="488" fill="#17171c">Feature</text>
+    <rect x="556" y="410" width="160" height="144" fill="#f2f4f8" stroke="#c72c73" rx="6"/>
+    <text x="636" y="488" fill="#17171c">Data</text>
+    <rect x="762" y="410" width="160" height="144" fill="#f2f4f8" stroke="#237a57" rx="6"/>
+    <text x="842" y="488" fill="#17171c">Errors</text>
+    <rect x="968" y="410" width="160" height="144" fill="#f2f4f8" stroke="#d9dde7" rx="6"/>
+    <text x="1048" y="488" fill="#17171c">Tests</text>
+    <rect x="1174" y="410" width="160" height="144" fill="#f2f4f8" stroke="#237a57" rx="6"/>
+    <text x="1254" y="488" fill="#17171c">Roadmap</text>
+  </g>
+  <text x="144" y="660" fill="#b42318" font-family="Inter, Arial, sans-serif" font-size="21" font-weight="700">Risk hotspots: implicit ownership and unclear cache semantics.</text>
+  <text x="144" y="704" fill="#237a57" font-family="Inter, Arial, sans-serif" font-size="21" font-weight="700">Decision markers: recovery-path error modeling and risk-based sequence.</text>
+</svg>
