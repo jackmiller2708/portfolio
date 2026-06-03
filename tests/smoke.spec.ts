@@ -75,6 +75,28 @@ test.describe("Smoke Tests", () => {
     expect(["light", "dark"]).toContain(after);
   });
 
+  test("Mobile header is compact and expandable", async ({ page }) => {
+    await page.setViewportSize({ width: 412, height: 915 });
+    await page.goto("/");
+
+    const header = page.locator(".site-header");
+    const nav = page.getByRole("navigation", { name: "Primary navigation" });
+    const toggle = page.getByRole("button", { name: "Open navigation" });
+    await expect(header).toBeVisible();
+    await expect(nav).not.toBeVisible();
+
+    const closedBox = await header.boundingBox();
+    expect(closedBox?.height).toBeLessThanOrEqual(64);
+
+    await toggle.click();
+    await expect(page.getByRole("button", { name: "Close navigation" })).toBeVisible();
+    await expect(nav).toBeVisible();
+
+    const openBox = await header.boundingBox();
+    expect(openBox?.height).toBeGreaterThan(closedBox?.height ?? 0);
+    expect(openBox?.height).toBeLessThan(220);
+  });
+
   test("Client-side navigation keeps theme and page interactions initialized", async ({ page }) => {
     test.slow();
     await page.goto("/");

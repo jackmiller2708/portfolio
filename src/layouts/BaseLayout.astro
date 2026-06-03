@@ -1,6 +1,7 @@
 ---
 import "@styles/global.css";
-import { Moon, Sun } from "lucide-astro";
+import { Menu, Moon, Sun, X } from "lucide-astro";
+import { Font } from "astro:assets";
 import type { PageSeo } from "@domain/site";
 
 type Props = {
@@ -39,19 +40,9 @@ const navItems = [
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <script is:inline>
-      const fontStylesheet = document.createElement("link");
-      fontStylesheet.rel = "stylesheet";
-      fontStylesheet.href =
-        "https://fonts.googleapis.com/css2?family=Epilogue:wght@300;400;700;800&family=Fraunces:opsz,wght,SOFT,WONK@9..144,300,0,0..1&family=IBM+Plex+Mono:wght@400;500&display=swap";
-      document.head.append(fontStylesheet);
-    </script>
-    <noscript>
-      <link
-        href="https://fonts.googleapis.com/css2?family=Epilogue:wght@300;400;700;800&family=Fraunces:opsz,wght,SOFT,WONK@9..144,300,0,0..1&family=IBM+Plex+Mono:wght@400;500&display=swap"
-        rel="stylesheet"
-      />
-    </noscript>
+    <Font cssVariable="--font-display" />
+    <Font cssVariable="--font-code" />
+    <Font cssVariable="--font-body" />
     <script is:inline>
       const storedTheme = localStorage.getItem("theme");
       if (storedTheme === "light" || storedTheme === "dark") {
@@ -64,8 +55,49 @@ const navItems = [
     <a class="u-skip-link" href="#main">Skip to content</a>
     <header class="site-header">
       <div class="site-header__inner u-container">
-        <a class="site-header__brand" href="/">Frontend Systems</a>
-        <nav class="site-header__nav" aria-label="Primary navigation">
+        <div class="site-header__bar">
+          <a class="site-header__brand" href="/">Frontend Systems</a>
+          <div class="site-header__controls">
+            <button
+              class="site-header__theme"
+              type="button"
+              data-theme-toggle
+              aria-label="Switch theme"
+            >
+              <Sun
+                class="site-header__theme-icon site-header__theme-icon--sun"
+                size={16}
+                aria-hidden="true"
+              />
+              <Moon
+                class="site-header__theme-icon site-header__theme-icon--moon"
+                size={16}
+                aria-hidden="true"
+              />
+              <span data-theme-label>Theme</span>
+            </button>
+            <button
+              class="site-header__menu-toggle"
+              type="button"
+              data-nav-toggle
+              aria-controls="site-navigation"
+              aria-expanded="false"
+              aria-label="Open navigation"
+            >
+              <Menu
+                class="site-header__menu-icon site-header__menu-icon--open"
+                size={18}
+                aria-hidden="true"
+              />
+              <X
+                class="site-header__menu-icon site-header__menu-icon--close"
+                size={18}
+                aria-hidden="true"
+              />
+            </button>
+          </div>
+        </div>
+        <nav id="site-navigation" class="site-header__nav" aria-label="Primary navigation">
           {
             navItems.map((item) => {
               const isActive =
@@ -84,24 +116,6 @@ const navItems = [
             })
           }
         </nav>
-        <button
-          class="site-header__theme"
-          type="button"
-          data-theme-toggle
-          aria-label="Switch theme"
-        >
-          <Sun
-            class="site-header__theme-icon site-header__theme-icon--sun"
-            size={16}
-            aria-hidden="true"
-          />
-          <Moon
-            class="site-header__theme-icon site-header__theme-icon--moon"
-            size={16}
-            aria-hidden="true"
-          />
-          <span data-theme-label>Theme</span>
-        </button>
       </div>
     </header>
     <main id="main">
@@ -124,14 +138,24 @@ const navItems = [
   }
 
   .site-header__inner {
-    display: flex;
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
     align-items: center;
-    justify-content: space-between;
     gap: var(--space-6);
-    min-height: 72px;
+    min-height: 64px;
+  }
+
+  .site-header__bar {
+    display: contents;
+  }
+
+  .site-header__controls {
+    display: contents;
   }
 
   .site-header__brand {
+    grid-column: 1;
+    grid-row: 1;
     color: var(--color-text);
     font-family: var(--font-display);
     font-size: 1.15rem;
@@ -142,7 +166,8 @@ const navItems = [
 
   .site-header__brand,
   .site-header__nav a,
-  .site-header__theme {
+  .site-header__theme,
+  .site-header__menu-toggle {
     transition:
       background-color var(--duration-1) var(--ease-standard),
       color var(--duration-1) var(--ease-standard),
@@ -151,6 +176,8 @@ const navItems = [
   }
 
   .site-header__nav {
+    grid-column: 2;
+    grid-row: 1;
     display: flex;
     flex-wrap: wrap;
     justify-content: flex-end;
@@ -189,6 +216,8 @@ const navItems = [
   }
 
   .site-header__theme {
+    grid-column: 3;
+    grid-row: 1;
     display: inline-flex;
     align-items: center;
     gap: var(--space-2);
@@ -203,7 +232,12 @@ const navItems = [
     font-weight: 700;
   }
 
-  .site-header__theme:hover {
+  .site-header__menu-toggle {
+    display: none;
+  }
+
+  .site-header__theme:hover,
+  .site-header__menu-toggle:hover {
     border-color: var(--color-border-accent);
   }
 
@@ -239,14 +273,97 @@ const navItems = [
 
   @media (max-width: 760px) {
     .site-header__inner {
-      align-items: flex-start;
-      flex-direction: column;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 0;
+      min-height: 0;
+    }
+
+    .site-header__bar {
+      grid-column: 1;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-3);
+      min-height: 56px;
+      width: 100%;
+    }
+
+    .site-header__controls {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-2);
+    }
+
+    .site-header__brand {
+      grid-column: auto;
+      font-size: 1.05rem;
+    }
+
+    .site-header__theme {
+      grid-column: auto;
+      min-height: 36px;
+      padding: var(--space-2);
+    }
+
+    .site-header__theme span {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    .site-header__menu-toggle {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
       justify-content: center;
-      padding-block: var(--space-4);
+      width: 40px;
+      min-height: 36px;
+      color: var(--color-text);
+      background: var(--color-surface);
+      border: var(--border-1);
+      border-radius: var(--radius-1);
+      cursor: pointer;
+    }
+
+    .site-header__menu-icon--close,
+    .site-header.is-menu-open .site-header__menu-icon--open {
+      display: none;
+    }
+
+    .site-header.is-menu-open .site-header__menu-icon--close {
+      display: block;
     }
 
     .site-header__nav {
-      justify-content: flex-start;
+      grid-column: 1;
+      grid-row: auto;
+      display: none;
+      width: 100%;
+      padding: var(--space-2) 0 var(--space-3);
+      border-top: var(--border-1);
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0;
+    }
+
+    .site-header.is-menu-open .site-header__nav {
+      display: grid;
+    }
+
+    .site-header__nav a {
+      min-height: 40px;
+      padding: var(--space-2) 0;
+      font-size: var(--t-small);
+    }
+
+    .site-header__nav a::after {
+      right: var(--space-4);
     }
   }
 </style>
@@ -302,10 +419,54 @@ const navItems = [
     });
   };
 
+  const initMobileNavigation = () => {
+    const siteHeader = document.querySelector<HTMLElement>(".site-header");
+    const navToggle = document.querySelector<HTMLButtonElement>("[data-nav-toggle]");
+    const nav = document.querySelector<HTMLElement>("#site-navigation");
+
+    if (!siteHeader || !navToggle || !nav) {
+      return;
+    }
+
+    if (navToggle.dataset.navReady === "true") {
+      return;
+    }
+
+    const setOpen = (isOpen: boolean) => {
+      siteHeader.classList.toggle("is-menu-open", isOpen);
+      navToggle.setAttribute("aria-expanded", String(isOpen));
+      navToggle.setAttribute("aria-label", isOpen ? "Close navigation" : "Open navigation");
+    };
+
+    navToggle.dataset.navReady = "true";
+    navToggle.addEventListener("click", () => {
+      setOpen(!siteHeader.classList.contains("is-menu-open"));
+    });
+
+    nav.addEventListener("click", (event) => {
+      if (event.target instanceof HTMLAnchorElement) {
+        setOpen(false);
+      }
+    });
+
+    window.matchMedia("(min-width: 761px)").addEventListener("change", (event) => {
+      if (event.matches) {
+        setOpen(false);
+      }
+    });
+  };
+
   systemPrefersDark.addEventListener("change", initThemeToggle);
   document.addEventListener("astro:after-swap", applyStoredTheme);
-  document.addEventListener("DOMContentLoaded", initThemeToggle);
-  document.addEventListener("astro:page-load", initThemeToggle);
+  document.addEventListener("DOMContentLoaded", () => {
+    initThemeToggle();
+    initMobileNavigation();
+  });
+  document.addEventListener("astro:page-load", () => {
+    initThemeToggle();
+    initMobileNavigation();
+  });
   applyStoredTheme();
   initThemeToggle();
+  initMobileNavigation();
 </script>
