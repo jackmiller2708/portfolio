@@ -37,8 +37,9 @@ export const loadContactPageFromRepository = (repository: ContentRepository) =>
     const services = yield* repository.listServices;
 
     return {
-      title: "Start with a scoped engineering diagnostic.",
-      summary: "This is a short diagnostic so the first conversation can start somewhere useful.",
+      title: "Request an Angular frontend audit",
+      summary:
+        "Send the product context, Angular version, team size, current pain, and timeline. I will use that to decide whether the right first step is an audit, stabilization sprint, architecture advisory, or no-fit.",
       availability: site.availability,
       contactEmail: site.contactEmail,
       nonFitCriteria: site.nonFitCriteria,
@@ -48,7 +49,8 @@ export const loadContactPageFromRepository = (repository: ContentRepository) =>
         submitting: submittingContactState,
         success: {
           kind: "success",
-          message: "Inquiry received. The next response can focus on system context and fit."
+          message:
+            "Thanks. I will review the context and reply with the most reasonable next step: audit, stabilization sprint, advisory, or no-fit."
         },
         validation: {
           kind: "validation",

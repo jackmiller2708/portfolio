@@ -25,14 +25,15 @@ const initialDiagnostic = viewModel.diagnostics[0];
   <section class="home-hero">
     <div class="home-hero__inner u-container">
       <PageHero
+        eyebrow={viewModel.hero.eyebrow}
         title={viewModel.hero.title}
         summary={viewModel.hero.summary}
-        primaryCta={{ label: "Start a diagnostic", href: "#diagnostic" }}
+        primaryCta={{ label: "Request an audit", href: "#diagnostic" }}
         secondaryCta={{ label: "See past work", href: "#past-work" }}
       />
       <p class="home-hero__support">
-        I don't just identify what's wrong. I show you exactly where, why it got there, and what a
-        better path looks like.
+        My first job is to make the risk visible: where state lives, how data moves, where errors
+        disappear, and which next step is worth taking.
       </p>
     </div>
   </section>
@@ -42,7 +43,7 @@ const initialDiagnostic = viewModel.diagnostics[0];
   <section class="home-section home-section--diagnostic" id="diagnostic">
     <div class="u-container u-stack">
       <SectionHeader
-        title="Start where the system is already resisting change"
+        title="Start where the Angular system is already resisting change"
         summary="Pick the pain that sounds closest to the current risk. The path updates to a service, a reference finding, and the map state to explore next."
       />
       <div class="diagnostic" data-diagnostic-selector>
@@ -145,7 +146,7 @@ const initialDiagnostic = viewModel.diagnostics[0];
   <section class="home-section home-section--surface" id="system-map">
     <div class="u-container u-stack">
       <SectionHeader
-        title="The architecture in context"
+        title="The Angular architecture in context"
         summary="The map shows how messy frontend ownership becomes explicit once state, data access, and recovery paths have named boundaries."
       />
       <HeroSystemMap map={viewModel.heroMap} />

@@ -11,8 +11,11 @@ type Props = {
 };
 
 const { title, description, seo } = Astro.props;
-const pageTitle = seo?.title ?? title ?? "Frontend Systems Portfolio";
-const pageDescription = seo?.description ?? description ?? "Angular frontend systems engineering.";
+const pageTitle = seo?.title ?? title ?? "Nguyen Ngoc Huy / Jack";
+const pageDescription =
+  seo?.description ??
+  description ??
+  "Vietnam-based Angular Frontend Systems Engineer for audits, refactors, and stabilization.";
 const currentPath = Astro.url.pathname.replace(/\/$/, "") || "/";
 
 const navItems = [
@@ -56,7 +59,10 @@ const navItems = [
     <header class="site-header">
       <div class="site-header__inner u-container">
         <div class="site-header__bar">
-          <a class="site-header__brand" href="/">Frontend Systems</a>
+          <a class="site-header__brand" href="/">
+            <span>Nguyen Ngoc Huy / Jack Miller</span>
+            <span class="site-header__brand-role">Angular Frontend Systems Engineer</span>
+          </a>
           <div class="site-header__controls">
             <button
               class="site-header__theme"
@@ -156,12 +162,21 @@ const navItems = [
   .site-header__brand {
     grid-column: 1;
     grid-row: 1;
+    display: grid;
+    gap: 8px;
     color: var(--color-text);
     font-family: var(--font-display);
     font-size: 1.15rem;
     font-weight: 300;
     line-height: 1;
     text-decoration: none;
+  }
+
+  .site-header__brand-role {
+    color: var(--color-muted);
+    font-family: var(--font-body);
+    font-size: var(--t-mono);
+    font-weight: 600;
   }
 
   .site-header__brand,
@@ -297,7 +312,11 @@ const navItems = [
 
     .site-header__brand {
       grid-column: auto;
-      font-size: 1.05rem;
+      font-size: 1rem;
+    }
+
+    .site-header__brand-role {
+      font-size: 0.68rem;
     }
 
     .site-header__theme {

@@ -5,10 +5,10 @@ import { join } from "node:path";
 test.describe("Smoke Tests", () => {
   test("Home page should load and have title", async ({ page }) => {
     await page.goto("/");
-    await expect(page).toHaveTitle(/Frontend Systems Portfolio/);
+    await expect(page).toHaveTitle(/Nguyen Ngoc Huy \/ Jack/);
     const heroHeading = page.locator("main h1");
     await expect(heroHeading).toBeVisible();
-    await expect(heroHeading).toContainText("Complex systems, made explicit.");
+    await expect(heroHeading).toContainText("Complex Angular systems, made explicit.");
   });
 
   test("public source does not use proof framing", async () => {
@@ -126,7 +126,7 @@ test.describe("Smoke Tests", () => {
 
   test("Services page should load and display services", async ({ page }) => {
     await page.goto("/services");
-    await expect(page).toHaveTitle(/Services \| Frontend Systems Portfolio/);
+    await expect(page).toHaveTitle(/Services \| Nguyen Ngoc Huy \/ Jack/);
     const heroHeading = page.locator("main h1");
     await expect(heroHeading).toBeVisible();
 
@@ -136,7 +136,7 @@ test.describe("Smoke Tests", () => {
 
   test("Sample Audit page should load", async ({ page }) => {
     await page.goto("/sample-audit");
-    await expect(page).toHaveTitle(/Sample Audit \| Frontend Systems Portfolio/);
+    await expect(page).toHaveTitle(/Sample Audit \| Nguyen Ngoc Huy \/ Jack/);
     const heroHeading = page.locator("main h1");
     await expect(heroHeading).toBeVisible();
   });
@@ -157,7 +157,7 @@ test.describe("Smoke Tests", () => {
 
   test("Contact page should load and display intake form", async ({ page }) => {
     await page.goto("/contact");
-    await expect(page).toHaveTitle(/Contact \| Frontend Systems Portfolio/);
+    await expect(page).toHaveTitle(/Contact \| Nguyen Ngoc Huy \/ Jack/);
     const heroHeading = page.locator("main h1");
     await expect(heroHeading).toBeVisible();
 
@@ -181,7 +181,7 @@ test.describe("Smoke Tests", () => {
 
   test("About page should load", async ({ page }) => {
     await page.goto("/about");
-    await expect(page).toHaveTitle(/About \| Frontend Systems Portfolio/);
+    await expect(page).toHaveTitle(/About Nguyen Ngoc Huy \| Nguyen Ngoc Huy \/ Jack/);
     const heroHeading = page.locator("main h1");
     await expect(heroHeading).toBeVisible();
   });

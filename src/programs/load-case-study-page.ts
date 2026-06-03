@@ -14,11 +14,11 @@ export const loadCaseStudyPageFromRepository = (repository: ContentRepository, s
       systemMap,
       recommendedReads: buildCaseStudyRecommendedReads(caseStudy.slug, caseStudies, labPosts),
       cta: {
-        title: "Start a similar diagnostic.",
+        title: "Request an Angular frontend audit.",
         summary:
-          "Share the current product context and the part of the system that has become expensive to change. The first diagnostic can stay narrow.",
+          "Share the current product context, Angular version, and the part of the system that has become expensive to change. The first step can stay narrow.",
         href: `/contact?context=case-study&case=${caseStudy.slug}`,
-        label: "Start a diagnostic"
+        label: "Request an Angular audit"
       }
     };
   });

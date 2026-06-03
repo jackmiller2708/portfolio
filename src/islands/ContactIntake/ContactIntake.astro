@@ -21,7 +21,7 @@ const fields = [
   },
   {
     id: "productContext",
-    label: "Product or company context"
+    label: "Product context"
   },
   {
     id: "angularVersion",
@@ -37,7 +37,8 @@ const fields = [
   },
   {
     id: "budgetComfort",
-    label: "Budget comfort"
+    label: "Budget comfort - optional",
+    required: false
   }
 ] as const;
 ---
@@ -49,7 +50,8 @@ const fields = [
         <div>
           <h2 id="advisory-flow-title">What I would ask first</h2>
           <p>
-            Pick the closest pain. The recommendation will keep the inquiry scoped before the form.
+            Pick the closest pain. The recommendation keeps the first inquiry scoped to the Angular
+            system risk.
           </p>
         </div>
         <div class="advisory-flow__layout">
@@ -87,8 +89,7 @@ const fields = [
 
   <form class="contact-form" method="post" aria-describedby="contact-fallback" data-astro-reload>
     <p class="contact-form__framing">
-      This isn't a contact form. It's a short diagnostic so the first conversation can start
-      somewhere useful.
+      Share the product context, Angular version, team size, current pain, and timeline.
     </p>
     <p class="contact-form__availability">{viewModel.availability}</p>
     {
@@ -100,17 +101,17 @@ const fields = [
             name={field.id}
             type={"type" in field ? field.type : "text"}
             autocomplete={"autocomplete" in field ? field.autocomplete : undefined}
-            required
+            required={!("required" in field) || field.required}
           />
         </label>
       ))
     }
     <label for="pain">
-      Main pain
+      What currently feels painful?
       <textarea id="pain" name="pain" rows="5" required></textarea>
     </label>
     <label for="engagementType">
-      Engagement type
+      Do you need diagnosis, implementation, or both?
       <select id="engagementType" name="engagementType" required>
         <option value="diagnosis">Diagnosis</option>
         <option value="implementation">Implementation</option>

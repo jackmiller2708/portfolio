@@ -10,15 +10,15 @@ export const loadServicesPageFromRepository = (repository: ContentRepository) =>
     return {
       title: "Services",
       summary:
-        "Scoped frontend architecture work for Angular teams dealing with blurred boundaries, brittle flows, and delivery risk.",
+        "I keep my contractor work intentionally narrow: Angular audits, refactor sprints, and architecture advisory for teams dealing with frontend complexity.",
       services,
       nonFitCriteria: site.nonFitCriteria,
       firstStep: {
-        title: "The first step is a narrow diagnostic.",
+        title: "The first step is usually a scoped Angular audit.",
         summary:
-          "Send the product context, system pain, timeline, and constraints. The first reply can confirm fit before any larger commitment.",
+          "Send the product context, Angular version, team size, current pain, timeline, and constraints. I will use that to confirm whether the next move should be audit, stabilization, advisory, or no-fit.",
         href: "/contact?context=services",
-        label: "Start a diagnostic"
+        label: "Request an Angular audit"
       }
     };
   });

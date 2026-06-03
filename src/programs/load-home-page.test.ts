@@ -68,7 +68,7 @@ const repository: ContentRepository = {
     siteUrl: "https://example.com",
     ogImage: "/og/default.png",
     availability: "Available",
-    contactEmail: "hello@example.com",
+    contactEmail: "jackmiller0899@gmail.com",
     credibilityPoints: [
       {
         label: "Focus",
@@ -91,7 +91,8 @@ describe("loadHomePage", () => {
   it("returns hero positioning and service offers", async () => {
     const viewModel = await Effect.runPromise(loadHomePageFromRepository(repository));
 
-    expect(viewModel.hero.title).toBe("Complex systems,\nmade explicit.");
+    expect(viewModel.hero.title).toBe("Complex Angular systems,\nmade explicit.");
+    expect(viewModel.hero.eyebrow).toContain("Nguyen Ngoc Huy / Jack");
     expect(viewModel.services).toHaveLength(1);
     expect(viewModel.credibilityPoints).toHaveLength(1);
     expect(viewModel.heroMap.states.explicit).toBe("Explicit ownership");

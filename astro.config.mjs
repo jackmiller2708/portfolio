@@ -21,7 +21,7 @@ export default defineConfig({
       styles: ["normal"]
     },
     {
-      name: "IBM Plex Mono",
+      name: "JetBrains Mono",
       provider: fontProviders.google(),
       cssVariable: "--font-code",
       weights: [100, 200, 300, 4000, 500, 600, 700, 800, 900],

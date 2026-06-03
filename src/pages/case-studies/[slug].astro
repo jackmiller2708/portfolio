@@ -35,7 +35,7 @@ const seo = buildPageSeo(site, {
   <PageHero
     title={caseStudy.title}
     summary={caseStudy.summary}
-    primaryCta={{ label: "Start a diagnostic", href: viewModel.cta.href }}
+    primaryCta={{ label: viewModel.cta.label, href: viewModel.cta.href }}
     secondaryCta={{ label: "Back to cases", href: "/case-studies" }}
   />
   <article class="case-detail">

@@ -9,7 +9,7 @@ export const loadCaseStudiesPageFromRepository = (repository: ContentRepository)
     return {
       title: "Case Studies",
       summary:
-        "Anonymized examples of past engagements: constraints, decisions, tradeoffs, and outcomes.",
+        "Anonymized examples of Angular frontend systems work: constraints, decisions, tradeoffs, and outcomes without private client details.",
       caseStudies
     };
   });

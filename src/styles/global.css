@@ -11,6 +11,9 @@ html {
   font-size: var(--t-body);
   line-height: 1.6;
   scroll-behavior: smooth;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   transition:
     background-color 400ms var(--ease-gentle),
     color 400ms var(--ease-gentle);
@@ -19,6 +22,7 @@ html {
 body {
   margin: 0;
   min-width: 320px;
+  font-synthesis: none;
   background:
     radial-gradient(circle at 50% 0%, var(--color-accent-glow), transparent 34rem), var(--color-bg);
 }

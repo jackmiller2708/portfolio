@@ -1,6 +1,6 @@
 ---
 title: Architecture Advisory
-summary: Get senior frontend architecture input before a rewrite, migration, or major feature push.
+summary: Get Angular-first frontend architecture input before a rewrite, migration, or major feature push.
 clientPain: The team needs a practical decision path, not abstract architecture advice.
 outputs:
   - decision records
@@ -8,7 +8,7 @@ outputs:
   - implementation sequence
 bestFit:
   - technical leads
-  - product engineering teams approaching major frontend decisions
+  - product engineering teams approaching major Angular frontend decisions
 notFit:
   - open-ended mentoring without a concrete system decision
   - commodity feature delivery
@@ -18,4 +18,4 @@ cta:
 priority: 3
 ---
 
-Advisory work creates a decision path that the team can actually implement.
+Advisory work creates a decision path that an Angular team can actually implement.

@@ -134,10 +134,10 @@ export const loadHomePageFromRepository = (
 
     return {
       hero: {
-        eyebrow: "",
-        title: "Complex systems,\nmade explicit.",
+        eyebrow: "Nguyen Ngoc Huy / Jack · Angular Frontend Systems Engineer · Vietnam",
+        title: "Complex Angular systems,\nmade explicit.",
         summary:
-          "Architecture audits, refactors, and stabilization for Angular teams dealing with state that drifted, boundaries that blurred, and code that became expensive to change."
+          "I help teams audit, refactor, and stabilize Angular applications where state ownership, RxJS flows, data access, and error handling have become expensive to change."
       },
       credibilityPoints: site.credibilityPoints,
       services: services.slice(0, 3),
@@ -157,11 +157,11 @@ export const loadHomePageFromRepository = (
       labPreview: labPosts.slice(0, 2),
       heroMap: systemMap,
       cta: {
-        title: "Start with a scoped diagnostic.",
+        title: "Request an Angular frontend audit.",
         summary:
-          "Share the current system shape and the risk you want made explicit. The first response can stay focused on fit, scope, and next steps.",
+          "Send the product context, Angular version, team size, current pain, and timeline. I will use that to decide whether the right first step is an audit, stabilization sprint, advisory session, or no-fit.",
         href: "/contact",
-        label: "Start a diagnostic"
+        label: "Request an Angular audit"
       }
     };
   });

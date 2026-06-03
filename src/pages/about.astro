@@ -17,16 +17,48 @@ const seo = buildPageSeo(site, {
 
 <BaseLayout seo={seo}>
   <PageHero
-    title="Practical frontend architecture under real delivery constraints."
-    summary={viewModel.about.context}
+    title={viewModel.title}
+    summary={viewModel.summary}
     primaryCta={{ label: "View services", href: "/services" }}
     secondaryCta={viewModel.cta}
   />
   <section class="about-section">
     <div class="u-container about-grid">
       <article class="about-panel about-panel--lead">
-        <h2>What good frontend work protects</h2>
+        <h2>Short version</h2>
+        <p>{viewModel.about.context}</p>
+        <dl class="snapshot-list">
+          <div>
+            <dt>Name</dt>
+            <dd>Nguyen Ngoc Huy</dd>
+          </div>
+          <div>
+            <dt>Also called</dt>
+            <dd>Jack by English-speaking teams</dd>
+          </div>
+          <div>
+            <dt>Role</dt>
+            <dd>Angular Frontend Systems Engineer</dd>
+          </div>
+          <div>
+            <dt>Location</dt>
+            <dd>Vietnam</dd>
+          </div>
+          <div>
+            <dt>Email</dt>
+            <dd>
+              <a href={`mailto:${viewModel.contactEmail}`}>{viewModel.contactEmail}</a>
+            </dd>
+          </div>
+        </dl>
+      </article>
+      <article class="about-panel about-panel--lead">
+        <h2>What I protect in frontend systems</h2>
         <p>{viewModel.about.philosophy}</p>
+      </article>
+      <article class="about-panel">
+        <h2>What I work on</h2>
+        {viewModel.about.qualityPhilosophy.map((item) => <p>{item}</p>)}
       </article>
       <article class="about-panel">
         <h2>How I work</h2>
@@ -43,7 +75,9 @@ const seo = buildPageSeo(site, {
       <h2>Communication</h2>
       <p>{viewModel.about.communication}</p>
       <p>
-        Direct fallback: <a href={`mailto:${viewModel.contactEmail}`}>{viewModel.contactEmail}</a>
+        For Angular audit, refactor, or architecture inquiries, email me at <a
+          href={`mailto:${viewModel.contactEmail}`}>{viewModel.contactEmail}</a
+        >.
       </p>
     </div>
   </section>
@@ -78,7 +112,9 @@ const seo = buildPageSeo(site, {
   }
 
   .about-panel h2,
-  .about-panel p {
+  .about-panel p,
+  .snapshot-list,
+  .snapshot-list dd {
     margin: 0;
   }
 
@@ -91,6 +127,29 @@ const seo = buildPageSeo(site, {
 
   .about-panel p {
     color: var(--color-muted);
+  }
+
+  .snapshot-list {
+    display: grid;
+    gap: var(--space-3);
+  }
+
+  .snapshot-list div {
+    display: grid;
+    gap: var(--space-1);
+    padding-top: var(--space-3);
+    border-top: var(--border-1);
+  }
+
+  .snapshot-list dt {
+    color: var(--color-accent);
+    font-family: var(--font-code);
+    font-size: var(--t-mono);
+    font-weight: 500;
+  }
+
+  .snapshot-list dd {
+    color: var(--color-text);
   }
 
   .communication {

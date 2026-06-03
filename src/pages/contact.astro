@@ -12,7 +12,7 @@ const site = await Effect.runPromise(astroContentRepository.getSiteMeta);
 const seo = buildPageSeo(site, {
   path: "/contact",
   title: "Contact",
-  description: "Start a scoped frontend systems diagnostic.",
+  description: "Request an Angular frontend audit with Nguyen Ngoc Huy / Jack.",
   ogImage: "/og/contact.svg"
 });
 ---
@@ -24,7 +24,7 @@ const seo = buildPageSeo(site, {
       <ContactIntake viewModel={viewModel} />
       <aside class="fit-note" aria-labelledby="contact-boundaries">
         <h2 id="contact-boundaries">Before sending</h2>
-        <p>These requests are usually not a fit for this diagnostic path.</p>
+        <p>These requests are usually not a fit for my Angular contractor work.</p>
         <ul>{viewModel.nonFitCriteria.map((item) => <li>{item}</li>)}</ul>
       </aside>
     </div>

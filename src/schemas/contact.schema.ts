@@ -9,7 +9,7 @@ export const ContactInquirySchema = Schema.Struct({
   pain: Schema.String.pipe(Schema.minLength(12)),
   engagementType: Schema.Literal("diagnosis", "implementation", "advisory", "unsure"),
   timeline: Schema.NonEmptyTrimmedString,
-  budgetComfort: Schema.NonEmptyTrimmedString,
+  budgetComfort: Schema.optionalWith(Schema.String, { default: () => "" }),
   consent: Schema.Literal(true)
 });
 

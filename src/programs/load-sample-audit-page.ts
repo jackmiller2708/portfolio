@@ -25,9 +25,9 @@ export const loadSampleAuditPageFromRepository = (repository: ContentRepository)
       cta: {
         title: "Want this shape of review on your system?",
         summary:
-          "Use the contact form to describe the product, current risk, and constraints for a scoped diagnostic.",
+          "Use the contact form to describe the product, Angular version, current risk, and constraints for a scoped audit.",
         href: "/contact?context=sample-audit",
-        label: "Start a similar diagnostic"
+        label: "Request a similar audit"
       }
     };
   });

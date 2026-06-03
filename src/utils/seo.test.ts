@@ -3,12 +3,12 @@ import type { SiteMeta } from "@domain/site";
 import { buildPageSeo } from "./seo";
 
 const site: SiteMeta = {
-  title: "Frontend Systems Portfolio",
+  title: "Nguyen Ngoc Huy / Jack",
   description: "Default description.",
   siteUrl: "https://example.com/",
   ogImage: "/og/default.png",
   availability: "Available",
-  contactEmail: "hello@example.com",
+  contactEmail: "jackmiller0899@gmail.com",
   credibilityPoints: [],
   nonFitCriteria: [],
   about: {
@@ -28,7 +28,7 @@ describe("buildPageSeo", () => {
       description: "Service page."
     });
 
-    expect(seo.title).toBe("Services | Frontend Systems Portfolio");
+    expect(seo.title).toBe("Services | Nguyen Ngoc Huy / Jack");
     expect(seo.canonicalUrl).toBe("https://example.com/services");
     expect(seo.ogImage).toBe("https://example.com/og/default.png");
   });

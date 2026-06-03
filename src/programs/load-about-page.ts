@@ -7,14 +7,15 @@ export const loadAboutPageFromRepository = (repository: ContentRepository) =>
     const site = yield* repository.getSiteMeta;
 
     return {
-      title: "About",
-      summary: "A practical view of frontend architecture under real delivery constraints.",
+      title: "About Nguyen Ngoc Huy",
+      summary:
+        "I am an Angular Frontend Systems Engineer based in Vietnam. English-speaking teams can call me Jack.",
       about: site.about,
       contactEmail: site.contactEmail,
       nonFitCriteria: site.nonFitCriteria,
       cta: {
         href: "/contact?context=about",
-        label: "Start a diagnostic"
+        label: "Request an audit"
       }
     };
   });

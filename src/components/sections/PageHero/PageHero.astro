@@ -15,7 +15,7 @@ type Props = {
   };
 };
 
-const { title, summary, primaryCta, secondaryCta } = Astro.props;
+const { eyebrow, title, summary, primaryCta, secondaryCta } = Astro.props;
 const [firstLine, ...restTitle] = title.split("\n");
 const secondLine = restTitle.join(" ");
 const isDisplayHero = Boolean(secondLine);
@@ -23,6 +23,7 @@ const isDisplayHero = Boolean(secondLine);
 
 <section class:list={["page-hero", isDisplayHero && "page-hero--display"]}>
   <div class="page-hero__inner u-container">
+    {eyebrow && <p class="page-hero__eyebrow">{eyebrow}</p>}
     <h1>
       {
         secondLine ? (
@@ -90,6 +91,14 @@ const isDisplayHero = Boolean(secondLine);
     color: var(--color-muted);
     font-size: 1.05rem;
     line-height: 1.65;
+  }
+
+  .page-hero__eyebrow {
+    max-width: 72ch;
+    margin: 0;
+    color: var(--color-text);
+    font-size: var(--t-small);
+    font-weight: 700;
   }
 
   .page-hero__actions {
