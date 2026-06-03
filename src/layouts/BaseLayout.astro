@@ -60,7 +60,7 @@ const navItems = [
       <div class="site-header__inner u-container">
         <div class="site-header__bar">
           <a class="site-header__brand" href="/">
-            <span>Nguyen Ngoc Huy / Jack Miller</span>
+            <span class="site-header__brand-name">Nguyen Ngoc Huy / Jack Miller</span>
             <span class="site-header__brand-role">Angular Frontend Systems Engineer</span>
           </a>
           <div class="site-header__controls">
@@ -145,7 +145,7 @@ const navItems = [
 
   .site-header__inner {
     display: grid;
-    grid-template-columns: auto minmax(0, 1fr);
+    grid-template-columns: minmax(220px, auto) minmax(0, 1fr) auto;
     align-items: center;
     gap: var(--space-6);
     min-height: 64px;
@@ -172,6 +172,10 @@ const navItems = [
     text-decoration: none;
   }
 
+  .site-header__brand-name {
+    font-weight: 500;
+  }
+
   .site-header__brand-role {
     color: var(--color-muted);
     font-family: var(--font-body);
@@ -194,17 +198,20 @@ const navItems = [
     grid-column: 2;
     grid-row: 1;
     display: flex;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     justify-content: flex-end;
-    gap: var(--space-4);
+    gap: clamp(var(--space-2), 1.4vw, var(--space-4));
+    min-width: 0;
   }
 
   .site-header__nav a {
     position: relative;
     padding-block: var(--space-2);
     color: var(--color-muted);
-    font-size: 0.94rem;
+    font-size: clamp(0.82rem, 0.9vw, 0.94rem);
     font-weight: 400;
+    line-height: 1;
+    white-space: nowrap;
     text-decoration: none;
   }
 
@@ -234,10 +241,11 @@ const navItems = [
     grid-column: 3;
     grid-row: 1;
     display: inline-flex;
+    justify-content: center;
     align-items: center;
     gap: var(--space-2);
-    min-height: 38px;
-    padding: var(--space-2) var(--space-3);
+    min-height: 35px;
+    width: calc(5ch + 2.5rem);
     color: var(--color-text);
     background: var(--color-surface);
     border: var(--border-1);
@@ -245,6 +253,10 @@ const navItems = [
     cursor: pointer;
     font-size: var(--t-small);
     font-weight: 700;
+  }
+
+  .site-header__theme span {
+    height: 18px;
   }
 
   .site-header__menu-toggle {
@@ -286,7 +298,7 @@ const navItems = [
     transform: rotate(180deg);
   }
 
-  @media (max-width: 760px) {
+  @media (max-width: 999px) {
     .site-header__inner {
       display: grid;
       grid-template-columns: minmax(0, 1fr);
@@ -321,6 +333,7 @@ const navItems = [
 
     .site-header__theme {
       grid-column: auto;
+      width: 40px;
       min-height: 36px;
       padding: var(--space-2);
     }
@@ -363,16 +376,30 @@ const navItems = [
     .site-header__nav {
       grid-column: 1;
       grid-row: auto;
-      display: none;
+      display: grid;
       width: 100%;
-      padding: var(--space-2) 0 var(--space-3);
+      max-height: 0;
+      padding: 0;
       border-top: var(--border-1);
       grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 0;
+      opacity: 0;
+      overflow: hidden;
+      pointer-events: none;
+      visibility: hidden;
+      transition:
+        max-height var(--duration-base) var(--ease-out-expo),
+        opacity var(--duration-fast) var(--ease-standard),
+        padding var(--duration-fast) var(--ease-standard),
+        visibility var(--duration-fast) var(--ease-standard);
     }
 
     .site-header.is-menu-open .site-header__nav {
-      display: grid;
+      max-height: 180px;
+      padding: var(--space-2) 0 var(--space-3);
+      opacity: 1;
+      pointer-events: auto;
+      visibility: visible;
     }
 
     .site-header__nav a {
@@ -468,7 +495,7 @@ const navItems = [
       }
     });
 
-    window.matchMedia("(min-width: 761px)").addEventListener("change", (event) => {
+    window.matchMedia("(min-width: 1000px)").addEventListener("change", (event) => {
       if (event.matches) {
         setOpen(false);
       }

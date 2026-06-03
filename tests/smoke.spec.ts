@@ -97,6 +97,47 @@ test.describe("Smoke Tests", () => {
     expect(openBox?.height).toBeLessThan(220);
   });
 
+  test("Tablet header stays compact instead of wrapping navigation", async ({ page }) => {
+    await page.setViewportSize({ width: 900, height: 900 });
+    await page.goto("/", { waitUntil: "domcontentloaded" });
+
+    const header = page.locator(".site-header");
+    const nav = page.getByRole("navigation", { name: "Primary navigation" });
+    const navElement = page.locator("#site-navigation");
+    const toggle = page.getByRole("button", { name: "Open navigation" });
+    await expect(nav).not.toBeVisible();
+
+    const closedBox = await header.boundingBox();
+    expect(closedBox?.height).toBeLessThanOrEqual(64);
+
+    const transition = await navElement.evaluate(
+      (element) => getComputedStyle(element).transitionProperty
+    );
+    expect(transition).toContain("max-height");
+
+    await toggle.click();
+    await expect(nav).toBeVisible();
+    const openBox = await header.boundingBox();
+    expect(openBox?.height).toBeGreaterThan(closedBox?.height ?? 0);
+  });
+
+  test("Desktop theme switch keeps a stable header width", async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 800 });
+    await page.goto("/", { waitUntil: "domcontentloaded" });
+
+    const nav = page.getByRole("navigation", { name: "Primary navigation" });
+    const toggle = page.getByRole("button", { name: "Switch theme" });
+    const beforeNavBox = await nav.boundingBox();
+    const beforeToggleBox = await toggle.boundingBox();
+
+    await toggle.click();
+
+    const afterNavBox = await nav.boundingBox();
+    const afterToggleBox = await toggle.boundingBox();
+    expect(afterToggleBox?.width).toBeCloseTo(beforeToggleBox?.width ?? 0, 0);
+    expect(afterNavBox?.x).toBeCloseTo(beforeNavBox?.x ?? 0, 0);
+  });
+
   test("Client-side navigation keeps theme and page interactions initialized", async ({ page }) => {
     test.slow();
     await page.goto("/");
@@ -121,6 +162,39 @@ test.describe("Smoke Tests", () => {
     });
 
     expect(duration).toBe("0s");
+    await context.close();
+  });
+
+  test("Mobile system map shows one selected-node detail surface", async ({ page }) => {
+    await page.setViewportSize({ width: 375, height: 760 });
+    await page.goto("/", { waitUntil: "domcontentloaded" });
+
+    const map = page.locator("[data-system-map]").first();
+    await map.scrollIntoViewIfNeeded();
+    await expect(map.locator("[data-node-id]").first()).toBeVisible();
+    await expect(map).toHaveAttribute("data-three-map-ready", "true", { timeout: 15_000 });
+    await map.locator("[data-node-id]").first().click();
+
+    await expect(map.locator("[data-map-drawer]")).toBeVisible();
+    await expect(map.locator("[data-map-details]")).not.toBeVisible();
+  });
+
+  test("Touch tablet system map does not duplicate selected-node details", async ({ browser }) => {
+    const context = await browser.newContext({
+      hasTouch: true,
+      viewport: { width: 768, height: 1024 }
+    });
+    const page = await context.newPage();
+    await page.goto("/", { waitUntil: "domcontentloaded" });
+
+    const map = page.locator("[data-system-map]").first();
+    await map.scrollIntoViewIfNeeded();
+    await expect(map.locator("[data-node-id]").first()).toBeVisible();
+    await expect(map).toHaveAttribute("data-compact", "true", { timeout: 15_000 });
+    await map.locator("[data-node-id]").nth(1).click();
+
+    await expect(map.locator("[data-map-drawer]")).toBeVisible();
+    await expect(map.locator("[data-map-details]")).not.toBeVisible();
     await context.close();
   });
 

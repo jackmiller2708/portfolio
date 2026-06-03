@@ -91,6 +91,7 @@ const mapJson = JSON.stringify(map);
 
 <style>
   .system-map {
+    contain: layout style;
     display: grid;
     gap: var(--space-4);
     margin: 0;
@@ -149,6 +150,7 @@ const mapJson = JSON.stringify(map);
 
   .system-map__stage {
     position: relative;
+    contain: layout paint;
     min-height: 420px;
     overflow: hidden;
     border: var(--border-1);
@@ -168,6 +170,7 @@ const mapJson = JSON.stringify(map);
   .system-map__canvas {
     position: absolute;
     inset: 0;
+    contain: strict;
     width: 100%;
     height: 100%;
   }
@@ -280,6 +283,10 @@ const mapJson = JSON.stringify(map);
     display: none;
   }
 
+  .system-map[data-compact="true"] .system-map__details {
+    display: none;
+  }
+
   .system-map__drawer > button {
     justify-self: end;
     min-height: 32px;
@@ -327,6 +334,7 @@ const mapJson = JSON.stringify(map);
       width: 128px;
       min-height: 64px;
     }
+
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -534,6 +542,7 @@ const mapJson = JSON.stringify(map);
     const resize = () => {
       const rect = stage.getBoundingClientRect();
       compact = rect.width < 720;
+      map.dataset.compact = String(compact);
       renderer.setSize(rect.width, rect.height, false);
       const aspect = rect.width / Math.max(rect.height, 1);
       const vertical = compact ? 3 : 2.7;
@@ -581,9 +590,11 @@ const mapJson = JSON.stringify(map);
         .join(" ");
       const html = `<h2>${button.dataset.nodeLabel}</h2><p>${button.dataset.nodeDescription} ${markers}</p>`;
 
-      withStateFade(details, () => {
-        if (details) details.innerHTML = html;
-      });
+      if (!compact) {
+        withStateFade(details, () => {
+          if (details) details.innerHTML = html;
+        });
+      }
 
       withStateFade(drawer, () => {
         if (drawerContent) drawerContent.innerHTML = html;
