@@ -10,15 +10,15 @@ export const loadServicesPageFromRepository = (repository: ContentRepository) =>
     return {
       title: "Services",
       summary:
-        "Scoped frontend architecture services for Angular teams that need clearer boundaries and safer delivery.",
+        "Scoped frontend architecture work for Angular teams dealing with blurred boundaries, brittle flows, and delivery risk.",
       services,
       nonFitCriteria: site.nonFitCriteria,
       firstStep: {
         title: "The first step is a narrow diagnostic.",
         summary:
-          "Send the product context, system pain, timeline, and constraints. The reply can confirm fit before any larger commitment.",
+          "Send the product context, system pain, timeline, and constraints. The first reply can confirm fit before any larger commitment.",
         href: "/contact?context=services",
-        label: "Start with contact"
+        label: "Start a diagnostic"
       }
     };
   });

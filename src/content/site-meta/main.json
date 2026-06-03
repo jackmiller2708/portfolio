@@ -7,19 +7,19 @@
   "contactEmail": "hello@example.com",
   "credibilityPoints": [
     {
-      "label": "Primary focus",
+      "label": "Focus",
       "value": "Angular systems",
-      "detail": "Architecture, state, data flow, errors, and maintainability."
+      "detail": "State, data flow, errors, and boundaries."
     },
     {
-      "label": "Engagement shape",
+      "label": "Shape",
       "value": "Scoped diagnostics",
-      "detail": "Short audits and focused implementation plans before larger work."
+      "detail": "Short reviews before larger commitments."
     },
     {
-      "label": "Delivery style",
-      "value": "Evidence first",
-      "detail": "Findings tie visible symptoms to risk, recommendation, and sequence."
+      "label": "Output",
+      "value": "Sequenced decisions",
+      "detail": "Findings connect symptoms, risk, and next steps."
     }
   ],
   "nonFitCriteria": [
@@ -29,6 +29,7 @@
   ],
   "about": {
     "context": "Frontend systems engineer focused on Angular applications where state, data access, ownership, and errors have become hard to reason about.",
+    "philosophy": "Most frontend problems are not framework problems. They are boundary problems: places where ownership was never declared, where the next person had to guess, where \"it works\" became the only definition of done. I am interested in the work that makes those boundaries visible before they become expensive.",
     "workingStyle": [
       "Start with a small diagnostic and make the current system visible before prescribing changes.",
       "Prefer explicit boundaries, typed contracts, and practical migration steps over large rewrites.",

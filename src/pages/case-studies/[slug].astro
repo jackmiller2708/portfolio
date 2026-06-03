@@ -35,7 +35,7 @@ const seo = buildPageSeo(site, {
   <PageHero
     title={caseStudy.title}
     summary={caseStudy.summary}
-    primaryCta={{ label: "Start contact", href: viewModel.cta.href }}
+    primaryCta={{ label: "Start a diagnostic", href: viewModel.cta.href }}
     secondaryCta={{ label: "Back to cases", href: "/case-studies" }}
   />
   <article class="case-detail">
@@ -87,14 +87,14 @@ const seo = buildPageSeo(site, {
         <section>
           <h2>Before and after architecture</h2>
           <div class="before-after">
-            <div>
+            <article>
               <h3>Before</h3>
               <ul>{caseStudy.beforeAfter.before.map((item) => <li>{item}</li>)}</ul>
-            </div>
-            <div>
+            </article>
+            <article>
               <h3>After</h3>
               <ul>{caseStudy.beforeAfter.after.map((item) => <li>{item}</li>)}</ul>
-            </div>
+            </article>
           </div>
         </section>
         <section aria-labelledby="case-system-map">
@@ -212,14 +212,16 @@ const seo = buildPageSeo(site, {
   }
 
   h2 {
-    font-family: var(--font-display);
+    font-family: var(--font-body);
     font-size: 2rem;
+    font-weight: 800;
     line-height: 1.15;
   }
 
   h3 {
-    font-family: var(--font-display);
+    font-family: var(--font-body);
     font-size: 1.25rem;
+    font-weight: 700;
   }
 
   p,

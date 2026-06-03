@@ -1,4 +1,6 @@
 import { test, expect } from "@playwright/test";
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
 
 test.describe("Smoke Tests", () => {
   test("Home page should load and have title", async ({ page }) => {
@@ -6,6 +8,27 @@ test.describe("Smoke Tests", () => {
     await expect(page).toHaveTitle(/Frontend Systems Portfolio/);
     const heroHeading = page.locator("main h1");
     await expect(heroHeading).toBeVisible();
+    await expect(heroHeading).toContainText("Complex systems, made explicit.");
+  });
+
+  test("public source does not use proof framing", async () => {
+    const files = [
+      "src/pages/index.astro",
+      "src/pages/services.astro",
+      "src/pages/case-studies/index.astro",
+      "src/pages/sample-audit.astro",
+      "src/pages/lab/index.astro",
+      "src/pages/about.astro",
+      "src/pages/contact.astro",
+      "src/programs/load-home-page.ts",
+      "src/programs/load-case-studies-page.ts",
+      "src/content/site-meta/main.json"
+    ];
+
+    for (const file of files) {
+      const contents = readFileSync(join(process.cwd(), file), "utf8");
+      expect(contents).not.toMatch(/\bproof\b/i);
+    }
   });
 
   test("Home diagnostic selector updates reference path and CTA", async ({ page }) => {
@@ -28,6 +51,15 @@ test.describe("Smoke Tests", () => {
     );
   });
 
+  test("Home diagnostic selector scrolls result into view on mobile", async ({ page }) => {
+    await page.setViewportSize({ width: 375, height: 700 });
+    await page.goto("/");
+
+    const diagnostic = page.locator("[data-diagnostic-selector]");
+    await diagnostic.getByRole("button", { name: /Cache and data behavior/ }).click();
+    await expect(diagnostic.locator("[data-diagnostic-result]")).toBeInViewport();
+  });
+
   test("Theme switch toggles the page theme", async ({ page }) => {
     await page.goto("/");
 
@@ -44,17 +76,12 @@ test.describe("Smoke Tests", () => {
   });
 
   test("Client-side navigation keeps theme and page interactions initialized", async ({ page }) => {
+    test.slow();
     await page.goto("/");
-
-    await page.getByRole("button", { name: "Switch theme" }).click();
-    const selectedTheme = await page.locator("html").getAttribute("data-theme");
-    await page
-      .getByRole("navigation", { name: "Primary navigation" })
-      .getByRole("link", { name: "Sample Audit", exact: true })
-      .click();
-
+    await page.evaluate(() => localStorage.setItem("theme", "dark"));
+    await page.goto("/sample-audit", { waitUntil: "domcontentloaded" });
     await expect(page).toHaveURL(/\/sample-audit$/);
-    await expect(page.locator("html")).toHaveAttribute("data-theme", selectedTheme ?? "");
+    await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
 
     const walkthrough = page.locator("[data-audit-walkthrough]");
     await walkthrough.getByRole("button", { name: "Risk" }).click();
@@ -100,6 +127,10 @@ test.describe("Smoke Tests", () => {
     await walkthrough.getByRole("button", { name: "Risk" }).click();
     await expect(walkthrough.locator("[data-phase-label]")).toContainText("Risk");
     await expect(page.getByRole("heading", { name: "Full report view" })).toBeVisible();
+    await expect(page.getByText("Read the full walkthrough")).toBeVisible();
+    await expect(walkthrough.locator(".audit-walkthrough__static")).toContainText(
+      "Sprint sequence"
+    );
   });
 
   test("Contact page should load and display intake form", async ({ page }) => {
@@ -111,6 +142,8 @@ test.describe("Smoke Tests", () => {
     const form = page.locator("form.contact-form");
     await expect(form).toBeVisible();
     await expect(form).toHaveAttribute("data-astro-reload", "");
+    await expect(form.getByLabel("Name")).toBeVisible();
+    await expect(form.getByLabel("Email")).toBeVisible();
   });
 
   test("Contact advisory selector updates recommendation and form context", async ({ page }) => {

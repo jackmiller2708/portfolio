@@ -8,7 +8,8 @@ export const loadLabPageFromRepository = (repository: ContentRepository) =>
 
     return {
       title: "Technical Lab",
-      summary: "Focused notes on Angular, RxJS, TypeScript, and architecture decisions.",
+      summary:
+        "Notes from the work. Things worth writing down because they are not obvious until you have seen the failure mode they prevent.",
       posts
     };
   });

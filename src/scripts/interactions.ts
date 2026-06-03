@@ -13,6 +13,8 @@ const withStateFade = (panel: HTMLElement | null, update: () => void) => {
   }, 90);
 };
 
+const isSmallViewport = () => window.matchMedia("(max-width: 760px)").matches;
+
 const initDiagnosticSelectors = () => {
   const selectors = document.querySelectorAll<HTMLElement>("[data-diagnostic-selector]");
 
@@ -53,6 +55,15 @@ const initDiagnosticSelectors = () => {
         cta.textContent = option.dataset.ctaLabel ?? "Start diagnostic";
         cta.href = option.dataset.ctaHref ?? "/contact";
       });
+
+      if (isSmallViewport()) {
+        window.setTimeout(() => {
+          result.scrollIntoView({
+            behavior: prefersReducedMotion.matches ? "auto" : "smooth",
+            block: "nearest"
+          });
+        }, 220);
+      }
 
       const map = document.querySelector<HTMLElement>("[data-system-map]");
       const stateButton = map?.querySelector<HTMLButtonElement>(
@@ -180,77 +191,8 @@ const initAdvisoryFlow = () => {
   }
 };
 
-const initSystemMaps = () => {
-  const maps = document.querySelectorAll<HTMLElement>("[data-system-map]");
-
-  for (const map of maps) {
-    if (map.dataset.mapReady === "true") {
-      continue;
-    }
-
-    map.dataset.mapReady = "true";
-    const stateButtons = map.querySelectorAll<HTMLButtonElement>("[data-map-state]");
-    const stateCopy = map.querySelectorAll<HTMLElement>("[data-state-copy]");
-    const nodes = map.querySelectorAll<HTMLButtonElement>("[data-node-id]");
-    const details = map.querySelector<HTMLElement>("[data-map-details]");
-
-    const setState = (state: string) => {
-      map.dataset.state = state;
-      for (const button of stateButtons) {
-        button.classList.toggle("is-active", button.dataset.mapState === state);
-        button.setAttribute("aria-pressed", String(button.dataset.mapState === state));
-      }
-      for (const copy of stateCopy) {
-        copy.hidden = copy.dataset.stateCopy !== state;
-      }
-    };
-
-    const showNode = (node: HTMLButtonElement) => {
-      for (const item of nodes) {
-        item.classList.toggle("is-active", item === node);
-      }
-
-      if (!details) {
-        return;
-      }
-
-      const risk = node.dataset.risk;
-      const decision = node.dataset.decision;
-      const markers = [risk && `Risk hotspot: ${risk}`, decision && `Decision overlay: ${decision}`]
-        .filter(Boolean)
-        .join(" ");
-
-      withStateFade(details, () => {
-        details.innerHTML = `<h2>${node.dataset.nodeLabel}</h2><p>${node.dataset.nodeDescription} ${markers}</p>`;
-      });
-    };
-
-    for (const button of stateButtons) {
-      button.addEventListener("click", () => setState(button.dataset.mapState ?? "messy"));
-    }
-
-    for (const node of nodes) {
-      node.addEventListener("click", () => showNode(node));
-      node.addEventListener("keydown", (event) => {
-        if (event.key !== "ArrowRight" && event.key !== "ArrowLeft") {
-          return;
-        }
-
-        event.preventDefault();
-        const current = [...nodes].indexOf(node);
-        const offset = event.key === "ArrowRight" ? 1 : -1;
-        const next = nodes[(current + offset + nodes.length) % nodes.length];
-        next?.focus();
-      });
-    }
-
-    setState("messy");
-  }
-};
-
 const initInteractions = () => {
   initDiagnosticSelectors();
-  initSystemMaps();
   initAuditWalkthrough();
   initAdvisoryFlow();
 };

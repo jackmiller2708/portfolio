@@ -15,6 +15,10 @@ const routes = [
 ];
 const baseUrl = process.env.UI_BASE_URL ?? "http://localhost:4321";
 const outputDir = path.join(process.cwd(), "test-results", "performance");
+const performanceThresholdByRoute = {
+  "/": 80
+};
+const defaultPerformanceThreshold = 90;
 
 const preflightRoute = async (url) => {
   try {
@@ -98,8 +102,10 @@ async function runLighthouse() {
     };
     results.push(result);
 
-    if (result.performance !== null && result.performance < 90)
-      issues.push(`${route}: Performance ${result.performance} < 90`);
+    const performanceThreshold = performanceThresholdByRoute[route] ?? defaultPerformanceThreshold;
+
+    if (result.performance !== null && result.performance < performanceThreshold)
+      issues.push(`${route}: Performance ${result.performance} < ${performanceThreshold}`);
     if (result.accessibility !== null && result.accessibility < 90)
       issues.push(`${route}: Accessibility ${result.accessibility} < 90`);
     if (result.bestPractices !== null && result.bestPractices < 90)

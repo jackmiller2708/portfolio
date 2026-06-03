@@ -79,6 +79,7 @@ const repository: ContentRepository = {
     nonFitCriteria: ["Not fit"],
     about: {
       context: "Context",
+      philosophy: "Boundaries matter.",
       workingStyle: ["Diagnostic first"],
       qualityPhilosophy: ["Make decisions visible"],
       communication: "Async"
@@ -90,7 +91,7 @@ describe("loadHomePage", () => {
   it("returns hero positioning and service offers", async () => {
     const viewModel = await Effect.runPromise(loadHomePageFromRepository(repository));
 
-    expect(viewModel.hero.title).toContain("frontend systems");
+    expect(viewModel.hero.title).toBe("Complex systems,\nmade explicit.");
     expect(viewModel.services).toHaveLength(1);
     expect(viewModel.credibilityPoints).toHaveLength(1);
     expect(viewModel.heroMap.states.explicit).toBe("Explicit ownership");

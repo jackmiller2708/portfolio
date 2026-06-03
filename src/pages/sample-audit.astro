@@ -81,6 +81,31 @@ const firstWalkthrough = viewModel.walkthrough[0];
                 <h3 data-walkthrough-title>{firstWalkthrough.title}</h3>
                 <p data-walkthrough-copy>{firstWalkthrough.symptom}</p>
                 <ButtonLink href="/contact?context=sample-audit" label="Talk through an audit" />
+                <details class="audit-walkthrough__static">
+                  <summary>Read the full walkthrough</summary>
+                  <dl>
+                    <div>
+                      <dt>Symptom</dt>
+                      <dd>{firstWalkthrough.symptom}</dd>
+                    </div>
+                    <div>
+                      <dt>Evidence</dt>
+                      <dd>{firstWalkthrough.evidence}</dd>
+                    </div>
+                    <div>
+                      <dt>Risk</dt>
+                      <dd>{firstWalkthrough.risk}</dd>
+                    </div>
+                    <div>
+                      <dt>Recommendation</dt>
+                      <dd>{firstWalkthrough.recommendation}</dd>
+                    </div>
+                    <div>
+                      <dt>Sprint sequence</dt>
+                      <dd>{firstWalkthrough.sprintTitle}</dd>
+                    </div>
+                  </dl>
+                </details>
               </article>
             </div>
           </section>
@@ -180,7 +205,8 @@ const firstWalkthrough = viewModel.walkthrough[0];
   .audit-walkthrough__header h2,
   .full-report h2,
   .audit-walkthrough__panel h3 {
-    font-family: var(--font-display);
+    font-family: var(--font-body);
+    font-weight: 800;
     line-height: 1.15;
   }
 
@@ -241,7 +267,39 @@ const firstWalkthrough = viewModel.walkthrough[0];
 
   .audit-walkthrough__label {
     color: var(--color-accent);
+    font-family: var(--font-code);
+    font-size: var(--t-mono);
+    font-weight: 500;
+    text-transform: uppercase;
+  }
+
+  .audit-walkthrough__static {
+    padding-top: var(--space-4);
+    border-top: var(--border-1);
+  }
+
+  .audit-walkthrough__static summary {
+    cursor: pointer;
     font-weight: 700;
+  }
+
+  .audit-walkthrough__static dl {
+    display: grid;
+    gap: var(--space-3);
+    margin: var(--space-4) 0 0;
+  }
+
+  .audit-walkthrough__static dt {
+    color: var(--color-accent);
+    font-family: var(--font-code);
+    font-size: var(--t-mono);
+    font-weight: 500;
+    text-transform: uppercase;
+  }
+
+  .audit-walkthrough__static dd {
+    margin: var(--space-1) 0 0;
+    color: var(--color-muted);
   }
 
   .matrix-grid,
@@ -281,7 +339,6 @@ const firstWalkthrough = viewModel.walkthrough[0];
   }
 
   .matrix-card strong {
-    font-family: var(--font-display);
     font-size: 1.45rem;
   }
 
@@ -300,8 +357,9 @@ const firstWalkthrough = viewModel.walkthrough[0];
   .roadmap h2,
   .audit-cta h2 {
     margin: 0;
-    font-family: var(--font-display);
+    font-family: var(--font-body);
     font-size: 2rem;
+    font-weight: 800;
     line-height: 1.15;
   }
 

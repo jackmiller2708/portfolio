@@ -8,6 +8,7 @@ type Props = {
 const { map } = Astro.props;
 const riskByNode = new Map(map.riskMarkers.map((marker) => [marker.nodeId, marker]));
 const decisionByNode = new Map(map.decisionMarkers.map((marker) => [marker.nodeId, marker]));
+const mapJson = JSON.stringify(map);
 ---
 
 <figure class="system-map" aria-label={map.fallbackLabel} data-system-map data-state="messy">
@@ -15,66 +16,24 @@ const decisionByNode = new Map(map.decisionMarkers.map((marker) => [marker.nodeI
     <strong>{map.title}</strong>
     <span>{map.summary}</span>
   </figcaption>
+
   <div class="system-map__toolbar" role="group" aria-label="Architecture state">
     <button class="system-map__state is-active" type="button" data-map-state="messy">
       Messy
     </button>
-    <button class="system-map__state" type="button" data-map-state="explicit"> Bounded </button>
+    <button class="system-map__state" type="button" data-map-state="explicit">Bounded</button>
   </div>
+
   <div class="system-map__states" aria-live="polite">
     <p data-state-copy="messy">{map.states.messy}</p>
     <p data-state-copy="explicit" hidden>{map.states.explicit}</p>
   </div>
+
   <div class="system-map__stage" data-map-stage>
-    <svg
-      class="system-map__fallback"
-      viewBox="0 0 720 210"
-      role="img"
-      aria-label={map.fallbackLabel}
-      preserveAspectRatio="none"
-    >
-      <polyline
-        points="64,104 190,104 316,104 442,104 568,104 666,104"
-        fill="none"
-        vector-effect="non-scaling-stroke"></polyline>
+    <canvas class="system-map__canvas" data-map-canvas aria-hidden="true"></canvas>
+    <div class="system-map__nodes" data-map-nodes>
       {
-        map.nodes.map((node, index) => (
-          <g>
-            <rect x={24 + index * 116} y="72" width="96" height="64" rx="4" />
-            <text x={72 + index * 116} y="108" text-anchor="middle">
-              {node.label}
-            </text>
-          </g>
-        ))
-      }
-    </svg>
-    <noscript>
-      <svg
-        class="system-map__noscript"
-        viewBox="0 0 720 210"
-        role="img"
-        aria-label={map.fallbackLabel}
-        preserveAspectRatio="none"
-      >
-        <polyline
-          points="64,104 190,104 316,104 442,104 568,104 666,104"
-          fill="none"
-          vector-effect="non-scaling-stroke"></polyline>
-        {
-          map.nodes.map((node, index) => (
-            <g>
-              <rect x={24 + index * 116} y="72" width="96" height="64" rx="4" />
-              <text x={72 + index * 116} y="108" text-anchor="middle">
-                {node.label}
-              </text>
-            </g>
-          ))
-        }
-      </svg>
-    </noscript>
-    <div class="system-map__nodes">
-      {
-        map.nodes.map((node) => {
+        map.nodes.map((node, index) => {
           const risk = riskByNode.get(node.id);
           const decision = decisionByNode.get(node.id);
 
@@ -82,7 +41,7 @@ const decisionByNode = new Map(map.decisionMarkers.map((marker) => [marker.nodeI
             <button
               class:list={["system-map__node", risk && "has-risk", decision && "has-decision"]}
               type="button"
-              data-node-index={map.nodes.indexOf(node)}
+              data-node-index={index}
               data-node-id={node.id}
               data-node-label={node.label}
               data-node-description={node.description}
@@ -96,47 +55,49 @@ const decisionByNode = new Map(map.decisionMarkers.map((marker) => [marker.nodeI
         })
       }
     </div>
+    <div class="system-map__drawer" data-map-drawer hidden>
+      <button type="button" aria-label="Close map detail" data-map-drawer-close>Close</button>
+      <div data-map-drawer-content></div>
+    </div>
   </div>
+
   <div class="system-map__details" aria-live="polite" data-map-details>
     <h2>Map details</h2>
-    <p>Select a node to read its risk or decision marker.</p>
+    <p>Tap a node to read the risk or decision marker.</p>
   </div>
-  <details class="system-map__text">
-    <summary>Accessible map text</summary>
-    <ul>
+
+  <div class="system-map__static" aria-label="Static map fallback">
+    <ol>
       {
-        map.edges.map((edge) => (
-          <li>
-            {edge.from} to {edge.to}: {edge.label}
-          </li>
-        ))
+        map.nodes.map((node) => {
+          const risk = riskByNode.get(node.id);
+          const decision = decisionByNode.get(node.id);
+
+          return (
+            <li>
+              <strong>{node.label}</strong>
+              <span>{node.description}</span>
+              {risk && <em>Risk: {risk.label}</em>}
+              {decision && <em>Decision: {decision.label}</em>}
+            </li>
+          );
+        })
       }
-      {map.riskMarkers.map((marker) => <li>Risk: {marker.label}</li>)}
-      {map.decisionMarkers.map((marker) => <li>Decision: {marker.label}</li>)}
-    </ul>
-  </details>
+    </ol>
+  </div>
+
+  <script is:inline type="application/json" data-map-json set:html={mapJson} />
 </figure>
 
 <style>
   .system-map {
-    position: relative;
     display: grid;
     gap: var(--space-4);
-    scroll-margin-top: 96px;
     margin: 0;
     padding: var(--space-4);
     background: var(--color-surface);
     border: var(--border-1);
     border-radius: var(--radius-2);
-  }
-
-  figcaption,
-  .system-map__toolbar,
-  .system-map__states,
-  .system-map__details,
-  .system-map__text {
-    position: relative;
-    z-index: 1;
   }
 
   figcaption {
@@ -146,227 +107,142 @@ const decisionByNode = new Map(map.decisionMarkers.map((marker) => [marker.nodeI
 
   figcaption strong,
   .system-map__details h2 {
-    font-family: var(--font-display);
+    font-family: var(--font-body);
+    font-size: var(--t-h3);
+    font-weight: 800;
     line-height: 1.2;
   }
 
   figcaption span,
   .system-map__states p,
-  .system-map__details p,
-  .system-map__text {
+  .system-map__details p {
     margin: 0;
     color: var(--color-muted);
   }
 
   .system-map__toolbar {
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: var(--space-2);
   }
 
   .system-map__state {
-    min-height: 40px;
+    min-height: 44px;
     padding: var(--space-2) var(--space-3);
-    color: var(--color-text);
-    background: var(--color-surface);
-    border: var(--border-1);
-    border-radius: var(--radius-1);
-    cursor: pointer;
-    transition:
-      background-color var(--duration-1) var(--ease-standard),
-      border-color var(--duration-1) var(--ease-standard),
-      color var(--duration-1) var(--ease-standard);
-  }
-
-  .system-map__state:hover {
-    border-color: var(--color-accent);
-  }
-
-  .system-map__state.is-active {
-    color: var(--color-surface);
-    background: var(--color-text);
-    border-color: var(--color-text);
-  }
-
-  .system-map__stage {
-    position: relative;
-    min-height: 360px;
-    overflow: hidden;
-    border: var(--border-1);
-    border-radius: var(--radius-1);
-    background:
-      linear-gradient(var(--color-border) 1px, transparent 1px),
-      linear-gradient(90deg, var(--color-border) 1px, transparent 1px), var(--color-surface-2);
-    background-size: 56px 56px;
-  }
-
-  .system-map__fallback,
-  .system-map__noscript {
-    display: none;
-  }
-
-  .system-map__fallback polyline,
-  .system-map__fallback rect,
-  .system-map__noscript polyline,
-  .system-map__noscript rect {
-    stroke: var(--color-muted);
-    stroke-width: 1.5;
-  }
-
-  .system-map__fallback rect,
-  .system-map__noscript rect {
-    fill: var(--color-surface);
-  }
-
-  .system-map__fallback text,
-  .system-map__noscript text {
-    fill: var(--color-text);
-    font: 13px var(--font-body);
-  }
-
-  .system-map__nodes {
-    position: relative;
-    z-index: 1;
-    display: grid;
-    grid-auto-rows: minmax(92px, auto);
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: var(--space-3);
-    padding: var(--space-4);
-  }
-
-  .system-map__node {
-    display: grid;
-    gap: var(--space-2);
-    min-height: 92px;
-    padding: var(--space-4);
     color: var(--color-text);
     background: var(--color-surface-2);
     border: var(--border-1);
     border-radius: var(--radius-1);
-    text-align: left;
     cursor: pointer;
+    font-weight: 700;
     transition:
-      background-color var(--duration-1) var(--ease-standard),
-      border-color var(--duration-1) var(--ease-standard),
-      outline-color var(--duration-1) var(--ease-standard);
+      background-color var(--duration-fast) var(--ease-out-expo),
+      border-color var(--duration-fast) var(--ease-out-expo),
+      transform var(--duration-fast) var(--ease-spring);
   }
 
-  .system-map__node:nth-child(1) {
-    grid-column: 1;
-    grid-row: 1;
-  }
-
-  .system-map__node:nth-child(2) {
-    grid-column: 3;
-    grid-row: 1;
-  }
-
-  .system-map__node:nth-child(3) {
-    grid-column: 2;
-    grid-row: 2;
-  }
-
-  .system-map__node:nth-child(4) {
-    grid-column: 3;
-    grid-row: 3;
-  }
-
-  .system-map__node:nth-child(5) {
-    grid-column: 1;
-    grid-row: 4;
-  }
-
-  .system-map__node:nth-child(6) {
-    grid-column: 2;
-    grid-row: 4;
-  }
-
-  .system-map[data-state="messy"] .system-map__node {
-    outline: 1px dashed color-mix(in srgb, var(--color-danger) 42%, transparent);
-    outline-offset: -5px;
-  }
-
-  .system-map[data-state="explicit"] .system-map__node {
-    grid-column: auto;
-    grid-row: auto;
-    background: var(--color-surface);
-    outline-color: transparent;
-  }
-
-  .system-map[data-state="explicit"] .system-map__nodes {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-
-  .system-map[data-state="explicit"] .system-map__node:nth-child(1) {
-    grid-column: 1;
-    grid-row: 1;
-  }
-
-  .system-map[data-state="explicit"] .system-map__node:nth-child(2) {
-    grid-column: 2;
-    grid-row: 1;
-  }
-
-  .system-map[data-state="explicit"] .system-map__node:nth-child(3) {
-    grid-column: 2;
-    grid-row: 2;
-  }
-
-  .system-map[data-state="explicit"] .system-map__node:nth-child(4) {
-    grid-column: 2;
-    grid-row: 3;
-  }
-
-  .system-map[data-state="explicit"] .system-map__node:nth-child(5) {
-    grid-column: 3;
-    grid-row: 1;
-  }
-
-  .system-map[data-state="explicit"] .system-map__node:nth-child(6) {
-    grid-column: 3;
-    grid-row: 2;
-  }
-
-  .system-map__node.is-active,
-  .system-map__node:hover {
+  .system-map__state:hover,
+  .system-map__state.is-active {
+    background: var(--color-accent-dim);
     border-color: var(--color-accent);
   }
 
+  .system-map__stage {
+    position: relative;
+    min-height: 420px;
+    overflow: hidden;
+    border: var(--border-1);
+    border-radius: var(--radius-2);
+    background:
+      linear-gradient(var(--color-border) 1px, transparent 1px),
+      linear-gradient(90deg, var(--color-border) 1px, transparent 1px),
+      radial-gradient(circle at 50% 50%, var(--color-accent-glow), transparent 22rem),
+      var(--color-surface-2);
+    background-size:
+      56px 56px,
+      56px 56px,
+      auto,
+      auto;
+  }
+
+  .system-map__canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .system-map__nodes {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+  }
+
+  .system-map__node {
+    position: absolute;
+    display: grid;
+    gap: var(--space-1);
+    width: 148px;
+    min-height: 56px;
+    padding: var(--space-2) var(--space-3);
+    color: var(--color-text);
+    background: color-mix(in srgb, var(--color-surface) 88%, transparent);
+    border: var(--border-1);
+    border-radius: var(--radius-1);
+    cursor: pointer;
+    text-align: left;
+    transform: translate(-50%, -50%);
+    transition:
+      background-color var(--duration-fast) var(--ease-out-expo),
+      border-color var(--duration-fast) var(--ease-out-expo),
+      box-shadow var(--duration-base) var(--ease-spring);
+  }
+
   .system-map__node span {
+    font-size: var(--t-small);
     font-weight: 700;
+    line-height: 1.2;
   }
 
   .system-map__node em {
     color: var(--color-muted);
+    font-family: var(--font-code);
+    font-size: var(--t-mono);
     font-style: normal;
-    font-size: 0.9rem;
+    text-transform: uppercase;
+  }
+
+  .system-map__node:hover,
+  .system-map__node.is-active {
+    background: var(--color-surface);
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0 4px var(--color-accent-dim);
   }
 
   .system-map__node.has-risk::after,
   .system-map__node.has-decision::before {
-    display: inline-block;
     width: fit-content;
     padding: 0 var(--space-2);
-    border: var(--border-1);
     border-radius: var(--radius-1);
-    font-size: 0.82rem;
+    font-family: var(--font-code);
+    font-size: var(--t-mono);
     line-height: 1.7;
   }
 
   .system-map__node.has-risk::after {
     color: var(--color-danger);
-    background: color-mix(in srgb, var(--color-danger) 10%, var(--color-surface));
-    border-color: color-mix(in srgb, var(--color-danger) 55%, var(--color-border));
+    background: var(--color-danger-dim);
     content: "Risk";
   }
 
   .system-map__node.has-decision::before {
     color: var(--color-success);
-    background: color-mix(in srgb, var(--color-success) 10%, var(--color-surface));
-    border-color: color-mix(in srgb, var(--color-success) 55%, var(--color-border));
+    background: color-mix(in srgb, var(--color-success) 12%, transparent);
     content: "Decision";
   }
 
-  .system-map__details {
+  .system-map__details,
+  .system-map__drawer {
     display: grid;
     gap: var(--space-2);
     padding: var(--space-4);
@@ -374,88 +250,444 @@ const decisionByNode = new Map(map.decisionMarkers.map((marker) => [marker.nodeI
     border: var(--border-1);
     border-radius: var(--radius-1);
     transition:
-      border-color var(--duration-state) var(--ease-standard),
-      opacity var(--duration-state) var(--ease-standard);
+      opacity var(--duration-fast) var(--ease-gentle),
+      transform var(--duration-base) var(--ease-out-expo);
   }
 
-  .system-map__details.is-updating {
-    opacity: 0.72;
+  .system-map__details.is-updating,
+  .system-map__drawer.is-updating {
+    opacity: 0;
+    transform: translateY(8px);
   }
 
-  .system-map__details h2 {
+  .system-map__details h2,
+  .system-map__drawer h2,
+  .system-map__details p,
+  .system-map__drawer p {
     margin: 0;
-    font-size: 1.05rem;
   }
 
-  .system-map__text summary {
+  .system-map__drawer {
+    position: absolute;
+    right: var(--space-3);
+    bottom: var(--space-3);
+    left: var(--space-3);
+    z-index: 3;
+    background: color-mix(in srgb, var(--color-surface) 96%, transparent);
+  }
+
+  .system-map__drawer[hidden] {
+    display: none;
+  }
+
+  .system-map__drawer > button {
+    justify-self: end;
+    min-height: 32px;
+    color: var(--color-muted);
+    background: transparent;
+    border: 0;
     cursor: pointer;
-    color: var(--color-text);
+    font-size: var(--t-small);
     font-weight: 700;
   }
 
-  .system-map__text ul {
-    display: grid;
-    gap: var(--space-2);
-    padding-left: var(--space-5);
+  .system-map__static {
+    display: none;
   }
 
-  @media (max-width: 719px) {
-    .system-map[data-state="messy"] .system-map__nodes {
-      grid-template-columns: minmax(0, 1fr);
+  .system-map__static ol {
+    display: grid;
+    gap: var(--space-3);
+    padding: 0;
+    margin: 0;
+    list-style: none;
+  }
+
+  .system-map__static li {
+    display: grid;
+    gap: var(--space-1);
+    padding: var(--space-4);
+    background: var(--color-surface-2);
+    border: var(--border-1);
+    border-radius: var(--radius-1);
+  }
+
+  .system-map__static span,
+  .system-map__static em {
+    color: var(--color-muted);
+    font-style: normal;
+  }
+
+  @media (max-width: 720px) {
+    .system-map__stage {
+      min-height: 520px;
     }
 
-    .system-map[data-state="messy"] .system-map__node:nth-child(n),
-    .system-map[data-state="explicit"] .system-map__node:nth-child(n) {
-      grid-column: auto;
-      grid-row: auto;
+    .system-map__node {
+      width: 128px;
+      min-height: 64px;
     }
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .system-map__toolbar {
+    .system-map__stage,
+    .system-map__details {
       display: none;
     }
 
-    .system-map__states [hidden] {
+    .system-map__static {
       display: block;
     }
   }
-
-  @media (prefers-color-scheme: dark) {
-    .system-map__stage {
-      background:
-        linear-gradient(
-          color-mix(in srgb, var(--color-border) 72%, transparent) 1px,
-          transparent 1px
-        ),
-        linear-gradient(
-          90deg,
-          color-mix(in srgb, var(--color-border) 72%, transparent) 1px,
-          transparent 1px
-        ),
-        var(--color-surface);
-      background-size: 56px 56px;
-    }
-  }
-
-  :global(:root[data-theme="dark"]) .system-map__stage {
-    background:
-      linear-gradient(
-        color-mix(in srgb, var(--color-border) 72%, transparent) 1px,
-        transparent 1px
-      ),
-      linear-gradient(
-        90deg,
-        color-mix(in srgb, var(--color-border) 72%, transparent) 1px,
-        transparent 1px
-      ),
-      var(--color-surface);
-    background-size: 56px 56px;
-  }
-
-  noscript .system-map__noscript {
-    display: block;
-    width: 100%;
-    min-height: 210px;
-  }
 </style>
+
+<script>
+  import type { Mesh, Vector3 } from "three";
+
+  const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+  type MapData = {
+    title: string;
+    nodes: {
+      id: string;
+      label: string;
+      group: string;
+      description: string;
+    }[];
+    edges: {
+      from: string;
+      to: string;
+      label: string;
+    }[];
+    riskMarkers: { nodeId: string; label: string }[];
+    decisionMarkers: { nodeId: string; label: string }[];
+  };
+
+  type NodeRuntime = {
+    id: string;
+    mesh: Mesh;
+    ring: Mesh;
+    current: Vector3;
+    target: Vector3;
+    button: HTMLButtonElement;
+  };
+
+  const colors = {
+    accent: 0x7b9cff,
+    surface: 0x20222c,
+    text: 0xe8e6e0,
+    muted: 0x6b6d7a,
+    danger: 0xff6b6b,
+    success: 0x4ade80
+  };
+
+  const desktopLayouts = {
+    messy: [
+      [-3.4, 1.25, 0],
+      [1.4, 1.45, 0],
+      [-0.55, -0.2, 0],
+      [2.9, -0.75, 0],
+      [-2.65, -1.7, 0],
+      [0.75, -1.95, 0]
+    ],
+    explicit: [
+      [-3.2, 1.15, 0],
+      [-0.8, 1.15, 0],
+      [-0.8, 0, 0],
+      [-0.8, -1.15, 0],
+      [1.8, 1.15, 0],
+      [1.8, 0, 0]
+    ]
+  } as const;
+
+  const mobileLayouts = {
+    messy: [
+      [-1.15, 2.2, 0],
+      [1.05, 1.45, 0],
+      [-0.85, 0.45, 0],
+      [1.1, -0.35, 0],
+      [-0.9, -1.35, 0],
+      [0.95, -2.15, 0]
+    ],
+    explicit: [
+      [-1.05, 2.15, 0],
+      [-1.05, 1.1, 0],
+      [-1.05, 0.05, 0],
+      [-1.05, -1, 0],
+      [1.05, 1.1, 0],
+      [1.05, 0.05, 0]
+    ]
+  } as const;
+
+  const withStateFade = (panel: HTMLElement | null, update: () => void) => {
+    if (!panel || prefersReducedMotion.matches) {
+      update();
+      return;
+    }
+
+    panel.classList.add("is-updating");
+    window.setTimeout(() => {
+      update();
+      panel.classList.remove("is-updating");
+    }, 150);
+  };
+
+  const getLayout = (state: "messy" | "explicit", compact: boolean) =>
+    compact ? mobileLayouts[state] : desktopLayouts[state];
+
+  const getNodeColor = (nodeId: string, riskIds: Set<string>, decisionIds: Set<string>) => {
+    if (riskIds.has(nodeId)) return colors.danger;
+    if (decisionIds.has(nodeId)) return colors.success;
+    return colors.accent;
+  };
+
+  const initMap = async (map: HTMLElement) => {
+    if (
+      map.dataset.threeMapReady === "true" ||
+      map.dataset.threeMapLoading === "true" ||
+      prefersReducedMotion.matches
+    ) {
+      return;
+    }
+
+    map.dataset.threeMapLoading = "true";
+    const THREE = await import("three");
+    const json = map.querySelector<HTMLScriptElement>("[data-map-json]");
+    const canvas = map.querySelector<HTMLCanvasElement>("[data-map-canvas]");
+    const stage = map.querySelector<HTMLElement>("[data-map-stage]");
+    const details = map.querySelector<HTMLElement>("[data-map-details]");
+    const drawer = map.querySelector<HTMLElement>("[data-map-drawer]");
+    const drawerContent = map.querySelector<HTMLElement>("[data-map-drawer-content]");
+    const drawerClose = map.querySelector<HTMLButtonElement>("[data-map-drawer-close]");
+    const stateButtons = map.querySelectorAll<HTMLButtonElement>("[data-map-state]");
+    const stateCopy = map.querySelectorAll<HTMLElement>("[data-state-copy]");
+    const nodeButtons = [...map.querySelectorAll<HTMLButtonElement>("[data-node-id]")];
+
+    if (!json?.textContent || !canvas || !stage) {
+      return;
+    }
+
+    const data = JSON.parse(json.textContent) as MapData;
+    const riskIds = new Set(data.riskMarkers.map((marker) => marker.nodeId));
+    const decisionIds = new Set(data.decisionMarkers.map((marker) => marker.nodeId));
+    const scene = new THREE.Scene();
+    const camera = new THREE.OrthographicCamera(-4.4, 4.4, 2.8, -2.8, 0.1, 20);
+    camera.position.z = 10;
+
+    const renderer = new THREE.WebGLRenderer({
+      alpha: true,
+      antialias: true,
+      canvas,
+      preserveDrawingBuffer: true
+    });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.setClearColor(0x000000, 0);
+
+    const nodeGeometry = new THREE.CircleGeometry(0.18, 40);
+    const ringGeometry = new THREE.RingGeometry(0.22, 0.27, 40);
+    const lineMaterial = new THREE.LineBasicMaterial({
+      color: colors.accent,
+      transparent: true,
+      opacity: 0.42
+    });
+    const nodes: NodeRuntime[] = data.nodes.map((node, index) => {
+      const material = new THREE.MeshBasicMaterial({
+        color: getNodeColor(node.id, riskIds, decisionIds)
+      });
+      const ringMaterial = new THREE.MeshBasicMaterial({
+        color: colors.accent,
+        transparent: true,
+        opacity: 0.16,
+        side: THREE.DoubleSide
+      });
+      const mesh = new THREE.Mesh(nodeGeometry, material);
+      const ring = new THREE.Mesh(ringGeometry, ringMaterial);
+      const target = new THREE.Vector3(...desktopLayouts.messy[index]);
+      const current = target.clone();
+      mesh.position.copy(current);
+      ring.position.copy(current);
+      scene.add(ring, mesh);
+
+      return {
+        id: node.id,
+        mesh,
+        ring,
+        current,
+        target,
+        button: nodeButtons[index]
+      };
+    });
+
+    const lineByEdge = data.edges.map((edge) => {
+      const geometry = new THREE.BufferGeometry().setFromPoints([
+        new THREE.Vector3(),
+        new THREE.Vector3()
+      ]);
+      const line = new THREE.Line(geometry, lineMaterial);
+      scene.add(line);
+      return { edge, line };
+    });
+
+    let activeState: "messy" | "explicit" = "messy";
+    let compact = false;
+
+    const resize = () => {
+      const rect = stage.getBoundingClientRect();
+      compact = rect.width < 720;
+      renderer.setSize(rect.width, rect.height, false);
+      const aspect = rect.width / Math.max(rect.height, 1);
+      const vertical = compact ? 3 : 2.7;
+      camera.left = -vertical * aspect;
+      camera.right = vertical * aspect;
+      camera.top = vertical;
+      camera.bottom = -vertical;
+      camera.updateProjectionMatrix();
+
+      const layout = getLayout(activeState, compact);
+      for (const [index, node] of nodes.entries()) {
+        const [x, y, z] = layout[index];
+        node.target.set(x, y, z);
+        if (!node.button.style.left) {
+          node.current.copy(node.target);
+          node.mesh.position.copy(node.current);
+          node.ring.position.copy(node.current);
+        }
+      }
+    };
+
+    const projectButtons = () => {
+      const rect = stage.getBoundingClientRect();
+      for (const node of nodes) {
+        const projected = node.current.clone().project(camera);
+        node.button.style.left = `${((projected.x + 1) / 2) * rect.width}px`;
+        node.button.style.top = `${((-projected.y + 1) / 2) * rect.height}px`;
+      }
+    };
+
+    const updateLines = () => {
+      for (const item of lineByEdge) {
+        const from = nodes.find((node) => node.id === item.edge.from);
+        const to = nodes.find((node) => node.id === item.edge.to);
+        if (!from || !to) continue;
+        item.line.geometry.setFromPoints([from.current, to.current]);
+      }
+    };
+
+    const renderDetail = (button: HTMLButtonElement) => {
+      const risk = button.dataset.risk;
+      const decision = button.dataset.decision;
+      const markers = [risk && `Risk hotspot: ${risk}`, decision && `Decision overlay: ${decision}`]
+        .filter(Boolean)
+        .join(" ");
+      const html = `<h2>${button.dataset.nodeLabel}</h2><p>${button.dataset.nodeDescription} ${markers}</p>`;
+
+      withStateFade(details, () => {
+        if (details) details.innerHTML = html;
+      });
+
+      withStateFade(drawer, () => {
+        if (drawerContent) drawerContent.innerHTML = html;
+        if (drawer && compact) drawer.hidden = false;
+      });
+    };
+
+    const selectNode = (button: HTMLButtonElement) => {
+      const selectedId = button.dataset.nodeId ?? "";
+      for (const node of nodes) {
+        const active = node.id === selectedId;
+        node.button.classList.toggle("is-active", active);
+        node.ring.scale.setScalar(active ? 1.35 : 1);
+      }
+      renderDetail(button);
+    };
+
+    const setState = (state: "messy" | "explicit") => {
+      activeState = state;
+      map.dataset.state = state;
+      const layout = getLayout(state, compact);
+      for (const [index, node] of nodes.entries()) {
+        const [x, y, z] = layout[index];
+        node.target.set(x, y, z);
+      }
+      for (const button of stateButtons) {
+        const isActive = button.dataset.mapState === state;
+        button.classList.toggle("is-active", isActive);
+        button.setAttribute("aria-pressed", String(isActive));
+      }
+      for (const copy of stateCopy) {
+        copy.hidden = copy.dataset.stateCopy !== state;
+      }
+      if (drawer) drawer.hidden = true;
+    };
+
+    const animate = () => {
+      for (const node of nodes) {
+        node.current.lerp(node.target, 0.09);
+        node.mesh.position.copy(node.current);
+        node.ring.position.copy(node.current);
+      }
+      updateLines();
+      projectButtons();
+      renderer.render(scene, camera);
+      window.requestAnimationFrame(animate);
+    };
+
+    for (const button of stateButtons) {
+      button.addEventListener("click", () =>
+        setState(button.dataset.mapState === "explicit" ? "explicit" : "messy")
+      );
+    }
+
+    for (const button of nodeButtons) {
+      button.addEventListener("click", () => selectNode(button));
+      button.addEventListener("keydown", (event) => {
+        if (event.key !== "ArrowRight" && event.key !== "ArrowLeft") return;
+        event.preventDefault();
+        const current = nodeButtons.indexOf(button);
+        const offset = event.key === "ArrowRight" ? 1 : -1;
+        nodeButtons[(current + offset + nodeButtons.length) % nodeButtons.length]?.focus();
+      });
+    }
+
+    drawerClose?.addEventListener("click", () => {
+      if (drawer) drawer.hidden = true;
+      for (const node of nodes) node.button.classList.remove("is-active");
+    });
+
+    const observer = new ResizeObserver(resize);
+    observer.observe(stage);
+    resize();
+    setState("messy");
+    animate();
+    map.dataset.threeMapReady = "true";
+    map.dataset.threeMapLoading = "false";
+  };
+
+  const initSystemMaps = () => {
+    document.querySelectorAll<HTMLElement>("[data-system-map]").forEach((map) => {
+      if ("IntersectionObserver" in window) {
+        const observer = new IntersectionObserver(
+          (entries) => {
+            if (!entries.some((entry) => entry.isIntersecting)) return;
+            observer.disconnect();
+            void initMap(map);
+          },
+          { rootMargin: "120px" }
+        );
+        observer.observe(map);
+        return;
+      }
+
+      const schedule =
+        "requestIdleCallback" in window
+          ? (callback: () => void) => window.requestIdleCallback(callback, { timeout: 1200 })
+          : (callback: () => void) => window.setTimeout(callback, 900);
+      schedule(() => void initMap(map));
+    });
+  };
+
+  document.addEventListener("DOMContentLoaded", initSystemMaps);
+  document.addEventListener("astro:page-load", initSystemMaps);
+  document.addEventListener("astro:after-swap", () => window.requestAnimationFrame(initSystemMaps));
+  initSystemMaps();
+</script>

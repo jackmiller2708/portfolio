@@ -6,6 +6,7 @@ const distDir = path.join(root, "dist");
 const astroAssetDir = path.join(distDir, "_astro");
 const ogDir = path.join(root, "public", "og");
 const maxClientBytesPerRoute = 45 * 1024;
+const maxSignatureMapBytes = 800 * 1024;
 const maxOgBytesTotal = 150 * 1024;
 const maxSingleAssetBytes = 100 * 1024;
 
@@ -43,16 +44,24 @@ if (!(await exists(distDir))) {
 const clientFiles = ((await exists(astroAssetDir)) ? await listFiles(astroAssetDir) : []).filter(
   (file) => file.endsWith(".js")
 );
-const clientSizes = await Promise.all(clientFiles.map(fileSize));
+const signatureMapFiles = clientFiles.filter((file) => path.basename(file).startsWith("three."));
+const baseClientFiles = clientFiles.filter((file) => !signatureMapFiles.includes(file));
+const clientSizes = await Promise.all(baseClientFiles.map(fileSize));
 const clientTotal = clientSizes.reduce((total, size) => total + size, 0);
+const signatureMapSizes = await Promise.all(signatureMapFiles.map(fileSize));
+const signatureMapTotal = signatureMapSizes.reduce((total, size) => total + size, 0);
 
 if (clientTotal > maxClientBytesPerRoute) {
   issues.push(`all routes: client JS ${clientTotal} > ${maxClientBytesPerRoute}`);
 }
 
+if (signatureMapTotal > maxSignatureMapBytes) {
+  issues.push(`signature map JS ${signatureMapTotal} > ${maxSignatureMapBytes}`);
+}
+
 for (const [index, size] of clientSizes.entries()) {
   if (size > maxSingleAssetBytes) {
-    issues.push(`${clientFiles[index]}: asset ${size} > ${maxSingleAssetBytes}`);
+    issues.push(`${baseClientFiles[index]}: asset ${size} > ${maxSingleAssetBytes}`);
   }
 }
 
@@ -80,6 +89,9 @@ if (issues.length > 0) {
   process.exitCode = 1;
 } else {
   console.log(`Asset budget passed.`);
-  console.log(`Client JS: ${clientTotal} bytes across ${clientFiles.length} file(s).`);
+  console.log(`Base client JS: ${clientTotal} bytes across ${baseClientFiles.length} file(s).`);
+  console.log(
+    `Signature map JS: ${signatureMapTotal} bytes across ${signatureMapFiles.length} lazy file(s).`
+  );
   console.log(`OG assets: ${ogTotal} bytes across ${ogFiles.length} file(s).`);
 }

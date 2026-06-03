@@ -16,7 +16,7 @@ const diagnosticSeeds: readonly DiagnosticOptionSeed[] = [
     serviceId: "angular-system-audit",
     auditFindingId: "implicit-state",
     systemMapState: "messy",
-    ctaLabel: "Explore this"
+    ctaLabel: "Start with state"
   },
   {
     id: "cache-data",
@@ -134,16 +134,16 @@ export const loadHomePageFromRepository = (
 
     return {
       hero: {
-        eyebrow: "Angular Frontend Systems Engineer",
-        title: "I make complex frontend systems explicit, safer, and easier to evolve.",
+        eyebrow: "",
+        title: "Complex systems,\nmade explicit.",
         summary:
-          "Architecture audits, refactors, and stabilization work for Angular teams dealing with unclear state, data flow, ownership, and errors."
+          "Architecture audits, refactors, and stabilization for Angular teams dealing with state that drifted, boundaries that blurred, and code that became expensive to change."
       },
       credibilityPoints: site.credibilityPoints,
       services: services.slice(0, 3),
       auditPreview: {
         summary:
-          "A sample of the report style: observable evidence, system risk, and a sequenced recommendation.",
+          "A sample of the review shape: observable evidence, system risk, and a sequenced recommendation.",
         findings: auditFindings.slice(0, 2)
       },
       diagnostics: buildDiagnostics(services, auditFindings),
@@ -154,12 +154,12 @@ export const loadHomePageFromRepository = (
         { label: "Lab notes", href: "/lab" }
       ],
       referenceCards: buildReferenceCards(caseStudies),
-      labPreview: labPosts.slice(0, 3),
+      labPreview: labPosts.slice(0, 2),
       heroMap: systemMap,
       cta: {
         title: "Start with a scoped diagnostic.",
         summary:
-          "Share the current system shape and the risk you want made explicit. The first response can focus on fit, scope, and next steps.",
+          "Share the current system shape and the risk you want made explicit. The first response can stay focused on fit, scope, and next steps.",
         href: "/contact",
         label: "Start a diagnostic"
       }

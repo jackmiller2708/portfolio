@@ -15,9 +15,10 @@ export const loadCaseStudyPageFromRepository = (repository: ContentRepository, s
       recommendedReads: buildCaseStudyRecommendedReads(caseStudy.slug, caseStudies, labPosts),
       cta: {
         title: "Start a similar diagnostic.",
-        summary: `Share the current product context, especially constraints like ${caseStudy.constraints[0] ?? "delivery pressure"}, so the first diagnostic can stay scoped.`,
+        summary:
+          "Share the current product context and the part of the system that has become expensive to change. The first diagnostic can stay narrow.",
         href: `/contact?context=case-study&case=${caseStudy.slug}`,
-        label: "Start contact"
+        label: "Start a diagnostic"
       }
     };
   });

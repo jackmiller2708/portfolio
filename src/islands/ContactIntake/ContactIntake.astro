@@ -85,52 +85,11 @@ const fields = [
     )
   }
 
-  <div class="contact-intake__status-grid" aria-label="Contact form states">
-    <p class={`contact-intake__status contact-intake__status--${viewModel.states.initial.kind}`}>
-      <strong>Initial</strong>
-      {viewModel.states.initial.message}
-    </p>
-    <p
-      class={`contact-intake__status contact-intake__status--${viewModel.states.submitting.kind}`}
-      aria-live="polite"
-    >
-      <strong>Submitting</strong>
-      {viewModel.states.submitting.message}
-    </p>
-    <p
-      class={`contact-intake__status contact-intake__status--${viewModel.states.success.kind}`}
-      role="status"
-    >
-      <strong>Success</strong>
-      {viewModel.states.success.message}
-    </p>
-    <div
-      class={`contact-intake__status contact-intake__status--${viewModel.states.validation.kind}`}
-      role="alert"
-    >
-      <strong>Validation</strong>
-      <p>{viewModel.states.validation.message}</p>
-      <ul>
-        {viewModel.states.validation.summary.map((item) => <li>{item}</li>)}
-      </ul>
-    </div>
-    <p
-      class={`contact-intake__status contact-intake__status--${viewModel.states.blocked.kind}`}
-      role="alert"
-    >
-      <strong>Spam/unavailable</strong>
-      {viewModel.states.blocked.message}
-    </p>
-    <p
-      class={`contact-intake__status contact-intake__status--${viewModel.states.delivery.kind}`}
-      role="alert"
-    >
-      <strong>Delivery failure</strong>
-      {viewModel.states.delivery.message}
-    </p>
-  </div>
-
   <form class="contact-form" method="post" aria-describedby="contact-fallback" data-astro-reload>
+    <p class="contact-form__framing">
+      This isn't a contact form. It's a short diagnostic so the first conversation can start
+      somewhere useful.
+    </p>
     <p class="contact-form__availability">{viewModel.availability}</p>
     {
       fields.map((field) => (
@@ -194,7 +153,8 @@ const fields = [
 
   .advisory-flow h2,
   .advisory-flow h3 {
-    font-family: var(--font-display);
+    font-family: var(--font-body);
+    font-weight: 800;
     line-height: 1.15;
   }
 
@@ -229,6 +189,7 @@ const fields = [
 
   .advisory-flow__option:hover,
   .advisory-flow__option.is-active {
+    background: var(--color-accent-dim);
     border-color: var(--color-accent);
   }
 
@@ -264,50 +225,25 @@ const fields = [
     color: var(--color-text);
   }
 
-  .contact-intake__status-grid {
-    display: grid;
-    gap: var(--space-3);
-  }
-
-  .contact-intake__status {
-    display: grid;
-    gap: var(--space-1);
-    padding: var(--space-4);
-    margin: 0;
-    color: var(--color-muted);
-    background: var(--color-surface);
-    border: var(--border-1);
-    border-radius: var(--radius-1);
-  }
-
-  .contact-intake__status strong {
-    color: var(--color-text);
-  }
-
-  .contact-intake__status--success {
-    border-color: color-mix(in srgb, var(--color-success) 50%, var(--color-border));
-  }
-
-  .contact-intake__status--validation,
-  .contact-intake__status--blocked,
-  .contact-intake__status--delivery {
-    border-color: color-mix(in srgb, var(--color-danger) 50%, var(--color-border));
-  }
-
-  .contact-intake__status p,
-  .contact-intake__status ul {
-    margin: 0;
-  }
-
   .contact-form {
     display: grid;
     gap: var(--space-5);
+    padding: var(--space-6);
+    background: var(--color-surface);
+    border: var(--border-1);
+    border-radius: var(--radius-2);
   }
 
+  .contact-form__framing,
   .contact-form__availability,
   .contact-form__fallback {
     margin: 0;
     color: var(--color-muted);
+  }
+
+  .contact-form__framing {
+    color: var(--color-text);
+    font-weight: 700;
   }
 
   label {
@@ -368,10 +304,6 @@ const fields = [
     .advisory-flow__layout {
       grid-template-columns: minmax(0, 1fr) minmax(280px, 0.85fr);
       align-items: start;
-    }
-
-    .contact-intake__status-grid {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
     }
   }
 </style>

@@ -118,7 +118,10 @@ const seo = buildPageSeo(site, {
     width: fit-content;
     margin: 0;
     color: var(--color-accent);
+    font-family: var(--font-code);
+    font-size: var(--t-mono);
     font-weight: 700;
+    text-transform: uppercase;
   }
 
   .lab-detail__meta h2,
@@ -139,8 +142,9 @@ const seo = buildPageSeo(site, {
   .related-services h2,
   .recommended-reads h2 {
     margin: var(--space-8) 0 var(--space-3);
-    font-family: var(--font-display);
+    font-family: var(--font-body);
     font-size: 2rem;
+    font-weight: 800;
     line-height: 1.15;
   }
 
@@ -179,12 +183,15 @@ const seo = buildPageSeo(site, {
 
   .related-card:hover,
   .recommended-card:hover {
-    border-color: var(--color-accent);
+    border-color: var(--color-border-accent);
   }
 
   .recommended-card span {
     color: var(--color-accent);
+    font-family: var(--font-code);
+    font-size: var(--t-mono);
     font-weight: 700;
+    text-transform: uppercase;
   }
 
   @media (min-width: 980px) {

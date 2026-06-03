@@ -57,7 +57,7 @@ const seo = buildPageSeo(site, {
   }
 
   .case-card:hover {
-    border-color: var(--color-accent);
+    border-color: var(--color-border-accent);
   }
 
   .case-card__label {
@@ -67,6 +67,8 @@ const seo = buildPageSeo(site, {
     color: var(--color-accent);
     border: 1px solid color-mix(in srgb, var(--color-accent) 40%, transparent);
     border-radius: var(--radius-1);
+    font-family: var(--font-code);
+    font-size: var(--t-mono);
     font-weight: 700;
     text-transform: capitalize;
   }

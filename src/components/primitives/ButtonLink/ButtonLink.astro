@@ -44,12 +44,15 @@ const Icon = icons[icon];
     border: var(--border-1);
     border-radius: var(--radius-2);
     cursor: pointer;
+    font-size: var(--t-small);
     font-weight: 700;
     text-decoration: none;
     transition:
       border-color var(--duration-1) var(--ease-standard),
       background-color var(--duration-1) var(--ease-standard),
-      color var(--duration-1) var(--ease-standard);
+      color var(--duration-1) var(--ease-standard),
+      box-shadow var(--duration-1) var(--ease-spring),
+      transform var(--duration-1) var(--ease-spring);
   }
 
   .button-link__icon {
@@ -57,7 +60,13 @@ const Icon = icons[icon];
   }
 
   .button-link:hover {
-    border-color: var(--color-text);
+    border-color: var(--color-border-accent);
+    box-shadow: 0 8px 24px color-mix(in srgb, var(--color-accent) 12%, transparent);
+    transform: translateY(-2px);
+  }
+
+  .button-link:active {
+    transform: translateY(0) scale(0.98);
   }
 
   .button-link--primary {
@@ -69,5 +78,12 @@ const Icon = icons[icon];
   .button-link--secondary {
     color: var(--color-text);
     background: var(--color-surface);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .button-link:hover,
+    .button-link:active {
+      transform: none;
+    }
   }
 </style>

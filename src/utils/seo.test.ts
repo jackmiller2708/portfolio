@@ -13,6 +13,7 @@ const site: SiteMeta = {
   nonFitCriteria: [],
   about: {
     context: "Context",
+    philosophy: "Boundaries matter.",
     workingStyle: [],
     qualityPhilosophy: [],
     communication: "Async"

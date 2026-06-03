@@ -16,7 +16,7 @@ export const loadSampleAuditPageFromRepository = (repository: ContentRepository)
     return {
       title: "Sample Audit",
       summary:
-        "A privacy-safe example of how an Angular frontend systems audit reports evidence, risk, and next steps.",
+        "A privacy-safe example of how an Angular frontend systems review connects symptoms, risk, and next steps.",
       findings,
       severityGroups: groupFindingsBySeverity(findings),
       riskMatrix: buildRiskMatrix(findings),
@@ -27,7 +27,7 @@ export const loadSampleAuditPageFromRepository = (repository: ContentRepository)
         summary:
           "Use the contact form to describe the product, current risk, and constraints for a scoped diagnostic.",
         href: "/contact?context=sample-audit",
-        label: "Request similar diagnostic"
+        label: "Start a similar diagnostic"
       }
     };
   });

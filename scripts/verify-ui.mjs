@@ -79,30 +79,6 @@ const inspectPage = async (page, route, viewport) =>
         })
         .filter((item) => item.radius > 8);
 
-      const transformedControls = [...document.querySelectorAll("a, button")]
-        .filter(isVisible)
-        .map((element) => ({
-          text: element.textContent?.trim() ?? "",
-          transform: getComputedStyle(element).transform
-        }))
-        .filter((item) => item.transform !== "none");
-
-      const decorativeEffects = inspectedElements
-        .map((element) => {
-          const style = getComputedStyle(element);
-
-          return {
-            text: element.textContent?.trim().slice(0, 80) ?? "",
-            backgroundImage: style.backgroundImage,
-            boxShadow: style.boxShadow
-          };
-        })
-        .filter(
-          (item) =>
-            item.backgroundImage.includes("gradient") ||
-            (item.boxShadow !== "none" && item.boxShadow !== "")
-        );
-
       const containers = [...document.querySelectorAll(".u-container")]
         .filter(isVisible)
         .map((element) => {
@@ -118,9 +94,16 @@ const inspectPage = async (page, route, viewport) =>
       const contactStates = [...document.querySelectorAll(".contact-intake__status")]
         .filter(isVisible)
         .map((element) => element.textContent?.trim().replace(/\s+/g, " ") ?? "");
+      const contactForm = document.querySelector(".contact-form");
+      const contactLabels = contactForm
+        ? [...contactForm.querySelectorAll("label")].filter(isVisible).length
+        : 0;
+      const contactFraming = document.querySelector(".contact-form__framing");
 
       const systemMap = document.querySelector("[data-system-map]");
       const systemMapRect = systemMap?.getBoundingClientRect();
+      const systemMapCanvas = systemMap?.querySelector("canvas[data-map-canvas]");
+      const systemMapCanvasRect = systemMapCanvas?.getBoundingClientRect();
 
       const h1 = document.querySelector("h1");
       const main = document.querySelector("main");
@@ -151,13 +134,16 @@ const inspectPage = async (page, route, viewport) =>
         containers,
         overflowElements,
         roundedElements,
-        transformedControls,
-        decorativeEffects,
         contactStates,
+        contactLabels,
+        contactFraming: contactFraming?.textContent?.trim() ?? "",
+        containsProof: /\bproof\b/i.test(document.body.textContent ?? ""),
         systemMap: systemMapRect
           ? {
               width: Math.round(systemMapRect.width),
               height: Math.round(systemMapRect.height),
+              canvasWidth: systemMapCanvasRect ? Math.round(systemMapCanvasRect.width) : 0,
+              canvasHeight: systemMapCanvasRect ? Math.round(systemMapCanvasRect.height) : 0,
               nodes: document.querySelectorAll("[data-system-map] [data-node-id]").length,
               states: document.querySelectorAll("[data-system-map] [data-map-state]").length
             }
@@ -212,18 +198,22 @@ for (const result of results) {
     issues.push(`${label}: rounded elements over 8px`);
   }
 
-  if (result.transformedControls.length > 0) {
-    issues.push(`${label}: transformed links/buttons`);
+  if (result.containsProof) {
+    issues.push(`${label}: public proof framing detected`);
   }
 
-  if (result.decorativeEffects.length > 0) {
-    issues.push(`${label}: gradient/shadow effects detected`);
-  }
+  if (result.route === "/contact") {
+    if (result.contactStates.length !== 0) {
+      issues.push(`${label}: obsolete visible contact states found`);
+    }
 
-  if (result.route === "/contact" && result.contactStates.length !== 6) {
-    issues.push(
-      `${label}: expected 6 visible contact states, found ${result.contactStates.length}`
-    );
+    if (!result.contactFraming) {
+      issues.push(`${label}: missing contact framing sentence`);
+    }
+
+    if (result.contactLabels < 10) {
+      issues.push(`${label}: expected persistent contact labels, found ${result.contactLabels}`);
+    }
   }
 
   if (result.route === "/" && result.systemMap) {
@@ -233,6 +223,10 @@ for (const result of results) {
 
     if (result.systemMap.height < 360) {
       issues.push(`${label}: system map height is too small`);
+    }
+
+    if (result.systemMap.canvasWidth < 280 || result.systemMap.canvasHeight < 300) {
+      issues.push(`${label}: Three.js map canvas is too small`);
     }
   }
 }

@@ -13,6 +13,7 @@ export type SiteMeta = {
   readonly nonFitCriteria: readonly string[];
   readonly about: {
     readonly context: string;
+    readonly philosophy: string;
     readonly workingStyle: readonly string[];
     readonly qualityPhilosophy: readonly string[];
     readonly communication: string;

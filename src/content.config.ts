@@ -140,6 +140,7 @@ const siteMeta = defineCollection({
     nonFitCriteria: z.array(z.string()),
     about: z.object({
       context: z.string(),
+      philosophy: z.string(),
       workingStyle: z.array(z.string()),
       qualityPhilosophy: z.array(z.string()),
       communication: z.string()

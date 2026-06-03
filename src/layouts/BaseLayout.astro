@@ -1,6 +1,5 @@
 ---
 import "@styles/global.css";
-import { ClientRouter } from "astro:transitions";
 import { Moon, Sun } from "lucide-astro";
 import type { PageSeo } from "@domain/site";
 
@@ -38,7 +37,21 @@ const navItems = [
     {seo && <meta property="og:url" content={seo.ogUrl} />}
     {seo && <meta property="og:type" content="website" />}
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <ClientRouter fallback="swap" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <script is:inline>
+      const fontStylesheet = document.createElement("link");
+      fontStylesheet.rel = "stylesheet";
+      fontStylesheet.href =
+        "https://fonts.googleapis.com/css2?family=Epilogue:wght@300;400;700;800&family=Fraunces:opsz,wght,SOFT,WONK@9..144,300,0,0..1&family=IBM+Plex+Mono:wght@400;500&display=swap";
+      document.head.append(fontStylesheet);
+    </script>
+    <noscript>
+      <link
+        href="https://fonts.googleapis.com/css2?family=Epilogue:wght@300;400;700;800&family=Fraunces:opsz,wght,SOFT,WONK@9..144,300,0,0..1&family=IBM+Plex+Mono:wght@400;500&display=swap"
+        rel="stylesheet"
+      />
+    </noscript>
     <script is:inline>
       const storedTheme = localStorage.getItem("theme");
       if (storedTheme === "light" || storedTheme === "dark") {
@@ -102,9 +115,12 @@ const navItems = [
     position: sticky;
     top: 0;
     z-index: var(--z-header);
-    background: color-mix(in srgb, var(--color-bg) 92%, transparent);
+    background: color-mix(in srgb, var(--color-bg) 88%, transparent);
     border-bottom: var(--border-1);
     backdrop-filter: blur(14px);
+    transition:
+      background-color 400ms var(--ease-gentle),
+      border-color 400ms var(--ease-gentle);
   }
 
   .site-header__inner {
@@ -118,7 +134,9 @@ const navItems = [
   .site-header__brand {
     color: var(--color-text);
     font-family: var(--font-display);
-    font-weight: 700;
+    font-size: 1.15rem;
+    font-weight: 300;
+    line-height: 1;
     text-decoration: none;
   }
 
@@ -128,7 +146,8 @@ const navItems = [
     transition:
       background-color var(--duration-1) var(--ease-standard),
       color var(--duration-1) var(--ease-standard),
-      border-color var(--duration-1) var(--ease-standard);
+      border-color var(--duration-1) var(--ease-standard),
+      transform var(--duration-1) var(--ease-spring);
   }
 
   .site-header__nav {
@@ -139,20 +158,34 @@ const navItems = [
   }
 
   .site-header__nav a {
+    position: relative;
     padding-block: var(--space-2);
     color: var(--color-muted);
-    border-bottom: 2px solid transparent;
     font-size: 0.94rem;
+    font-weight: 400;
     text-decoration: none;
+  }
+
+  .site-header__nav a::after {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    height: 2px;
+    background: var(--color-accent);
+    content: "";
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 200ms var(--ease-spring);
   }
 
   .site-header__nav a:hover,
   .site-header__nav a.is-active {
-    color: var(--color-text);
+    color: var(--color-accent);
   }
 
-  .site-header__nav a.is-active {
-    border-color: var(--color-accent);
+  .site-header__nav a.is-active::after {
+    transform: scaleX(1);
   }
 
   .site-header__theme {
@@ -166,18 +199,20 @@ const navItems = [
     border: var(--border-1);
     border-radius: var(--radius-1);
     cursor: pointer;
-    font-size: 0.9rem;
+    font-size: var(--t-small);
     font-weight: 700;
   }
 
   .site-header__theme:hover {
-    border-color: var(--color-accent);
+    border-color: var(--color-border-accent);
   }
 
   .site-header__theme-icon {
     flex: 0 0 auto;
     opacity: 0;
-    transition: opacity var(--duration-state) var(--ease-standard);
+    transition:
+      opacity var(--duration-state) var(--ease-standard),
+      transform 300ms var(--ease-in-out-quart);
   }
 
   .site-header__theme-icon--moon {
@@ -195,6 +230,11 @@ const navItems = [
 
   .site-header__theme[data-theme-state="dark"] .site-header__theme-icon--moon {
     display: block;
+  }
+
+  .site-header__theme[data-theme-state="dark"] .site-header__theme-icon--moon,
+  .site-header__theme[data-theme-state="light"] .site-header__theme-icon--sun {
+    transform: rotate(180deg);
   }
 
   @media (max-width: 760px) {

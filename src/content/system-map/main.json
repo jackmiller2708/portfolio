@@ -1,6 +1,6 @@
 {
   "title": "Frontend system boundary map",
-  "summary": "A basic V1.5 map showing how messy frontend ownership becomes explicit through feature, data, error, and testing boundaries.",
+  "summary": "A map of how messy frontend ownership becomes explicit through feature, data, error, and testing boundaries.",
   "fallbackLabel": "Static frontend system map with UI shell, feature boundary, data access, error model, tests, and delivery roadmap nodes.",
   "groups": [
     {

@@ -8,10 +8,10 @@ export const loadAboutPageFromRepository = (repository: ContentRepository) =>
 
     return {
       title: "About",
-      summary:
-        "Professional context, working style, and quality philosophy for frontend systems work.",
+      summary: "A practical view of frontend architecture under real delivery constraints.",
       about: site.about,
       contactEmail: site.contactEmail,
+      nonFitCriteria: site.nonFitCriteria,
       cta: {
         href: "/contact?context=about",
         label: "Start a diagnostic"

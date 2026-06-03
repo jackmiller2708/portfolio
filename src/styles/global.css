@@ -8,13 +8,19 @@ html {
   background: var(--color-bg);
   color: var(--color-text);
   font-family: var(--font-body);
+  font-size: var(--t-body);
   line-height: 1.6;
   scroll-behavior: smooth;
+  transition:
+    background-color 400ms var(--ease-gentle),
+    color 400ms var(--ease-gentle);
 }
 
 body {
   margin: 0;
   min-width: 320px;
+  background:
+    radial-gradient(circle at 50% 0%, var(--color-accent-glow), transparent 34rem), var(--color-bg);
 }
 
 body,
@@ -36,7 +42,7 @@ svg {
 }
 
 :focus-visible {
-  outline: 3px solid var(--color-accent);
+  outline: 2px solid var(--color-accent);
   outline-offset: 3px;
 }
 
@@ -93,6 +99,20 @@ svg {
   gap: var(--space-6);
 }
 
+.u-section {
+  padding: var(--space-12) 0;
+  scroll-margin-top: 96px;
+}
+
+.u-section--surface {
+  background: var(--color-surface-2);
+  border-block: var(--border-1);
+}
+
+.u-reveal {
+  opacity: 1;
+}
+
 .u-visually-hidden {
   position: absolute;
   width: 1px;
@@ -122,6 +142,10 @@ svg {
 @media (min-width: 720px) {
   .u-container {
     width: min(100% - 48px, 1200px);
+  }
+
+  .u-section {
+    padding: var(--space-16) 0;
   }
 }
 

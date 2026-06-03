@@ -16,11 +16,25 @@ type Props = {
 };
 
 const { title, summary, primaryCta, secondaryCta } = Astro.props;
+const [firstLine, ...restTitle] = title.split("\n");
+const secondLine = restTitle.join(" ");
+const isDisplayHero = Boolean(secondLine);
 ---
 
-<section class="page-hero">
+<section class:list={["page-hero", isDisplayHero && "page-hero--display"]}>
   <div class="page-hero__inner u-container">
-    <h1>{title}</h1>
+    <h1>
+      {
+        secondLine ? (
+          <>
+            <span>{firstLine}</span>
+            <em>{secondLine}</em>
+          </>
+        ) : (
+          title
+        )
+      }
+    </h1>
     <p class="page-hero__summary">{summary}</p>
     {
       (primaryCta || secondaryCta) && (
@@ -49,15 +63,33 @@ const { title, summary, primaryCta, secondaryCta } = Astro.props;
     max-width: 900px;
     margin: 0;
     font-family: var(--font-display);
-    font-size: 2.4rem;
+    font-size: var(--t-hero);
+    font-weight: 300;
     line-height: 1.05;
+  }
+
+  .page-hero:not(.page-hero--display) h1 {
+    font-family: var(--font-body);
+    font-size: var(--t-h2);
+    font-weight: 800;
+    line-height: 1.12;
+  }
+
+  h1 span,
+  h1 em {
+    display: block;
+  }
+
+  h1 em {
+    font-style: italic;
   }
 
   .page-hero__summary {
     max-width: 72ch;
     margin: 0;
     color: var(--color-muted);
-    font-size: 1.15rem;
+    font-size: 1.05rem;
+    line-height: 1.65;
   }
 
   .page-hero__actions {
@@ -69,10 +101,6 @@ const { title, summary, primaryCta, secondaryCta } = Astro.props;
   @media (min-width: 720px) {
     .page-hero {
       padding: var(--space-16) 0 var(--space-12);
-    }
-
-    h1 {
-      font-size: 4.25rem;
     }
   }
 </style>

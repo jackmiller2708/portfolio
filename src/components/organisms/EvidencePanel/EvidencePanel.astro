@@ -58,11 +58,14 @@ const { eyebrow, title, summary, evidence, risk, recommendation, cta } = Astro.p
     background: var(--color-surface);
     border: var(--border-1);
     border-radius: var(--radius-2);
-    transition: border-color var(--duration-state) var(--ease-standard);
+    transition:
+      border-color var(--duration-fast) var(--ease-spring),
+      transform var(--duration-fast) var(--ease-spring);
   }
 
   .evidence-panel:hover {
-    border-color: var(--color-accent);
+    border-color: var(--color-border-accent);
+    transform: translateY(-2px);
   }
 
   .evidence-panel__header {
@@ -78,14 +81,18 @@ const { eyebrow, title, summary, evidence, risk, recommendation, cta } = Astro.p
   }
 
   .evidence-panel__context {
-    color: var(--color-muted);
-    font-size: 0.95rem;
+    color: var(--color-accent);
+    font-family: var(--font-code);
+    font-size: var(--t-mono);
+    font-weight: 500;
+    text-transform: uppercase;
   }
 
   h3 {
     margin: 0;
-    font-family: var(--font-display);
-    font-size: 1.45rem;
+    font-family: var(--font-body);
+    font-size: var(--t-h3);
+    font-weight: 700;
     line-height: 1.15;
   }
 
@@ -100,11 +107,20 @@ const { eyebrow, title, summary, evidence, risk, recommendation, cta } = Astro.p
   }
 
   dt {
-    color: var(--color-text);
-    font-weight: 700;
+    color: var(--color-accent);
+    font-family: var(--font-code);
+    font-size: var(--t-mono);
+    font-weight: 500;
+    text-transform: uppercase;
   }
 
   dd {
     margin-top: var(--space-1);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .evidence-panel:hover {
+      transform: none;
+    }
   }
 </style>

@@ -38,8 +38,7 @@ export const loadContactPageFromRepository = (repository: ContentRepository) =>
 
     return {
       title: "Start with a scoped engineering diagnostic.",
-      summary:
-        "Share the product context, Angular version, team shape, current pain, timeline, and budget comfort so the first response can be useful.",
+      summary: "This is a short diagnostic so the first conversation can start somewhere useful.",
       availability: site.availability,
       contactEmail: site.contactEmail,
       nonFitCriteria: site.nonFitCriteria,

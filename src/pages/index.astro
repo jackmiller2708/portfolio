@@ -5,7 +5,6 @@ import EvidencePanel from "@components/organisms/EvidencePanel/EvidencePanel.ast
 import PageHero from "@components/sections/PageHero/PageHero.astro";
 import CredibilityStrip from "@components/sections/CredibilityStrip/CredibilityStrip.astro";
 import SectionHeader from "@components/molecules/SectionHeader/SectionHeader.astro";
-import ServiceCard from "@components/organisms/ServiceCard/ServiceCard.astro";
 import HeroSystemMap from "@islands/HeroSystemMap/HeroSystemMap.astro";
 import { loadHomePageFromRepository } from "@programs/load-home-page";
 import { astroContentRepository } from "@services/AstroContentRepository";
@@ -25,28 +24,26 @@ const initialDiagnostic = viewModel.diagnostics[0];
 <BaseLayout seo={seo}>
   <section class="home-hero">
     <div class="home-hero__inner u-container">
-      <div class="home-hero__copy">
-        <PageHero
-          eyebrow={viewModel.hero.eyebrow}
-          title={viewModel.hero.title}
-          summary={viewModel.hero.summary}
-          primaryCta={{ label: "Start a diagnostic", href: "#diagnostic" }}
-          secondaryCta={{ label: "View services", href: "/services" }}
-        />
-      </div>
+      <PageHero
+        title={viewModel.hero.title}
+        summary={viewModel.hero.summary}
+        primaryCta={{ label: "Start a diagnostic", href: "#diagnostic" }}
+        secondaryCta={{ label: "See past work", href: "#past-work" }}
+      />
+      <p class="home-hero__support">
+        I don't just identify what's wrong. I show you exactly where, why it got there, and what a
+        better path looks like.
+      </p>
     </div>
   </section>
-  <CredibilityStrip points={viewModel.credibilityPoints} />
 
-  <nav class="exploration-strip u-container" aria-label="Reference sections">
-    {viewModel.explorationStrip.map((item) => <a href={item.href}>{item.label}</a>)}
-  </nav>
+  <CredibilityStrip points={viewModel.credibilityPoints} />
 
   <section class="home-section home-section--diagnostic" id="diagnostic">
     <div class="u-container u-stack">
       <SectionHeader
-        title="Start with a scoped diagnostic"
-        summary="Pick the frontend-system pain that is closest to the current risk. The recommendation updates to a service, a reference finding, and the map state to explore next."
+        title="Start where the system is already resisting change"
+        summary="Pick the pain that sounds closest to the current risk. The path updates to a service, a reference finding, and the map state to explore next."
       />
       <div class="diagnostic" data-diagnostic-selector>
         <div class="diagnostic__options" aria-label="Frontend system pains">
@@ -91,7 +88,7 @@ const initialDiagnostic = viewModel.diagnostics[0];
                   </dd>
                 </div>
                 <div>
-                  <dt>Example</dt>
+                  <dt>Reference finding</dt>
                   <dd>
                     <a href={initialDiagnostic.auditFinding.href} data-diagnostic-reference>
                       {initialDiagnostic.auditFinding.title}
@@ -113,21 +110,11 @@ const initialDiagnostic = viewModel.diagnostics[0];
     </div>
   </section>
 
-  <section class="home-section home-section--surface" id="system-map">
-    <div class="u-container u-stack">
-      <SectionHeader
-        title="The architecture in context"
-        summary="The map shows the before/after boundary work behind the diagnostic recommendation."
-      />
-      <HeroSystemMap map={viewModel.heroMap} />
-    </div>
-  </section>
-
   <section class="home-section" id="past-work">
     <div class="u-container u-stack">
       <SectionHeader
-        title="How past engagements have gone"
-        summary="Each case study summarizes the problem, the architectural decision, and the result without exposing private client data."
+        title="Past work without private details"
+        summary="Each case study keeps the engineering shape visible while removing client-specific names, paths, and production data."
       />
       <div class="reference-card-list">
         {
@@ -155,32 +142,23 @@ const initialDiagnostic = viewModel.diagnostics[0];
     </div>
   </section>
 
-  <section class="home-section home-section--surface">
+  <section class="home-section home-section--surface" id="system-map">
     <div class="u-container u-stack">
-      <SectionHeader title="What a finding looks like" summary={viewModel.auditPreview.summary} />
-      <div class="panel-grid">
-        {
-          viewModel.auditPreview.findings.map((finding) => (
-            <EvidencePanel
-              eyebrow={finding.severity}
-              title={finding.title}
-              evidence={finding.evidence}
-              risk={finding.risk}
-              recommendation={finding.recommendation}
-              cta={{ label: "View sample audit", href: "/sample-audit" }}
-            />
-          ))
-        }
-      </div>
+      <SectionHeader
+        title="The architecture in context"
+        summary="The map shows how messy frontend ownership becomes explicit once state, data access, and recovery paths have named boundaries."
+      />
+      <HeroSystemMap map={viewModel.heroMap} />
     </div>
   </section>
+
   <section class="home-section">
     <div class="u-container u-stack">
       <SectionHeader
-        title="Notes that show the engineering stance"
-        summary="Short technical entries preview the kind of decisions, tradeoffs, and implementation details behind the service work."
+        title="Notes from the work"
+        summary="Short technical entries about decisions that are easy to miss until a system starts failing around them."
       />
-      <div class="panel-grid">
+      <div class="panel-grid panel-grid--compact">
         {
           viewModel.labPreview.map((post) => (
             <EvidencePanel
@@ -193,19 +171,10 @@ const initialDiagnostic = viewModel.diagnostics[0];
           ))
         }
       </div>
+      <a class="home-more-link" href="/lab">More in the lab</a>
     </div>
   </section>
-  <section class="home-section home-section--surface">
-    <div class="u-container u-stack">
-      <SectionHeader
-        title="Scoped ways to make risk visible"
-        summary="Each offer is designed around a concrete engineering outcome, not a vague list of technologies."
-      />
-      <div class="service-grid">
-        {viewModel.services.map((service) => <ServiceCard service={service} />)}
-      </div>
-    </div>
-  </section>
+
   <section class="home-section home-section--cta">
     <div class="u-container">
       <EvidencePanel
@@ -230,43 +199,26 @@ const initialDiagnostic = viewModel.diagnostics[0];
     padding: 0;
   }
 
+  .home-hero__support {
+    max-width: 62ch;
+    margin: var(--space-5) 0 0;
+    color: var(--color-muted);
+  }
+
   .home-section {
     scroll-margin-top: 96px;
     padding: var(--space-12) 0 var(--space-16);
+    content-visibility: auto;
+    contain-intrinsic-size: auto 720px;
   }
 
   .home-section--diagnostic {
-    padding-top: var(--space-5);
-  }
-
-  .home-section--diagnostic > .u-container {
-    padding-top: var(--space-6);
-    border-top: var(--border-1);
+    padding-top: var(--space-8);
   }
 
   .home-section--surface {
     background: var(--color-surface-2);
-  }
-
-  .exploration-strip {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-3);
-    padding-block: var(--space-4);
-    border-top: var(--border-1);
-    border-bottom: var(--border-1);
-  }
-
-  .exploration-strip a {
-    color: var(--color-muted);
-    font-size: 0.95rem;
-    font-weight: 700;
-    text-decoration: none;
-    transition: color var(--duration-1) var(--ease-standard);
-  }
-
-  .exploration-strip a:hover {
-    color: var(--color-text);
+    border-block: var(--border-1);
   }
 
   .diagnostic {
@@ -280,6 +232,7 @@ const initialDiagnostic = viewModel.diagnostics[0];
   }
 
   .diagnostic__option {
+    position: relative;
     display: grid;
     gap: var(--space-2);
     min-height: 112px;
@@ -289,15 +242,37 @@ const initialDiagnostic = viewModel.diagnostics[0];
     border: var(--border-1);
     border-radius: var(--radius-2);
     cursor: pointer;
+    overflow: hidden;
     text-align: left;
     transition:
-      background-color var(--duration-1) var(--ease-standard),
-      border-color var(--duration-1) var(--ease-standard);
+      background-color var(--duration-fast) var(--ease-out-expo),
+      border-color var(--duration-fast) var(--ease-out-expo),
+      transform var(--duration-fast) var(--ease-spring);
   }
 
-  .diagnostic__option:hover,
+  .diagnostic__option::before {
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: 3px;
+    background: var(--color-accent);
+    content: "";
+    transform: scaleY(0);
+    transform-origin: bottom;
+    transition: transform 220ms var(--ease-spring);
+  }
+
+  .diagnostic__option:hover {
+    background: var(--color-surface-2);
+    border-color: var(--color-border-accent);
+  }
+
   .diagnostic__option.is-active {
+    background: var(--color-accent-dim);
     border-color: var(--color-accent);
+  }
+
+  .diagnostic__option.is-active::before {
+    transform: scaleY(1);
   }
 
   .diagnostic__option span {
@@ -306,7 +281,7 @@ const initialDiagnostic = viewModel.diagnostics[0];
 
   .diagnostic__option small {
     color: var(--color-muted);
-    font-size: 0.95rem;
+    font-size: var(--t-small);
   }
 
   .diagnostic__result,
@@ -322,11 +297,13 @@ const initialDiagnostic = viewModel.diagnostics[0];
   .diagnostic__result {
     transition:
       border-color var(--duration-state) var(--ease-standard),
-      opacity var(--duration-state) var(--ease-standard);
+      opacity 150ms var(--ease-gentle),
+      transform 220ms var(--ease-out-expo);
   }
 
   .diagnostic__result.is-updating {
-    opacity: 0.72;
+    opacity: 0;
+    transform: translateY(-6px);
   }
 
   .diagnostic__label,
@@ -338,15 +315,21 @@ const initialDiagnostic = viewModel.diagnostics[0];
     margin: 0;
   }
 
-  .diagnostic__label {
-    color: var(--color-text);
-    font-weight: 700;
+  .diagnostic__label,
+  .diagnostic__result dt,
+  .reference-card dt {
+    color: var(--color-accent);
+    font-family: var(--font-code);
+    font-size: var(--t-mono);
+    font-weight: 500;
+    text-transform: uppercase;
   }
 
   .diagnostic__result h3 {
     margin: 0;
-    font-family: var(--font-display);
-    font-size: 1.45rem;
+    font-family: var(--font-body);
+    font-size: var(--t-h3);
+    font-weight: 700;
     line-height: 1.15;
   }
 
@@ -362,15 +345,13 @@ const initialDiagnostic = viewModel.diagnostics[0];
     gap: var(--space-3);
   }
 
-  .diagnostic__result dt,
-  .reference-card dt {
-    color: var(--color-text);
-    font-weight: 700;
-  }
-
   .diagnostic__result a,
   .reference-card {
     color: var(--color-text);
+  }
+
+  .diagnostic__result .diagnostic__cta {
+    color: #ffffff;
   }
 
   .diagnostic__cta {
@@ -385,30 +366,28 @@ const initialDiagnostic = viewModel.diagnostics[0];
     border-radius: var(--radius-2);
     color: #ffffff;
     cursor: pointer;
+    font-size: var(--t-small);
     font-weight: 700;
     text-decoration: none;
     transition:
-      background-color var(--duration-1) var(--ease-standard),
-      border-color var(--duration-1) var(--ease-standard);
-  }
-
-  .diagnostic__result .diagnostic__cta {
-    color: #ffffff;
+      background-color var(--duration-fast) var(--ease-standard),
+      border-color var(--duration-fast) var(--ease-standard),
+      transform var(--duration-fast) var(--ease-spring);
   }
 
   .diagnostic__cta:hover {
-    background: var(--color-text);
-    border-color: var(--color-text);
-  }
-
-  .service-grid {
-    display: grid;
-    gap: var(--space-6);
+    border-color: var(--color-violet);
+    background: var(--color-violet);
+    transform: translateY(-2px);
   }
 
   .panel-grid {
     display: grid;
     gap: var(--space-6);
+  }
+
+  .panel-grid--compact {
+    max-width: 920px;
   }
 
   .reference-card-list {
@@ -418,18 +397,28 @@ const initialDiagnostic = viewModel.diagnostics[0];
 
   .reference-card {
     text-decoration: none;
-    transition: border-color var(--duration-1) var(--ease-standard);
+    transition:
+      border-color var(--duration-fast) var(--ease-spring),
+      transform var(--duration-fast) var(--ease-spring);
   }
 
   .reference-card:hover {
-    border-color: var(--color-accent);
+    border-color: var(--color-border-accent);
+    transform: translateY(-2px);
   }
 
   .reference-card span {
-    font-family: var(--font-display);
+    font-family: var(--font-body);
     font-size: 1.2rem;
     font-weight: 700;
     line-height: 1.2;
+  }
+
+  .home-more-link {
+    width: fit-content;
+    color: var(--color-accent);
+    font-weight: 700;
+    text-decoration: none;
   }
 
   @media (min-width: 860px) {
@@ -442,12 +431,16 @@ const initialDiagnostic = viewModel.diagnostics[0];
       grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
-    .service-grid {
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-    }
-
     .panel-grid {
       grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .diagnostic__option,
+    .diagnostic__cta,
+    .reference-card {
+      transform: none !important;
     }
   }
 </style>

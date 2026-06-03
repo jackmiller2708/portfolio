@@ -16,12 +16,20 @@ const { service } = Astro.props;
   </div>
   <dl>
     <div>
-      <dt>Client pain</dt>
+      <dt>Situation</dt>
       <dd>{service.clientPain}</dd>
     </div>
     <div>
-      <dt>Outputs</dt>
+      <dt>Output</dt>
       <dd>{service.outputs.join(", ")}</dd>
+    </div>
+    <div>
+      <dt>Good fit</dt>
+      <dd>{service.bestFit.join("; ")}</dd>
+    </div>
+    <div>
+      <dt>Not fit</dt>
+      <dd>{service.notFit.join("; ")}</dd>
     </div>
   </dl>
   <ButtonLink href={service.cta.href} label={service.cta.label} />
@@ -36,17 +44,22 @@ const { service } = Astro.props;
     background: var(--color-surface);
     border: var(--border-1);
     border-radius: var(--radius-2);
-    transition: border-color var(--duration-state) var(--ease-standard);
+    transition:
+      border-color var(--duration-fast) var(--ease-spring),
+      transform var(--duration-fast) var(--ease-spring);
   }
 
   .service-card:hover {
-    border-color: var(--color-accent);
+    border-color: var(--color-border-accent);
+    transform: translateY(-3px);
   }
 
   h2 {
     margin: 0;
-    font-family: var(--font-display);
-    font-size: 1.45rem;
+    font-family: var(--font-body);
+    font-size: var(--t-h3);
+    font-weight: 700;
+    line-height: 1.15;
   }
 
   p {
@@ -61,12 +74,21 @@ const { service } = Astro.props;
   }
 
   dt {
-    color: var(--color-text);
-    font-weight: 700;
+    color: var(--color-accent);
+    font-family: var(--font-code);
+    font-size: var(--t-mono);
+    font-weight: 500;
+    text-transform: uppercase;
   }
 
   dd {
     margin: var(--space-1) 0 0;
     color: var(--color-muted);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .service-card:hover {
+      transform: none;
+    }
   }
 </style>
