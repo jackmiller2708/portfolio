@@ -55,7 +55,7 @@ const mapJson = JSON.stringify(map);
         })
       }
     </div>
-    <div class="system-map__drawer" data-map-drawer hidden>
+    <div class="system-map__drawer" data-map-drawer aria-live="polite" hidden>
       <button type="button" aria-label="Close map detail" data-map-drawer-close>Close</button>
       <div data-map-drawer-content></div>
     </div>
@@ -122,7 +122,7 @@ const mapJson = JSON.stringify(map);
   }
 
   .system-map__toolbar {
-    display: grid;
+    display: none;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: var(--space-2);
   }
@@ -149,6 +149,7 @@ const mapJson = JSON.stringify(map);
   }
 
   .system-map__stage {
+    display: none;
     position: relative;
     contain: layout paint;
     min-height: 420px;
@@ -246,7 +247,6 @@ const mapJson = JSON.stringify(map);
 
   .system-map__details,
   .system-map__drawer {
-    display: grid;
     gap: var(--space-2);
     padding: var(--space-4);
     background: var(--color-surface-2);
@@ -255,6 +255,14 @@ const mapJson = JSON.stringify(map);
     transition:
       opacity var(--duration-fast) var(--ease-gentle),
       transform var(--duration-base) var(--ease-out-expo);
+  }
+
+  .system-map__details {
+    display: none;
+  }
+
+  .system-map__drawer {
+    display: grid;
   }
 
   .system-map__details.is-updating,
@@ -283,7 +291,7 @@ const mapJson = JSON.stringify(map);
     display: none;
   }
 
-  .system-map[data-compact="true"] .system-map__details {
+  :root .system-map[data-compact="true"] .system-map__details {
     display: none;
   }
 
@@ -299,7 +307,31 @@ const mapJson = JSON.stringify(map);
   }
 
   .system-map__static {
-    display: none;
+    display: block;
+  }
+
+  /* Without JS (or if the dynamic three.js import fails), the interactive
+     stage's node buttons never get positioned and its toolbar never
+     responds to clicks, so the static list is the default and the
+     interactive stage only shows once script confirms it can run it.
+     Reduced-motion always wins regardless of has-js, matching the
+     early-return in initMap() that never starts the WebGL scene at all. */
+  @media (prefers-reduced-motion: no-preference) {
+    :root.has-js .system-map__toolbar {
+      display: grid;
+    }
+
+    :root.has-js .system-map__stage {
+      display: block;
+    }
+
+    :root.has-js .system-map__details {
+      display: grid;
+    }
+
+    :root.has-js .system-map__static {
+      display: none;
+    }
   }
 
   .system-map__static ol {
@@ -353,7 +385,7 @@ const mapJson = JSON.stringify(map);
 </style>
 
 <script>
-  import type { Mesh, Vector3 } from "three";
+  import type { Mesh, MeshBasicMaterial, Vector3 } from "three";
 
   const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 
@@ -378,6 +410,8 @@ const mapJson = JSON.stringify(map);
     id: string;
     mesh: Mesh;
     ring: Mesh;
+    material: MeshBasicMaterial;
+    ringMaterial: MeshBasicMaterial;
     current: Vector3;
     target: Vector3;
     button: HTMLButtonElement;
@@ -386,14 +420,16 @@ const mapJson = JSON.stringify(map);
     positioned: boolean;
   };
 
-  const colors = {
-    accent: 0x7b9cff,
-    surface: 0x20222c,
-    text: 0xe8e6e0,
-    muted: 0x6b6d7a,
-    danger: 0xff6b6b,
-    success: 0x4ade80
+  const readColor = (name: string): number => {
+    const value = getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+    return Number.parseInt(value.replace("#", ""), 16);
   };
+
+  const readThemeColors = () => ({
+    accent: readColor("--color-accent"),
+    danger: readColor("--color-danger"),
+    success: readColor("--color-success")
+  });
 
   const desktopLayouts = {
     messy: [
@@ -449,7 +485,12 @@ const mapJson = JSON.stringify(map);
   const getLayout = (state: "messy" | "explicit", compact: boolean) =>
     compact ? mobileLayouts[state] : desktopLayouts[state];
 
-  const getNodeColor = (nodeId: string, riskIds: Set<string>, decisionIds: Set<string>) => {
+  const getNodeColor = (
+    nodeId: string,
+    riskIds: Set<string>,
+    decisionIds: Set<string>,
+    colors: ReturnType<typeof readThemeColors>
+  ) => {
     if (riskIds.has(nodeId)) return colors.danger;
     if (decisionIds.has(nodeId)) return colors.success;
     return colors.accent;
@@ -484,6 +525,7 @@ const mapJson = JSON.stringify(map);
     const data = JSON.parse(json.textContent) as MapData;
     const riskIds = new Set(data.riskMarkers.map((marker) => marker.nodeId));
     const decisionIds = new Set(data.decisionMarkers.map((marker) => marker.nodeId));
+    let colors = readThemeColors();
     const scene = new THREE.Scene();
     const camera = new THREE.OrthographicCamera(-4.4, 4.4, 2.8, -2.8, 0.1, 20);
     camera.position.z = 10;
@@ -507,7 +549,7 @@ const mapJson = JSON.stringify(map);
     });
     const nodes: NodeRuntime[] = data.nodes.map((node, index) => {
       const material = new THREE.MeshBasicMaterial({
-        color: getNodeColor(node.id, riskIds, decisionIds)
+        color: getNodeColor(node.id, riskIds, decisionIds, colors)
       });
       const ringMaterial = new THREE.MeshBasicMaterial({
         color: colors.accent,
@@ -527,6 +569,8 @@ const mapJson = JSON.stringify(map);
         id: node.id,
         mesh,
         ring,
+        material,
+        ringMaterial,
         current,
         target,
         button: nodeButtons[index],
@@ -535,6 +579,16 @@ const mapJson = JSON.stringify(map);
         positioned: false
       };
     });
+
+    const applyThemeColors = () => {
+      colors = readThemeColors();
+      lineMaterial.color.setHex(colors.accent);
+      for (const node of nodes) {
+        node.material.color.setHex(getNodeColor(node.id, riskIds, decisionIds, colors));
+        node.ringMaterial.color.setHex(colors.accent);
+      }
+      renderer.render(scene, camera);
+    };
 
     const lineByEdge = data.edges.map((edge) => {
       const geometry = new THREE.BufferGeometry().setFromPoints([
@@ -612,6 +666,16 @@ const mapJson = JSON.stringify(map);
       }
     };
 
+    let drawerTrigger: HTMLButtonElement | null = null;
+
+    const closeDrawer = () => {
+      if (!drawer || drawer.hidden) return;
+      drawer.hidden = true;
+      for (const node of nodes) node.button.classList.remove("is-active");
+      drawerTrigger?.focus();
+      drawerTrigger = null;
+    };
+
     const renderDetail = (button: HTMLButtonElement) => {
       const risk = button.dataset.risk;
       const decision = button.dataset.decision;
@@ -628,7 +692,14 @@ const mapJson = JSON.stringify(map);
 
       withStateFade(drawer, () => {
         if (drawerContent) drawerContent.innerHTML = html;
-        if (drawer && compact) drawer.hidden = false;
+        if (drawer && compact) {
+          const wasHidden = drawer.hidden;
+          drawer.hidden = false;
+          if (wasHidden) {
+            drawerTrigger = button;
+            drawerClose?.focus();
+          }
+        }
       });
     };
 
@@ -659,6 +730,7 @@ const mapJson = JSON.stringify(map);
         copy.hidden = copy.dataset.stateCopy !== state;
       }
       if (drawer) drawer.hidden = true;
+      drawerTrigger = null;
       ensureAnimating();
     };
 
@@ -700,9 +772,12 @@ const mapJson = JSON.stringify(map);
       });
     }
 
-    drawerClose?.addEventListener("click", () => {
-      if (drawer) drawer.hidden = true;
-      for (const node of nodes) node.button.classList.remove("is-active");
+    drawerClose?.addEventListener("click", closeDrawer);
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && drawer && !drawer.hidden) {
+        closeDrawer();
+      }
     });
 
     const observer = new ResizeObserver(resize);
@@ -718,6 +793,13 @@ const mapJson = JSON.stringify(map);
       { rootMargin: "200px" }
     );
     visibilityObserver.observe(stage);
+
+    const themeObserver = new MutationObserver(applyThemeColors);
+    themeObserver.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["data-theme"]
+    });
+    window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", applyThemeColors);
 
     resize();
     setState("messy");
