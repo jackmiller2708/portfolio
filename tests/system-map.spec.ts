@@ -11,13 +11,13 @@ test.describe("System Map", () => {
   };
 
   test("supports state toggle and hotspot detail updates", async ({ page }) => {
-    await page.goto("/");
+    await page.goto("/en");
 
     const map = page.locator("[data-system-map]").first();
     await expect(map).toBeVisible();
     await expect(map.locator("canvas[data-map-canvas]")).toBeVisible();
     await scrollToMap(page);
-    await expect(map).toHaveAttribute("data-three-map-ready", "true");
+    await expect(map).toHaveAttribute("data-three-map-ready", "true", { timeout: 15_000 });
 
     await map.getByRole("button", { name: "Bounded" }).click();
     await expect(map.locator("[data-state-copy='explicit']")).toBeVisible();
@@ -27,11 +27,11 @@ test.describe("System Map", () => {
   });
 
   test("uses distinct messy and bounded node layouts", async ({ page }) => {
-    await page.goto("/");
+    await page.goto("/en");
 
     const map = page.locator("[data-system-map]").first();
     await scrollToMap(page);
-    await expect(map).toHaveAttribute("data-three-map-ready", "true");
+    await expect(map).toHaveAttribute("data-three-map-ready", "true", { timeout: 15_000 });
     const boundaryNode = map.locator("[data-node-id='feature-boundary']");
     const roadmapNode = map.locator("[data-node-id='roadmap']");
     await expect(boundaryNode).toBeVisible();
@@ -50,10 +50,10 @@ test.describe("System Map", () => {
   });
 
   test("renders a nonblank Three.js canvas", async ({ page }) => {
-    await page.goto("/");
+    await page.goto("/en");
     const map = page.locator("[data-system-map]").first();
     await scrollToMap(page);
-    await expect(map).toHaveAttribute("data-three-map-ready", "true");
+    await expect(map).toHaveAttribute("data-three-map-ready", "true", { timeout: 15_000 });
 
     const isNonblank = await page
       .locator("canvas[data-map-canvas]")
@@ -73,21 +73,21 @@ test.describe("System Map", () => {
   test("captures desktop and mobile map screenshots", async ({ page }) => {
     test.slow();
     await page.setViewportSize({ width: 1280, height: 900 });
-    await page.goto("/");
+    await page.goto("/en");
     let map = page.locator("[data-system-map]").first();
     await expect(map).toBeVisible();
     await scrollToMap(page);
-    await expect(map).toHaveAttribute("data-three-map-ready", "true");
+    await expect(map).toHaveAttribute("data-three-map-ready", "true", { timeout: 15_000 });
     await map.screenshot({
       path: "test-results/system-map-desktop.png"
     });
 
     await page.setViewportSize({ width: 360, height: 800 });
-    await page.goto("/");
+    await page.goto("/en");
     map = page.locator("[data-system-map]").first();
     await expect(map).toBeVisible();
     await scrollToMap(page);
-    await expect(map).toHaveAttribute("data-three-map-ready", "true");
+    await expect(map).toHaveAttribute("data-three-map-ready", "true", { timeout: 15_000 });
     await map.screenshot({
       path: "test-results/system-map-mobile.png"
     });

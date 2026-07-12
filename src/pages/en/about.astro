@@ -1,51 +1,58 @@
 ---
+import type { Locale } from "@domain/site";
+
+import { loadAboutPageFromRepository } from "@programs/load-about-page";
+import { astroContentRepository } from "@services/AstroContentRepository";
+import { localizeSiteMeta } from "@i18n/content";
+import { localePath, t } from "@i18n/locales";
+import { buildPageSeo } from "@utils/seo";
 import { Effect } from "effect";
+
 import BaseLayout from "@layouts/BaseLayout.astro";
 import PageHero from "@components/sections/PageHero/PageHero.astro";
-import { loadAboutPage } from "@programs/load-about-page";
-import { astroContentRepository } from "@services/AstroContentRepository";
-import { buildPageSeo } from "@utils/seo";
 
-const viewModel = await Effect.runPromise(loadAboutPage);
-const site = await Effect.runPromise(astroContentRepository.getSiteMeta);
+const locale = (Astro.currentLocale ?? "en") as Locale;
+const copy = t(locale);
+const viewModel = await Effect.runPromise(loadAboutPageFromRepository(astroContentRepository, locale));
+const site = localizeSiteMeta(await Effect.runPromise(astroContentRepository.getSiteMeta), locale);
 const seo = buildPageSeo(site, {
-  path: "/about",
+  path: localePath(locale, "/about"),
   title: viewModel.title,
   description: viewModel.summary
 });
 ---
 
-<BaseLayout seo={seo}>
+<BaseLayout seo={seo} locale={locale} routePath="/about">
   <PageHero
     title={viewModel.title}
     summary={viewModel.summary}
-    primaryCta={{ label: "View services", href: "/services" }}
+    primaryCta={{ label: copy.common.viewServices, href: localePath(locale, "/services") }}
     secondaryCta={viewModel.cta}
   />
   <section class="about-section">
     <div class="u-container about-grid">
       <article class="about-panel about-panel--lead">
-        <h2>Short version</h2>
+        <h2>{copy.about.shortVersion}</h2>
         <p>{viewModel.about.context}</p>
         <dl class="snapshot-list">
           <div>
-            <dt>Name</dt>
+            <dt>{copy.about.name}</dt>
             <dd>Nguyen Ngoc Huy</dd>
           </div>
           <div>
-            <dt>Also called</dt>
-            <dd>Jack by English-speaking teams</dd>
+            <dt>{copy.about.alsoCalled}</dt>
+            <dd>{copy.about.alsoCalledValue}</dd>
           </div>
           <div>
-            <dt>Role</dt>
-            <dd>Angular Frontend Systems Engineer</dd>
+            <dt>{copy.about.role}</dt>
+            <dd>{copy.about.roleValue}</dd>
           </div>
           <div>
-            <dt>Location</dt>
-            <dd>Vietnam</dd>
+            <dt>{copy.about.location}</dt>
+            <dd>{copy.about.locationValue}</dd>
           </div>
           <div>
-            <dt>Email</dt>
+            <dt>{copy.about.email}</dt>
             <dd>
               <a href={`mailto:${viewModel.contactEmail}`}>{viewModel.contactEmail}</a>
             </dd>
@@ -53,31 +60,30 @@ const seo = buildPageSeo(site, {
         </dl>
       </article>
       <article class="about-panel about-panel--lead">
-        <h2>What I protect in frontend systems</h2>
+        <h2>{copy.about.protects}</h2>
         <p>{viewModel.about.philosophy}</p>
       </article>
       <article class="about-panel">
-        <h2>What I work on</h2>
+        <h2>{copy.about.workOn}</h2>
         {viewModel.about.qualityPhilosophy.map((item) => <p>{item}</p>)}
       </article>
       <article class="about-panel">
-        <h2>How I work</h2>
+        <h2>{copy.about.howIWork}</h2>
         {viewModel.about.workingStyle.map((item) => <p>{item}</p>)}
       </article>
       <article class="about-panel">
-        <h2>What I will not do</h2>
+        <h2>{copy.about.willNotDo}</h2>
         {viewModel.nonFitCriteria.map((item) => <p>{item}</p>)}
       </article>
     </div>
   </section>
   <section class="about-section about-section--compact">
     <div class="u-container communication">
-      <h2>Communication</h2>
+      <h2>{copy.about.communication}</h2>
       <p>{viewModel.about.communication}</p>
       <p>
-        For Angular audit, refactor, or architecture inquiries, email me at <a
-          href={`mailto:${viewModel.contactEmail}`}>{viewModel.contactEmail}</a
-        >.
+        {copy.about.emailLine}
+        <a href={`mailto:${viewModel.contactEmail}`}>{viewModel.contactEmail}</a>.
       </p>
     </div>
   </section>

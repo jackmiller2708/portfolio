@@ -1,12 +1,21 @@
 import { Effect } from "effect";
 import type { ContentRepository } from "@services/ContentRepository";
 import { buildLabRecommendedReads } from "@utils/recommended-read";
+import type { Locale } from "@domain/site";
+import { localizeCaseStudies, localizeLabPosts, localizeServices } from "@i18n/content";
+import { defaultLocale } from "@i18n/locales";
 
-export const loadLabPostPageFromRepository = (repository: ContentRepository, slug: string) =>
+export const loadLabPostPageFromRepository = (
+  repository: ContentRepository,
+  slug: string,
+  locale: Locale = defaultLocale
+) =>
   Effect.gen(function* () {
-    const post = yield* repository.getLabPostBySlug(slug);
-    const services = yield* repository.listServices;
-    const caseStudies = yield* repository.listCaseStudies;
+    const posts = localizeLabPosts(yield* repository.listLabPosts, locale);
+    const post =
+      posts.find((item) => item.slug === slug) ?? (yield* repository.getLabPostBySlug(slug));
+    const services = localizeServices(yield* repository.listServices, locale);
+    const caseStudies = localizeCaseStudies(yield* repository.listCaseStudies, locale);
 
     const relatedServices = services.filter((service) =>
       post.relatedServices?.includes(service.id)
@@ -19,11 +28,11 @@ export const loadLabPostPageFromRepository = (repository: ContentRepository, slu
     };
   });
 
-export const loadLabPostPage = (slug: string) =>
+export const loadLabPostPage = (slug: string, locale: Locale = defaultLocale) =>
   Effect.gen(function* () {
     const { astroContentRepository } = yield* Effect.promise(
       async () => await import("@services/AstroContentRepository")
     );
 
-    return yield* loadLabPostPageFromRepository(astroContentRepository, slug);
+    return yield* loadLabPostPageFromRepository(astroContentRepository, slug, locale);
   });

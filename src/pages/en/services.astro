@@ -4,24 +4,31 @@ import BaseLayout from "@layouts/BaseLayout.astro";
 import ButtonLink from "@components/primitives/ButtonLink/ButtonLink.astro";
 import PageHero from "@components/sections/PageHero/PageHero.astro";
 import ServiceCard from "@components/organisms/ServiceCard/ServiceCard.astro";
-import { loadServicesPage } from "@programs/load-services-page";
+import { loadServicesPageFromRepository } from "@programs/load-services-page";
 import { astroContentRepository } from "@services/AstroContentRepository";
 import { buildPageSeo } from "@utils/seo";
+import type { Locale } from "@domain/site";
+import { localePath, t } from "@i18n/locales";
+import { localizeSiteMeta } from "@i18n/content";
 
-const viewModel = await Effect.runPromise(loadServicesPage);
-const site = await Effect.runPromise(astroContentRepository.getSiteMeta);
+const locale = (Astro.currentLocale ?? "en") as Locale;
+const copy = t(locale);
+const viewModel = await Effect.runPromise(
+  loadServicesPageFromRepository(astroContentRepository, locale)
+);
+const site = localizeSiteMeta(await Effect.runPromise(astroContentRepository.getSiteMeta), locale);
 const seo = buildPageSeo(site, {
-  path: "/services",
+  path: localePath(locale, "/services"),
   title: viewModel.title,
   description: viewModel.summary
 });
 ---
 
-<BaseLayout seo={seo}>
+<BaseLayout seo={seo} locale={locale} routePath="/services">
   <PageHero
     title={viewModel.title}
     summary={viewModel.summary}
-    primaryCta={{ label: "Request an audit", href: "/contact" }}
+    primaryCta={{ label: copy.common.requestAudit, href: localePath(locale, "/contact") }}
   />
   <section class="services-section">
     <div class="u-container service-grid">
@@ -32,11 +39,8 @@ const seo = buildPageSeo(site, {
     <div class="u-container fit-grid">
       <article class="fit-panel">
         <div class="fit-panel__header">
-          <h2>Where this work is useful</h2>
-          <p>
-            Use these criteria to check whether an Angular audit, advisory pass, or implementation
-            sprint is a good first move.
-          </p>
+          <h2>{copy.services.usefulTitle}</h2>
+          <p>{copy.services.usefulSummary}</p>
         </div>
         <div class="fit-panel__items">
           {
@@ -55,15 +59,12 @@ const seo = buildPageSeo(site, {
       </article>
       <article class="fit-panel">
         <div class="fit-panel__header">
-          <h2>Boundaries that keep scope useful</h2>
-          <p>
-            These exclusions reduce mismatched requests and keep the work tied to Angular system
-            clarity, maintainability, and frontend risk.
-          </p>
+          <h2>{copy.services.boundaryTitle}</h2>
+          <p>{copy.services.boundarySummary}</p>
         </div>
         <div class="fit-panel__items">
           <div class="fit-card">
-            <h3>Site-level exclusions</h3>
+            <h3>{copy.services.siteExclusions}</h3>
             <ul>{viewModel.nonFitCriteria.map((item) => <li>{item}</li>)}</ul>
           </div>
           {

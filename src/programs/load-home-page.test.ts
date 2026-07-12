@@ -106,6 +106,15 @@ describe("loadHomePage", () => {
     expect(diagnostic?.recommendedService.title).toBe("Angular System Audit");
     expect(diagnostic?.auditFinding.title).toBe("Implicit state ownership");
     expect(diagnostic?.systemMapState).toBe("messy");
-    expect(diagnostic?.cta.href).toBe("/contact?diagnostic=unclear-state");
+    expect(diagnostic?.cta.href).toBe("/en/contact?diagnostic=unclear-state");
+  });
+
+  it("returns Vietnamese home copy and localized links", async () => {
+    const viewModel = await Effect.runPromise(loadHomePageFromRepository(repository, "vi"));
+
+    expect(viewModel.hero.title).toBe("Hệ thống Angular phức tạp,\nđược làm rõ.");
+    expect(viewModel.hero.summary).toContain("Tôi giúp các đội audit");
+    expect(viewModel.diagnostics[0]?.cta.href).toBe("/vi/contact?diagnostic=unclear-state");
+    expect(viewModel.heroMap.title).toBe("Bản đồ boundary hệ thống frontend");
   });
 });

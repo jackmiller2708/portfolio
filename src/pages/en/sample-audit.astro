@@ -7,11 +7,16 @@ import AuditFinding from "@components/organisms/AuditFinding/AuditFinding.astro"
 import { loadSampleAuditPage } from "@programs/load-sample-audit-page";
 import { astroContentRepository } from "@services/AstroContentRepository";
 import { buildPageSeo } from "@utils/seo";
+import { localizeSiteMeta } from "@i18n/content";
+import type { Locale } from "@domain/site";
+import { localePath, t } from "@i18n/locales";
 
-const viewModel = await Effect.runPromise(loadSampleAuditPage);
-const site = await Effect.runPromise(astroContentRepository.getSiteMeta);
+const locale = (Astro.currentLocale ?? "en") as Locale;
+const copy = t(locale);
+const viewModel = await Effect.runPromise(loadSampleAuditPage(locale));
+const site = localizeSiteMeta(await Effect.runPromise(astroContentRepository.getSiteMeta), locale);
 const seo = buildPageSeo(site, {
-  path: "/sample-audit",
+  path: localePath(locale, "/sample-audit"),
   title: viewModel.title,
   description: viewModel.summary,
   ogImage: "/og/sample-audit.svg"
@@ -20,11 +25,11 @@ const formatSeverity = (severity: string) => `${severity[0]?.toUpperCase()}${sev
 const firstWalkthrough = viewModel.walkthrough[0];
 ---
 
-<BaseLayout seo={seo}>
+<BaseLayout seo={seo} locale={locale} routePath="/sample-audit">
   <PageHero
     title={viewModel.title}
     summary={viewModel.summary}
-    primaryCta={{ label: "Request similar diagnostic", href: "/contact" }}
+    primaryCta={{ label: copy.audit.primaryCta, href: localePath(locale, "/contact") }}
   />
   <section class="audit-section">
     <div class="u-container u-stack">
@@ -32,14 +37,11 @@ const firstWalkthrough = viewModel.walkthrough[0];
         firstWalkthrough && (
           <section class="audit-walkthrough" aria-labelledby="audit-walkthrough-title">
             <div class="audit-walkthrough__header">
-              <h2 id="audit-walkthrough-title">Guided audit walkthrough</h2>
-              <p>
-                Step through one finding as symptom, evidence, risk, recommendation, and sprint
-                sequence.
-              </p>
+              <h2 id="audit-walkthrough-title">{copy.audit.guidedTitle}</h2>
+              <p>{copy.audit.guidedSummary}</p>
             </div>
             <div class="audit-walkthrough__layout" data-audit-walkthrough>
-              <div class="audit-walkthrough__findings" aria-label="Audit findings">
+              <div class="audit-walkthrough__findings" aria-label={copy.audit.findingsLabel}>
                 {viewModel.walkthrough.map((step, index) => (
                   <button
                     class:list={["audit-walkthrough__finding", index === 0 && "is-active"]}
@@ -58,50 +60,57 @@ const firstWalkthrough = viewModel.walkthrough[0];
                 ))}
               </div>
               <article class="audit-walkthrough__panel" aria-live="polite">
-                <div class="audit-walkthrough__phases" role="group" aria-label="Walkthrough phase">
+                <div
+                  class="audit-walkthrough__phases"
+                  role="group"
+                  aria-label={copy.audit.phaseLabel}
+                >
                   <button class="is-active" type="button" aria-pressed="true" data-phase="symptom">
-                    Symptom
+                    {copy.audit.symptom}
                   </button>
                   <button type="button" aria-pressed="false" data-phase="evidence">
-                    Evidence
+                    {copy.audit.evidence}
                   </button>
                   <button type="button" aria-pressed="false" data-phase="risk">
-                    Risk
+                    {copy.audit.risk}
                   </button>
                   <button type="button" aria-pressed="false" data-phase="recommendation">
-                    Recommendation
+                    {copy.audit.recommendation}
                   </button>
                   <button type="button" aria-pressed="false" data-phase="sprint">
-                    Sprint sequence
+                    {copy.audit.sprint}
                   </button>
                 </div>
                 <p class="audit-walkthrough__label" data-phase-label>
-                  Symptom
+                  {copy.audit.symptom}
                 </p>
                 <h3 data-walkthrough-title>{firstWalkthrough.title}</h3>
                 <p data-walkthrough-copy>{firstWalkthrough.symptom}</p>
-                <ButtonLink href="/contact?context=sample-audit" label="Talk through an audit" />
+                <ButtonLink
+                  href={localePath(locale, "/contact?context=sample-audit")}
+                  label={copy.audit.talk}
+                />
                 <details class="audit-walkthrough__static">
-                  <summary>Read the full walkthrough</summary>
+                  <summary>{copy.audit.readFull}</summary>
                   <dl>
                     <div>
-                      <dt>Symptom</dt>
+                      <dt>{copy.audit.symptom}</dt>
                       <dd>{firstWalkthrough.symptom}</dd>
                     </div>
                     <div>
-                      <dt>Evidence</dt>
+                      <dt>{copy.audit.evidence}</dt>
                       <dd>{firstWalkthrough.evidence}</dd>
                     </div>
                     <div>
-                      <dt>Risk</dt>
+                      <dt>{copy.audit.risk}</dt>
                       <dd>{firstWalkthrough.risk}</dd>
                     </div>
                     <div>
-                      <dt>Recommendation</dt>
+                      <dt>{copy.audit.recommendation}</dt>
                       <dd>{firstWalkthrough.recommendation}</dd>
                     </div>
                     <div>
-                      <dt>Sprint sequence</dt>
+                      <dt>{copy.audit.sprint}</dt>
                       <dd>{firstWalkthrough.sprintTitle}</dd>
                     </div>
                   </dl>
@@ -112,15 +121,17 @@ const firstWalkthrough = viewModel.walkthrough[0];
         )
       }
       <section class="full-report" aria-labelledby="full-report-title">
-        <h2 id="full-report-title">Full report view</h2>
-        <p>Scan all findings, severity groups, and the sprint sequence without using the guide.</p>
+        <h2 id="full-report-title">{copy.audit.fullReportTitle}</h2>
+        <p>{copy.audit.fullReportSummary}</p>
       </section>
-      <div class="matrix-grid" aria-label="Risk matrix summary">
+      <div class="matrix-grid" aria-label={copy.audit.fullReportTitle}>
         {
           viewModel.riskMatrix.map((row) => (
             <article class="matrix-card">
               <p>{row.severity}</p>
-              <strong>{row.count} findings</strong>
+              <strong>
+                {row.count} {copy.audit.findings}
+              </strong>
               <span>{row.areas.join(", ")}</span>
             </article>
           ))
@@ -139,7 +150,7 @@ const firstWalkthrough = viewModel.walkthrough[0];
         ))
       }
       <section class="roadmap" aria-labelledby="audit-roadmap">
-        <h2 id="audit-roadmap">Sprint roadmap</h2>
+        <h2 id="audit-roadmap">{copy.audit.sprintRoadmap}</h2>
         <div class="roadmap-grid">
           {
             viewModel.roadmap.map((step) => (
@@ -225,13 +236,14 @@ const firstWalkthrough = viewModel.walkthrough[0];
   .audit-walkthrough__finding,
   .audit-walkthrough__phases button {
     min-height: 42px;
-    padding: var(--space-2) var(--space-3);
+    padding: var(--control-padding-y) var(--control-padding-x);
     color: var(--color-text);
     background: var(--color-surface);
     border: var(--border-1);
     border-radius: var(--radius-1);
     cursor: pointer;
     font-weight: 700;
+    line-height: 1.25;
     text-align: left;
     transition:
       background-color var(--duration-state) var(--ease-standard),
@@ -264,6 +276,12 @@ const firstWalkthrough = viewModel.walkthrough[0];
     display: flex;
     flex-wrap: wrap;
     gap: var(--space-2);
+  }
+
+  .audit-walkthrough__phases button {
+    text-align: center;
+    padding-top: 8px;
+    line-height: 1;
   }
 
   .audit-walkthrough__label {

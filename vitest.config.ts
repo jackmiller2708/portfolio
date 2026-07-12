@@ -8,6 +8,7 @@ export default defineConfig({
     alias: {
       "@components": "/src/components",
       "@domain": "/src/domain",
+      "@i18n": "/src/i18n",
       "@islands": "/src/islands",
       "@layouts": "/src/layouts",
       "@programs": "/src/programs",

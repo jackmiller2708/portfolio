@@ -129,7 +129,7 @@ const mapJson = JSON.stringify(map);
 
   .system-map__state {
     min-height: 44px;
-    padding: var(--space-2) var(--space-3);
+    padding: var(--control-padding-y) var(--control-padding-x);
     color: var(--color-text);
     background: var(--color-surface-2);
     border: var(--border-1);
@@ -326,6 +326,10 @@ const mapJson = JSON.stringify(map);
   }
 
   @media (max-width: 720px) {
+    .system-map {
+      padding: var(--space-3);
+    }
+
     .system-map__stage {
       min-height: 520px;
     }
@@ -334,7 +338,6 @@ const mapJson = JSON.stringify(map);
       width: 128px;
       min-height: 64px;
     }
-
   }
 
   @media (prefers-reduced-motion: reduce) {

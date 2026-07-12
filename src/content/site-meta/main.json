@@ -1,5 +1,5 @@
 {
-  "title": "Nguyen Ngoc Huy / Jack Miller",
+  "title": "Nguyễn Ngọc Huy / Jack Miller",
   "description": "Vietnam-based Angular Frontend Systems Engineer for audits, refactors, and stabilization.",
   "siteUrl": "https://portfolio-launch-blocker.invalid",
   "ogImage": "/og/default.svg",
@@ -28,7 +28,7 @@
     "Open-ended staff augmentation without a scoped audit, refactor, or advisory outcome."
   ],
   "about": {
-    "context": "I am Nguyen Ngoc Huy, an Angular Frontend Systems Engineer based in Vietnam. English-speaking teams can call me Jack.",
+    "context": "I am Nguyễn Ngọc Huy, an Angular Frontend Systems Engineer based in Vietnam. But you can call me Jack.",
     "philosophy": "I make Angular frontend systems easier to reason about by clarifying state ownership, RxJS flows, service boundaries, data access, and error handling. Most frontend problems are not framework problems. They are boundary problems: unclear ownership, hidden side effects, scattered state, inconsistent error handling, and code paths that only one person understands.",
     "workingStyle": [
       "Start with a scoped Angular audit when the right next step is unclear.",

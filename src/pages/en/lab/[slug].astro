@@ -7,6 +7,9 @@ import PageHero from "@components/sections/PageHero/PageHero.astro";
 import { loadLabPostPage } from "@programs/load-lab-post-page";
 import { astroContentRepository } from "@services/AstroContentRepository";
 import { buildPageSeo } from "@utils/seo";
+import { localizeSiteMeta } from "@i18n/content";
+import type { Locale } from "@domain/site";
+import { localePath, t } from "@i18n/locales";
 
 export async function getStaticPaths() {
   const entries = await getCollection("lab-posts");
@@ -19,38 +22,46 @@ export async function getStaticPaths() {
 
 const { entry } = Astro.props;
 const { Content } = await render(entry);
-const viewModel = await Effect.runPromise(loadLabPostPage(entry.id));
+const locale = (Astro.currentLocale ?? "en") as Locale;
+const copy = t(locale);
+const viewModel = await Effect.runPromise(loadLabPostPage(entry.id, locale));
 const { post } = viewModel;
-const site = await Effect.runPromise(astroContentRepository.getSiteMeta);
+const site = localizeSiteMeta(await Effect.runPromise(astroContentRepository.getSiteMeta), locale);
 const seo = buildPageSeo(site, {
-  path: `/lab/${post.slug}`,
+  path: localePath(locale, `/lab/${post.slug}`),
   title: post.title,
   description: post.summary,
   ogImage: "/og/lab.svg"
 });
 ---
 
-<BaseLayout seo={seo}>
+<BaseLayout seo={seo} locale={locale} routePath={`/lab/${post.slug}`}>
   <PageHero
     title={post.title}
     summary={post.summary}
-    primaryCta={{ label: "View services", href: "/services" }}
-    secondaryCta={{ label: "Back to lab", href: "/lab" }}
+    primaryCta={{ label: copy.common.viewServices, href: localePath(locale, "/services") }}
+    secondaryCta={{ label: copy.common.backToLab, href: localePath(locale, "/lab") }}
   />
   <article class="lab-detail">
     <div class="u-container lab-detail__layout">
-      <aside class="lab-detail__meta" aria-label="Lab post metadata">
+      <aside class="lab-detail__meta" aria-label={copy.common.readNote}>
         <p class="lab-detail__topic">{post.topic}</p>
-        <h2>Takeaway</h2>
+        <h2>{copy.common.takeaway}</h2>
         <p>{post.takeaway}</p>
-        {post.codeLanguage && <p>Code language: {post.codeLanguage}</p>}
+        {
+          post.codeLanguage && (
+            <p>
+              {copy.common.codeLanguage}: {post.codeLanguage}
+            </p>
+          )
+        }
       </aside>
       <div class="lab-detail__body">
         <Content />
         {
           viewModel.relatedServices.length > 0 && (
             <section class="related-services">
-              <h2>Related services</h2>
+              <h2>{copy.common.relatedServices}</h2>
               <div class="related-grid">
                 {viewModel.relatedServices.map((service) => (
                   <article class="related-card">
@@ -70,7 +81,7 @@ const seo = buildPageSeo(site, {
         {
           viewModel.recommendedReads.length > 0 && (
             <section class="recommended-reads" aria-labelledby="lab-next-read">
-              <h2 id="lab-next-read">Recommended next reads</h2>
+              <h2 id="lab-next-read">{copy.common.recommendedNextReads}</h2>
               <div class="recommended-grid">
                 {viewModel.recommendedReads.map((read) => (
                   <a class="recommended-card" href={read.href}>

@@ -4,22 +4,49 @@ import { join } from "node:path";
 
 test.describe("Smoke Tests", () => {
   test("Home page should load and have title", async ({ page }) => {
-    await page.goto("/");
+    await page.goto("/en");
     await expect(page).toHaveTitle(/Nguyen Ngoc Huy \/ Jack/);
     const heroHeading = page.locator("main h1");
     await expect(heroHeading).toBeVisible();
     await expect(heroHeading).toContainText("Complex Angular systems, made explicit.");
   });
 
+  test("Vietnamese home and language switch render localized chrome", async ({ page }) => {
+    await page.goto("/vi");
+    await expect(page.locator("html")).toHaveAttribute("lang", "vi");
+    await expect(page.locator("main h1")).toContainText("Hệ thống Angular phức tạp, được làm rõ.");
+    await expect(page.getByRole("navigation", { name: "Điều hướng chính" })).toContainText(
+      "Dịch vụ"
+    );
+    await expect(page.getByRole("link", { name: "English" })).toHaveAttribute("href", "/en/");
+  });
+
+  test("Vietnamese secondary routes render localized content", async ({ page }) => {
+    test.slow();
+    await page.goto("/vi/contact");
+    await expect(page.locator("main h1")).toContainText("Yêu cầu audit frontend Angular");
+    await expect(page.getByLabel("Tên")).toBeVisible();
+
+    await page.goto("/vi/sample-audit");
+    await expect(page.locator("main h1")).toContainText("Mẫu audit");
+    await expect(page.getByRole("heading", { name: "Xem báo cáo đầy đủ" })).toBeVisible();
+
+    await page.goto("/vi/case-studies/checkout-stabilization");
+    await expect(page.getByRole("heading", { name: "Tóm tắt ca" })).toBeVisible();
+
+    await page.goto("/vi/lab/rxjs-cleanup");
+    await expect(page.getByRole("heading", { name: "Dịch vụ liên quan" })).toBeVisible();
+  });
+
   test("public source does not use proof framing", async () => {
     const files = [
       "src/pages/index.astro",
-      "src/pages/services.astro",
-      "src/pages/case-studies/index.astro",
-      "src/pages/sample-audit.astro",
-      "src/pages/lab/index.astro",
-      "src/pages/about.astro",
-      "src/pages/contact.astro",
+      "src/pages/en/services.astro",
+      "src/pages/en/case-studies/index.astro",
+      "src/pages/en/sample-audit.astro",
+      "src/pages/en/lab/index.astro",
+      "src/pages/en/about.astro",
+      "src/pages/en/contact.astro",
       "src/programs/load-home-page.ts",
       "src/programs/load-case-studies-page.ts",
       "src/content/site-meta/main.json"
@@ -32,7 +59,7 @@ test.describe("Smoke Tests", () => {
   });
 
   test("Home diagnostic selector updates reference path and CTA", async ({ page }) => {
-    await page.goto("/");
+    await page.goto("/en");
 
     const diagnostic = page.locator("[data-diagnostic-selector]");
     await expect(diagnostic).toBeVisible();
@@ -47,13 +74,13 @@ test.describe("Smoke Tests", () => {
     await expect(diagnostic.locator("[data-diagnostic-map-state]")).toContainText("explicit");
     await expect(diagnostic.locator("[data-diagnostic-cta]")).toHaveAttribute(
       "href",
-      "/contact?diagnostic=cache-data"
+      "/en/contact?diagnostic=cache-data"
     );
   });
 
   test("Home diagnostic selector scrolls result into view on mobile", async ({ page }) => {
     await page.setViewportSize({ width: 375, height: 700 });
-    await page.goto("/");
+    await page.goto("/en");
 
     const diagnostic = page.locator("[data-diagnostic-selector]");
     await diagnostic.getByRole("button", { name: /Cache and data behavior/ }).click();
@@ -61,7 +88,7 @@ test.describe("Smoke Tests", () => {
   });
 
   test("Theme switch toggles the page theme", async ({ page }) => {
-    await page.goto("/");
+    await page.goto("/en");
 
     const toggle = page.getByRole("button", { name: "Switch theme" });
     await expect(toggle).toBeVisible();
@@ -77,7 +104,7 @@ test.describe("Smoke Tests", () => {
 
   test("Mobile header is compact and expandable", async ({ page }) => {
     await page.setViewportSize({ width: 412, height: 915 });
-    await page.goto("/");
+    await page.goto("/en");
 
     const header = page.locator(".site-header");
     const nav = page.getByRole("navigation", { name: "Primary navigation" });
@@ -99,7 +126,7 @@ test.describe("Smoke Tests", () => {
 
   test("Tablet header stays compact instead of wrapping navigation", async ({ page }) => {
     await page.setViewportSize({ width: 900, height: 900 });
-    await page.goto("/", { waitUntil: "domcontentloaded" });
+    await page.goto("/en", { waitUntil: "domcontentloaded" });
 
     const header = page.locator(".site-header");
     const nav = page.getByRole("navigation", { name: "Primary navigation" });
@@ -123,7 +150,7 @@ test.describe("Smoke Tests", () => {
 
   test("Desktop theme switch keeps a stable header width", async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 800 });
-    await page.goto("/", { waitUntil: "domcontentloaded" });
+    await page.goto("/en", { waitUntil: "domcontentloaded" });
 
     const nav = page.getByRole("navigation", { name: "Primary navigation" });
     const toggle = page.getByRole("button", { name: "Switch theme" });
@@ -140,10 +167,10 @@ test.describe("Smoke Tests", () => {
 
   test("Client-side navigation keeps theme and page interactions initialized", async ({ page }) => {
     test.slow();
-    await page.goto("/");
+    await page.goto("/en");
     await page.evaluate(() => localStorage.setItem("theme", "dark"));
-    await page.goto("/sample-audit", { waitUntil: "domcontentloaded" });
-    await expect(page).toHaveURL(/\/sample-audit$/);
+    await page.goto("/en/sample-audit", { waitUntil: "domcontentloaded" });
+    await expect(page).toHaveURL(/\/en\/sample-audit$/);
     await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
 
     const walkthrough = page.locator("[data-audit-walkthrough]");
@@ -154,7 +181,7 @@ test.describe("Smoke Tests", () => {
   test("Reduced motion disables page view-transition animation", async ({ browser }) => {
     const context = await browser.newContext({ reducedMotion: "reduce" });
     const page = await context.newPage();
-    await page.goto("/");
+    await page.goto("/en");
 
     const duration = await page.evaluate(() => {
       const style = getComputedStyle(document.documentElement, "::view-transition-new(root)");
@@ -167,7 +194,7 @@ test.describe("Smoke Tests", () => {
 
   test("Mobile system map shows one selected-node detail surface", async ({ page }) => {
     await page.setViewportSize({ width: 375, height: 760 });
-    await page.goto("/", { waitUntil: "domcontentloaded" });
+    await page.goto("/en", { waitUntil: "domcontentloaded" });
 
     const map = page.locator("[data-system-map]").first();
     await map.scrollIntoViewIfNeeded();
@@ -185,7 +212,7 @@ test.describe("Smoke Tests", () => {
       viewport: { width: 768, height: 1024 }
     });
     const page = await context.newPage();
-    await page.goto("/", { waitUntil: "domcontentloaded" });
+    await page.goto("/en", { waitUntil: "domcontentloaded" });
 
     const map = page.locator("[data-system-map]").first();
     await map.scrollIntoViewIfNeeded();
@@ -199,7 +226,7 @@ test.describe("Smoke Tests", () => {
   });
 
   test("Services page should load and display services", async ({ page }) => {
-    await page.goto("/services");
+    await page.goto("/en/services");
     await expect(page).toHaveTitle(/Services \| Nguyen Ngoc Huy \/ Jack/);
     const heroHeading = page.locator("main h1");
     await expect(heroHeading).toBeVisible();
@@ -209,14 +236,14 @@ test.describe("Smoke Tests", () => {
   });
 
   test("Sample Audit page should load", async ({ page }) => {
-    await page.goto("/sample-audit");
+    await page.goto("/en/sample-audit");
     await expect(page).toHaveTitle(/Sample Audit \| Nguyen Ngoc Huy \/ Jack/);
     const heroHeading = page.locator("main h1");
     await expect(heroHeading).toBeVisible();
   });
 
   test("Sample Audit walkthrough updates visible phase content", async ({ page }) => {
-    await page.goto("/sample-audit");
+    await page.goto("/en/sample-audit");
 
     const walkthrough = page.locator("[data-audit-walkthrough]");
     await expect(walkthrough).toBeVisible();
@@ -230,7 +257,7 @@ test.describe("Smoke Tests", () => {
   });
 
   test("Contact page should load and display intake form", async ({ page }) => {
-    await page.goto("/contact");
+    await page.goto("/en/contact");
     await expect(page).toHaveTitle(/Contact \| Nguyen Ngoc Huy \/ Jack/);
     const heroHeading = page.locator("main h1");
     await expect(heroHeading).toBeVisible();
@@ -243,7 +270,7 @@ test.describe("Smoke Tests", () => {
   });
 
   test("Contact advisory selector updates recommendation and form context", async ({ page }) => {
-    await page.goto("/contact");
+    await page.goto("/en/contact");
 
     const advisory = page.locator("[data-advisory-flow]");
     await expect(advisory).toBeVisible();
@@ -254,14 +281,14 @@ test.describe("Smoke Tests", () => {
   });
 
   test("About page should load", async ({ page }) => {
-    await page.goto("/about");
+    await page.goto("/en/about");
     await expect(page).toHaveTitle(/About Nguyen Ngoc Huy \| Nguyen Ngoc Huy \/ Jack/);
     const heroHeading = page.locator("main h1");
     await expect(heroHeading).toBeVisible();
   });
 
   test("Case study detail page should load", async ({ page }) => {
-    await page.goto("/case-studies/checkout-stabilization");
+    await page.goto("/en/case-studies/checkout-stabilization");
     await expect(page).toHaveTitle(/Checkout flow stabilization/);
     await expect(page.locator("main h1")).toBeVisible();
     await expect(page.getByRole("heading", { name: "Problem" })).toBeVisible();
@@ -269,7 +296,7 @@ test.describe("Smoke Tests", () => {
   });
 
   test("Lab detail page should load", async ({ page }) => {
-    await page.goto("/lab/rxjs-cleanup");
+    await page.goto("/en/lab/rxjs-cleanup");
     await expect(page).toHaveTitle(/RxJS cleanup without hiding ownership/);
     await expect(page.locator("main h1")).toBeVisible();
     await expect(page.getByRole("heading", { name: "Related services" })).toBeVisible();

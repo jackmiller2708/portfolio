@@ -106,13 +106,15 @@ const initAuditWalkthrough = () => {
   let activeFinding = findings[0];
   let activePhase = "symptom";
 
-  const phaseLabels: Record<string, string> = {
-    symptom: "Symptom",
-    evidence: "Evidence",
-    risk: "Risk",
-    recommendation: "Recommendation",
-    sprint: "Sprint sequence"
-  };
+  const phaseLabels = [...phases].reduce<Record<string, string>>((labels, phase) => {
+    const key = phase.dataset.phase;
+
+    if (key) {
+      labels[key] = phase.textContent?.trim() ?? key;
+    }
+
+    return labels;
+  }, {});
 
   const updatePanel = () => {
     if (!activeFinding || !label || !title || !copy) {
@@ -120,7 +122,7 @@ const initAuditWalkthrough = () => {
     }
 
     withStateFade(panel, () => {
-      label.textContent = phaseLabels[activePhase] ?? "Symptom";
+      label.textContent = phaseLabels[activePhase] ?? phaseLabels.symptom ?? activePhase;
       title.textContent = activeFinding.dataset.title ?? "";
       copy.textContent = activeFinding.dataset[activePhase] ?? "";
     });

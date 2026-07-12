@@ -807,11 +807,17 @@ Suggested About sections:
 # About Nguyen Ngoc Huy
 
 ## Short version
+
 ## What I work on
+
 ## Why Angular-first
+
 ## What I protect in frontend systems
+
 ## How I work
+
 ## Communication
+
 ## What I am not a fit for
 ```
 

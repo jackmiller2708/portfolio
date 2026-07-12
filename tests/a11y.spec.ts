@@ -2,13 +2,13 @@ import { test, expect } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 
 const routes = [
-  "/",
-  "/services",
-  "/sample-audit",
-  "/contact",
-  "/about",
-  "/case-studies/checkout-stabilization",
-  "/lab/rxjs-cleanup",
+  "/en",
+  "/en/services",
+  "/en/sample-audit",
+  "/en/contact",
+  "/en/about",
+  "/en/case-studies/checkout-stabilization",
+  "/en/lab/rxjs-cleanup",
   "/404"
 ];
 

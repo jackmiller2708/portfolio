@@ -1,0 +1,443 @@
+---
+import type { Locale } from "@domain/site";
+
+import { loadHomePageFromRepository } from "@programs/load-home-page";
+import { astroContentRepository } from "@services/AstroContentRepository";
+import { localizeSiteMeta } from "@i18n/content";
+import { localePath, t } from "@i18n/locales";
+import { buildPageSeo } from "@utils/seo";
+import { Effect } from "effect";
+
+import CredibilityStrip from "@components/sections/CredibilityStrip/CredibilityStrip.astro";
+import EvidencePanel from "@components/organisms/EvidencePanel/EvidencePanel.astro";
+import SectionHeader from "@components/molecules/SectionHeader/SectionHeader.astro";
+import HeroSystemMap from "@islands/HeroSystemMap/HeroSystemMap.astro";
+import BaseLayout from "@layouts/BaseLayout.astro";
+import PageHero from "@components/sections/PageHero/PageHero.astro";
+
+const locale = (Astro.currentLocale ?? "en") as Locale;
+const copy = t(locale);
+const viewModel = await Effect.runPromise(loadHomePageFromRepository(astroContentRepository, locale));
+const site = localizeSiteMeta(await Effect.runPromise(astroContentRepository.getSiteMeta), locale);
+const seo = buildPageSeo(site, {
+  path: localePath(locale, "/"),
+  description: viewModel.hero.summary,
+  ogImage: "/og/home.svg"
+});
+
+const initialDiagnostic = viewModel.diagnostics[0];
+---
+
+<BaseLayout seo={seo} locale={locale} routePath="/">
+  <section class="home-hero">
+    <div class="home-hero__inner u-container">
+      <PageHero
+        eyebrow={viewModel.hero.eyebrow}
+        title={viewModel.hero.title}
+        summary={viewModel.hero.summary}
+        primaryCta={{ label: copy.home.primaryCta, href: "#diagnostic" }}
+        secondaryCta={{ label: copy.home.secondaryCta, href: "#past-work" }}
+      />
+      <p class="home-hero__support">{copy.home.support}</p>
+    </div>
+  </section>
+
+  <CredibilityStrip points={viewModel.credibilityPoints} />
+
+  <section class="home-section home-section--diagnostic" id="diagnostic">
+    <div class="u-container u-stack">
+      <SectionHeader title={copy.home.diagnosticTitle} summary={copy.home.diagnosticSummary} />
+      <div class="diagnostic" data-diagnostic-selector>
+        <div class="diagnostic__options" aria-label={copy.home.diagnosticOptionsLabel}>
+          {
+            viewModel.diagnostics.map((option, index) => (
+              <button
+                class:list={["diagnostic__option", index === 0 && "is-active"]}
+                type="button"
+                aria-pressed={index === 0 ? "true" : "false"}
+                data-diagnostic-option
+                data-id={option.id}
+                data-label={option.label}
+                data-pain={option.pain}
+                data-service-title={option.recommendedService.title}
+                data-service-href={option.recommendedService.href}
+                data-audit-title={option.auditFinding.title}
+                data-audit-href={option.auditFinding.href}
+                data-system-state={option.systemMapState}
+                data-reference-href={option.referenceHref}
+                data-cta-label={option.cta.label}
+                data-cta-href={option.cta.href}
+              >
+                <span>{option.label}</span>
+                <small>{option.pain}</small>
+              </button>
+            ))
+          }
+        </div>
+        {
+          initialDiagnostic && (
+            <article class="diagnostic__result" aria-live="polite" data-diagnostic-result>
+              <p class="diagnostic__label">{copy.home.recommendedPath}</p>
+              <h3 data-diagnostic-title>{initialDiagnostic.label}</h3>
+              <p data-diagnostic-pain>{initialDiagnostic.pain}</p>
+              <dl>
+                <div>
+                  <dt>{copy.home.service}</dt>
+                  <dd>
+                    <a href={initialDiagnostic.recommendedService.href} data-diagnostic-service>
+                      {initialDiagnostic.recommendedService.title}
+                    </a>
+                  </dd>
+                </div>
+                <div>
+                  <dt>{copy.home.referenceFinding}</dt>
+                  <dd>
+                    <a href={initialDiagnostic.auditFinding.href} data-diagnostic-reference>
+                      {initialDiagnostic.auditFinding.title}
+                    </a>
+                  </dd>
+                </div>
+                <div>
+                  <dt>{copy.home.mapState}</dt>
+                  <dd data-diagnostic-map-state>{initialDiagnostic.systemMapState}</dd>
+                </div>
+              </dl>
+              <a class="diagnostic__cta" href={initialDiagnostic.cta.href} data-diagnostic-cta>
+                {initialDiagnostic.cta.label}
+              </a>
+            </article>
+          )
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="home-section" id="past-work">
+    <div class="u-container u-stack">
+      <SectionHeader title={copy.home.pastWorkTitle} summary={copy.home.pastWorkSummary} />
+      <div class="reference-card-list">
+        {
+          viewModel.referenceCards.map((card) => (
+            <a class="reference-card" href={card.href}>
+              <span>{card.title}</span>
+              <dl>
+                <div>
+                  <dt>{copy.home.problem}</dt>
+                  <dd>{card.problem}</dd>
+                </div>
+                <div>
+                  <dt>{copy.home.decision}</dt>
+                  <dd>{card.decision}</dd>
+                </div>
+                <div>
+                  <dt>{copy.home.result}</dt>
+                  <dd>{card.result}</dd>
+                </div>
+              </dl>
+            </a>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="home-section home-section--surface" id="system-map">
+    <div class="u-container u-stack">
+      <SectionHeader title={copy.home.systemMapTitle} summary={copy.home.systemMapSummary} />
+      <HeroSystemMap map={viewModel.heroMap} />
+    </div>
+  </section>
+
+  <section class="home-section">
+    <div class="u-container u-stack">
+      <SectionHeader title={copy.home.labTitle} summary={copy.home.labSummary} />
+      <div class="panel-grid panel-grid--compact">
+        {
+          viewModel.labPreview.map((post) => (
+            <EvidencePanel
+              eyebrow={post.topic}
+              title={post.title}
+              summary={post.summary}
+              recommendation={post.takeaway}
+              cta={{ label: copy.home.openLab, href: localePath(locale, `/lab/${post.slug}`) }}
+            />
+          ))
+        }
+      </div>
+      <a class="home-more-link" href={localePath(locale, "/lab")}>{copy.home.moreInLab}</a>
+    </div>
+  </section>
+
+  <section class="home-section home-section--cta">
+    <div class="u-container">
+      <EvidencePanel
+        title={viewModel.cta.title}
+        summary={viewModel.cta.summary}
+        cta={{ href: viewModel.cta.href, label: viewModel.cta.label }}
+      />
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .home-hero {
+    padding: var(--space-10) 0 var(--space-8);
+  }
+
+  .home-hero__inner {
+    max-width: 980px;
+  }
+
+  .home-hero :global(.page-hero) {
+    padding: 0;
+  }
+
+  .home-hero__support {
+    max-width: 62ch;
+    margin: var(--space-5) 0 0;
+    color: var(--color-muted);
+  }
+
+  .home-section {
+    contain: layout style;
+    scroll-margin-top: 96px;
+    padding: var(--space-12) 0 var(--space-16);
+    content-visibility: auto;
+    contain-intrinsic-size: auto 720px;
+  }
+
+  .home-section--diagnostic {
+    padding-top: var(--space-8);
+  }
+
+  .home-section--surface {
+    background: var(--color-surface-2);
+    border-block: var(--border-1);
+  }
+
+  .diagnostic {
+    display: grid;
+    gap: var(--space-6);
+  }
+
+  .diagnostic__options {
+    display: grid;
+    gap: var(--space-3);
+  }
+
+  .diagnostic__option {
+    position: relative;
+    display: grid;
+    gap: var(--space-2);
+    min-height: 112px;
+    padding: var(--space-4);
+    color: var(--color-text);
+    background: var(--color-surface);
+    border: var(--border-1);
+    border-radius: var(--radius-2);
+    cursor: pointer;
+    overflow: hidden;
+    text-align: left;
+    transition:
+      background-color var(--duration-fast) var(--ease-out-expo),
+      border-color var(--duration-fast) var(--ease-out-expo),
+      transform var(--duration-fast) var(--ease-spring);
+  }
+
+  .diagnostic__option::before {
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: 3px;
+    background: var(--color-accent);
+    content: "";
+    transform: scaleY(0);
+    transform-origin: bottom;
+    transition: transform 220ms var(--ease-spring);
+  }
+
+  .diagnostic__option:hover {
+    background: var(--color-surface-2);
+    border-color: var(--color-border-accent);
+  }
+
+  .diagnostic__option.is-active {
+    background: var(--color-accent-dim);
+    border-color: var(--color-accent);
+  }
+
+  .diagnostic__option.is-active::before {
+    transform: scaleY(1);
+  }
+
+  .diagnostic__option span {
+    font-weight: 700;
+  }
+
+  .diagnostic__option small {
+    color: var(--color-muted);
+    font-size: var(--t-small);
+    line-height: 1.5;
+  }
+
+  .diagnostic__result,
+  .reference-card {
+    display: grid;
+    gap: var(--space-4);
+    padding: var(--space-6);
+    background: var(--color-surface);
+    border: var(--border-1);
+    border-radius: var(--radius-2);
+  }
+
+  .diagnostic__result {
+    transition:
+      border-color var(--duration-state) var(--ease-standard),
+      opacity 150ms var(--ease-gentle),
+      transform 220ms var(--ease-out-expo);
+  }
+
+  .diagnostic__result.is-updating {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+
+  .diagnostic__label,
+  .diagnostic__result p,
+  .diagnostic__result dl,
+  .diagnostic__result dd,
+  .reference-card dl,
+  .reference-card dd {
+    margin: 0;
+  }
+
+  .diagnostic__label,
+  .diagnostic__result dt,
+  .reference-card dt {
+    color: var(--color-accent);
+    font-family: var(--font-code);
+    font-size: var(--t-mono);
+    font-weight: 500;
+    text-transform: uppercase;
+  }
+
+  .diagnostic__result h3 {
+    margin: 0;
+    font-family: var(--font-body);
+    font-size: var(--t-h3);
+    font-weight: 700;
+    line-height: 1.15;
+  }
+
+  .diagnostic__result p,
+  .diagnostic__result dd,
+  .reference-card dd {
+    color: var(--color-muted);
+  }
+
+  .diagnostic__result dl,
+  .reference-card dl {
+    display: grid;
+    gap: var(--space-3);
+  }
+
+  .diagnostic__result a,
+  .reference-card {
+    color: var(--color-text);
+  }
+
+  .diagnostic__result .diagnostic__cta {
+    color: #ffffff;
+  }
+
+  .diagnostic__cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: fit-content;
+    min-height: 44px;
+    padding: calc(var(--control-padding-y) + 2px) var(--control-padding-x) var(--control-padding-y)
+      var(--control-padding-x);
+    background: var(--color-accent);
+    border: 1px solid var(--color-accent);
+    border-radius: var(--radius-1);
+    color: #ffffff;
+    cursor: pointer;
+    font-size: var(--t-small);
+    font-weight: 700;
+    line-height: 1;
+    text-decoration: none;
+    transition:
+      background-color var(--duration-fast) var(--ease-standard),
+      border-color var(--duration-fast) var(--ease-standard),
+      transform var(--duration-fast) var(--ease-spring);
+  }
+
+  .diagnostic__cta:hover {
+    border-color: var(--color-violet);
+    background: var(--color-violet);
+    transform: translateY(-2px);
+  }
+
+  .panel-grid {
+    display: grid;
+    gap: var(--space-6);
+  }
+
+  .panel-grid--compact {
+    max-width: 920px;
+  }
+
+  .reference-card-list {
+    display: grid;
+    gap: var(--space-4);
+  }
+
+  .reference-card {
+    text-decoration: none;
+    transition:
+      border-color var(--duration-fast) var(--ease-spring),
+      transform var(--duration-fast) var(--ease-spring);
+  }
+
+  .reference-card:hover {
+    border-color: var(--color-border-accent);
+    transform: translateY(-2px);
+  }
+
+  .reference-card span {
+    font-family: var(--font-body);
+    font-size: 1.2rem;
+    font-weight: 700;
+    line-height: 1.2;
+  }
+
+  .home-more-link {
+    width: fit-content;
+    color: var(--color-accent);
+    font-weight: 700;
+    text-decoration: none;
+  }
+
+  @media (min-width: 860px) {
+    .diagnostic {
+      grid-template-columns: minmax(0, 1.1fr) minmax(320px, 0.9fr);
+      align-items: start;
+    }
+
+    .diagnostic__options {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .panel-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .diagnostic__option,
+    .diagnostic__cta,
+    .reference-card {
+      transform: none !important;
+    }
+  }
+</style>

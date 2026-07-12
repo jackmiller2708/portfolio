@@ -58,6 +58,13 @@ textarea {
   font: inherit;
 }
 
+button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
 a {
   color: inherit;
 }
@@ -69,6 +76,15 @@ a {
     box-shadow var(--duration-fast) var(--ease-standard),
     color var(--duration-fast) var(--ease-standard),
     opacity var(--duration-fast) var(--ease-standard);
+}
+
+:where(button, .button-link, [role="button"]) {
+  text-wrap: balance;
+}
+
+:where(button, .button-link, [role="button"]) > :where(span, strong, em) {
+  line-height: 1;
+  padding-top: 2px;
 }
 
 img,

@@ -1,0 +1,107 @@
+---
+import { Effect } from "effect";
+import BaseLayout from "@layouts/BaseLayout.astro";
+import PageHero from "@components/sections/PageHero/PageHero.astro";
+import { loadCaseStudiesPageFromRepository } from "@programs/load-case-studies-page";
+import { astroContentRepository } from "@services/AstroContentRepository";
+import { buildPageSeo } from "@utils/seo";
+import type { Locale } from "@domain/site";
+import { localePath, t } from "@i18n/locales";
+import { localizeSiteMeta } from "@i18n/content";
+
+const locale = (Astro.currentLocale ?? "en") as Locale;
+const copy = t(locale);
+const viewModel = await Effect.runPromise(
+  loadCaseStudiesPageFromRepository(astroContentRepository, locale)
+);
+const site = localizeSiteMeta(await Effect.runPromise(astroContentRepository.getSiteMeta), locale);
+const seo = buildPageSeo(site, {
+  path: localePath(locale, "/case-studies"),
+  title: viewModel.title,
+  description: viewModel.summary,
+  ogImage: "/og/case-studies.svg"
+});
+---
+
+<BaseLayout seo={seo} locale={locale} routePath="/case-studies">
+  <PageHero
+    title={viewModel.title}
+    summary={viewModel.summary}
+    primaryCta={{ label: copy.cases.viewSampleAudit, href: localePath(locale, "/sample-audit") }}
+  />
+  <section class="case-section">
+    <div class="u-container case-grid">
+      {
+        viewModel.caseStudies.map((caseStudy) => (
+          <article class="case-card">
+            <p class="case-card__label">{caseStudy.redactionStatus}</p>
+            <h2>{caseStudy.title}</h2>
+            <p>{caseStudy.summary}</p>
+            <a href={localePath(locale, `/case-studies/${caseStudy.slug}`)}>
+              {copy.common.readCaseStudy}
+            </a>
+          </article>
+        ))
+      }
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .case-section {
+    contain: layout style;
+    padding: 0 0 var(--space-16);
+  }
+
+  .case-grid {
+    display: grid;
+    gap: var(--space-6);
+  }
+
+  .case-card {
+    padding: var(--space-6);
+    background: var(--color-surface);
+    border: var(--border-1);
+    border-radius: var(--radius-2);
+    transition: border-color var(--duration-state) var(--ease-standard);
+  }
+
+  .case-card:hover {
+    border-color: var(--color-border-accent);
+  }
+
+  .case-card__label {
+    width: fit-content;
+    margin: 0 0 var(--space-3);
+    padding: var(--space-1) var(--space-3);
+    color: var(--color-accent);
+    border: 1px solid color-mix(in srgb, var(--color-accent) 40%, transparent);
+    border-radius: var(--radius-1);
+    font-family: var(--font-code);
+    font-size: var(--t-mono);
+    font-weight: 700;
+    text-transform: capitalize;
+  }
+
+  h2,
+  p {
+    margin: 0;
+  }
+
+  h2 + p {
+    margin-top: var(--space-3);
+    color: var(--color-muted);
+  }
+
+  a {
+    display: inline-block;
+    margin-top: var(--space-5);
+    color: var(--color-text);
+    font-weight: 700;
+    transition: color var(--duration-state) var(--ease-standard);
+  }
+
+  a:hover {
+    color: var(--color-accent);
+  }
+</style>

@@ -1,3 +1,5 @@
+export type Locale = "en" | "vi";
+
 export type SiteMeta = {
   readonly title: string;
   readonly description: string;

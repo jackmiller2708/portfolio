@@ -8,6 +8,9 @@ import HeroSystemMap from "@islands/HeroSystemMap/HeroSystemMap.astro";
 import { loadCaseStudyPage } from "@programs/load-case-study-page";
 import { astroContentRepository } from "@services/AstroContentRepository";
 import { buildPageSeo } from "@utils/seo";
+import { localizeSiteMeta } from "@i18n/content";
+import type { Locale } from "@domain/site";
+import { localePath, t } from "@i18n/locales";
 
 export async function getStaticPaths() {
   const entries = await getCollection("case-studies");
@@ -20,55 +23,57 @@ export async function getStaticPaths() {
 
 const { entry } = Astro.props;
 const { Content } = await render(entry);
-const viewModel = await Effect.runPromise(loadCaseStudyPage(entry.id));
+const locale = (Astro.currentLocale ?? "en") as Locale;
+const copy = t(locale);
+const viewModel = await Effect.runPromise(loadCaseStudyPage(entry.id, locale));
 const { caseStudy, systemMap } = viewModel;
-const site = await Effect.runPromise(astroContentRepository.getSiteMeta);
+const site = localizeSiteMeta(await Effect.runPromise(astroContentRepository.getSiteMeta), locale);
 const seo = buildPageSeo(site, {
-  path: `/case-studies/${caseStudy.slug}`,
+  path: localePath(locale, `/case-studies/${caseStudy.slug}`),
   title: caseStudy.title,
   description: caseStudy.summary,
   ogImage: "/og/case-studies.svg"
 });
 ---
 
-<BaseLayout seo={seo}>
+<BaseLayout seo={seo} locale={locale} routePath={`/case-studies/${caseStudy.slug}`}>
   <PageHero
     title={caseStudy.title}
     summary={caseStudy.summary}
     primaryCta={{ label: viewModel.cta.label, href: viewModel.cta.href }}
-    secondaryCta={{ label: "Back to cases", href: "/case-studies" }}
+    secondaryCta={{ label: copy.common.backToCases, href: localePath(locale, "/case-studies") }}
   />
   <article class="case-detail">
     <div class="u-container case-detail__layout">
-      <aside class="case-detail__meta" aria-label="Case study context">
+      <aside class="case-detail__meta" aria-label={copy.cases.context}>
         <p class="case-detail__label">{caseStudy.redactionStatus}</p>
-        <h2>Context</h2>
+        <h2>{copy.cases.context}</h2>
         <p>{caseStudy.context}</p>
       </aside>
       <div class="case-detail__main">
         <section class="scan-section" aria-labelledby="case-scan-title">
-          <h2 id="case-scan-title">Case scan</h2>
+          <h2 id="case-scan-title">{copy.cases.caseScan}</h2>
           <div class="scan-grid">
             <article>
-              <h3>Problem</h3>
+              <h3>{copy.home.problem}</h3>
               <p>{caseStudy.problem}</p>
             </article>
             <article>
-              <h3>Result</h3>
+              <h3>{copy.home.result}</h3>
               <p>{caseStudy.result}</p>
             </article>
             <article>
-              <h3>Recommendation</h3>
+              <h3>{copy.cases.recommendation}</h3>
               <p>{caseStudy.recommendation}</p>
             </article>
           </div>
         </section>
         <section>
-          <h2>Constraints</h2>
+          <h2>{copy.cases.constraints}</h2>
           <ul>{caseStudy.constraints.map((item) => <li>{item}</li>)}</ul>
         </section>
         <section>
-          <h2>Decisions</h2>
+          <h2>{copy.cases.decisions}</h2>
           <div class="detail-grid">
             {
               caseStudy.decisions.map((decision) => (
@@ -81,18 +86,18 @@ const seo = buildPageSeo(site, {
           </div>
         </section>
         <section>
-          <h2>Tradeoffs</h2>
+          <h2>{copy.cases.tradeoffs}</h2>
           <ul>{caseStudy.tradeoffs.map((item) => <li>{item}</li>)}</ul>
         </section>
         <section>
-          <h2>Before and after architecture</h2>
+          <h2>{copy.cases.beforeAfter}</h2>
           <div class="before-after">
             <article>
-              <h3>Before</h3>
+              <h3>{copy.cases.before}</h3>
               <ul>{caseStudy.beforeAfter.before.map((item) => <li>{item}</li>)}</ul>
             </article>
             <article>
-              <h3>After</h3>
+              <h3>{copy.cases.after}</h3>
               <ul>{caseStudy.beforeAfter.after.map((item) => <li>{item}</li>)}</ul>
             </article>
           </div>
@@ -103,7 +108,7 @@ const seo = buildPageSeo(site, {
           <HeroSystemMap map={systemMap} />
         </section>
         <section>
-          <h2>Evidence</h2>
+          <h2>{copy.cases.evidence}</h2>
           <div class="detail-grid">
             {
               caseStudy.evidence.map((item) => (
@@ -121,7 +126,7 @@ const seo = buildPageSeo(site, {
         {
           viewModel.recommendedReads.length > 0 && (
             <section class="recommended-reads" aria-labelledby="case-next-read">
-              <h2 id="case-next-read">Recommended next reads</h2>
+              <h2 id="case-next-read">{copy.common.recommendedNextReads}</h2>
               <div class="recommended-grid">
                 {viewModel.recommendedReads.map((read) => (
                   <a class="recommended-card" href={read.href}>

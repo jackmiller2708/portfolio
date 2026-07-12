@@ -3,28 +3,35 @@ import { Effect } from "effect";
 import BaseLayout from "@layouts/BaseLayout.astro";
 import PageHero from "@components/sections/PageHero/PageHero.astro";
 import ContactIntake from "@islands/ContactIntake/ContactIntake.astro";
-import { loadContactPage } from "@programs/load-contact-page";
+import { loadContactPageFromRepository } from "@programs/load-contact-page";
 import { astroContentRepository } from "@services/AstroContentRepository";
 import { buildPageSeo } from "@utils/seo";
+import type { Locale } from "@domain/site";
+import { localePath, t } from "@i18n/locales";
+import { localizeSiteMeta } from "@i18n/content";
 
-const viewModel = await Effect.runPromise(loadContactPage);
-const site = await Effect.runPromise(astroContentRepository.getSiteMeta);
+const locale = (Astro.currentLocale ?? "en") as Locale;
+const copy = t(locale);
+const viewModel = await Effect.runPromise(
+  loadContactPageFromRepository(astroContentRepository, locale)
+);
+const site = localizeSiteMeta(await Effect.runPromise(astroContentRepository.getSiteMeta), locale);
 const seo = buildPageSeo(site, {
-  path: "/contact",
+  path: localePath(locale, "/contact"),
   title: "Contact",
-  description: "Request an Angular frontend audit with Nguyen Ngoc Huy / Jack.",
+  description: copy.contact.seoDescription,
   ogImage: "/og/contact.svg"
 });
 ---
 
-<BaseLayout seo={seo}>
+<BaseLayout seo={seo} locale={locale} routePath="/contact">
   <PageHero title={viewModel.title} summary={viewModel.summary} />
   <section class="contact-section">
     <div class="u-container contact-layout">
-      <ContactIntake viewModel={viewModel} />
+      <ContactIntake viewModel={viewModel} locale={locale} />
       <aside class="fit-note" aria-labelledby="contact-boundaries">
-        <h2 id="contact-boundaries">Before sending</h2>
-        <p>These requests are usually not a fit for my Angular contractor work.</p>
+        <h2 id="contact-boundaries">{copy.contact.beforeSending}</h2>
+        <p>{copy.contact.fitNote}</p>
         <ul>{viewModel.nonFitCriteria.map((item) => <li>{item}</li>)}</ul>
       </aside>
     </div>

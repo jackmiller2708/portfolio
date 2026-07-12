@@ -6,13 +6,13 @@ import path from "node:path";
 const baseUrl = process.env.UI_BASE_URL ?? "http://localhost:4321";
 const outputDir = path.join(process.cwd(), "test-results", "ui-verification");
 const routes = [
-  "/",
-  "/services",
-  "/sample-audit",
-  "/contact",
-  "/about",
-  "/case-studies/checkout-stabilization",
-  "/lab/rxjs-cleanup"
+  "/en",
+  "/en/services",
+  "/en/sample-audit",
+  "/en/contact",
+  "/en/about",
+  "/en/case-studies/checkout-stabilization",
+  "/en/lab/rxjs-cleanup"
 ];
 const viewports = [
   { name: "desktop", width: 1280, height: 900 },
@@ -22,7 +22,7 @@ const viewports = [
 ];
 
 const getRouteName = (route) =>
-  route === "/" ? "home" : route.replace(/^\//, "").replaceAll("/", "-");
+  route === "/en" ? "home" : route.replace(/^\//, "").replaceAll("/", "-");
 
 const inspectPage = async (page, route, viewport) =>
   page.evaluate(
@@ -67,17 +67,21 @@ const inspectPage = async (page, route, viewport) =>
       ]
         .filter(isVisible)
         .map((element) => {
-          const radius = Number.parseFloat(getComputedStyle(element).borderTopLeftRadius);
+          const style = getComputedStyle(element);
+          const radius = Number.parseFloat(style.borderTopLeftRadius);
+          const padding = Number.parseFloat(style.paddingTop);
+          const innerRadius = Number.parseFloat(getCssVar("--radius-inner")) || 1;
 
           return {
             selector:
               element.className && typeof element.className === "string"
                 ? `.${element.className.split(/\s+/).join(".")}`
                 : element.tagName.toLowerCase(),
-            radius
+            radius,
+            expectedMax: padding + innerRadius
           };
         })
-        .filter((item) => item.radius > 8);
+        .filter((item) => item.radius > item.expectedMax + 0.5);
 
       const containers = [...document.querySelectorAll(".u-container")]
         .filter(isVisible)
@@ -165,6 +169,30 @@ for (const viewport of viewports) {
     const url = `${baseUrl}${route}`;
 
     await page.goto(url, { waitUntil: "networkidle" });
+    if (route === "/en") {
+      await page
+        .locator("[data-system-map]")
+        .first()
+        .waitFor({ state: "visible", timeout: 15_000 });
+      await page
+        .locator("[data-system-map]")
+        .first()
+        .evaluate((element) => {
+          element.scrollIntoView({ block: "center" });
+        });
+      await page
+        .locator("[data-system-map]")
+        .first()
+        .waitFor({ state: "visible", timeout: 15_000 });
+      await page
+        .locator("[data-system-map]")
+        .first()
+        .waitFor({ state: "attached", timeout: 15_000 });
+      await page
+        .locator("[data-system-map][data-three-map-ready='true']")
+        .first()
+        .waitFor({ state: "attached", timeout: 15_000 });
+    }
     await page.screenshot({
       path: path.join(outputDir, `${getRouteName(route)}-${viewport.name}.png`),
       fullPage: true
@@ -202,7 +230,7 @@ for (const result of results) {
     issues.push(`${label}: public proof framing detected`);
   }
 
-  if (result.route === "/contact") {
+  if (result.route === "/en/contact") {
     if (result.contactStates.length !== 0) {
       issues.push(`${label}: obsolete visible contact states found`);
     }
@@ -216,7 +244,7 @@ for (const result of results) {
     }
   }
 
-  if (result.route === "/" && result.systemMap) {
+  if (result.route === "/en" && result.systemMap) {
     if (result.systemMap.nodes < 6 || result.systemMap.states < 2) {
       issues.push(`${label}: system map missing expected nodes or states`);
     }

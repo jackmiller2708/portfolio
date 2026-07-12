@@ -2,35 +2,43 @@
 import { Effect } from "effect";
 import BaseLayout from "@layouts/BaseLayout.astro";
 import PageHero from "@components/sections/PageHero/PageHero.astro";
-import { loadCaseStudiesPage } from "@programs/load-case-studies-page";
+import { loadLabPageFromRepository } from "@programs/load-lab-page";
 import { astroContentRepository } from "@services/AstroContentRepository";
 import { buildPageSeo } from "@utils/seo";
+import type { Locale } from "@domain/site";
+import { localePath, t } from "@i18n/locales";
+import { localizeSiteMeta } from "@i18n/content";
 
-const viewModel = await Effect.runPromise(loadCaseStudiesPage);
-const site = await Effect.runPromise(astroContentRepository.getSiteMeta);
+const locale = (Astro.currentLocale ?? "en") as Locale;
+const copy = t(locale);
+const viewModel = await Effect.runPromise(
+  loadLabPageFromRepository(astroContentRepository, locale)
+);
+const site = localizeSiteMeta(await Effect.runPromise(astroContentRepository.getSiteMeta), locale);
 const seo = buildPageSeo(site, {
-  path: "/case-studies",
+  path: localePath(locale, "/lab"),
   title: viewModel.title,
   description: viewModel.summary,
-  ogImage: "/og/case-studies.svg"
+  ogImage: "/og/lab.svg"
 });
 ---
 
-<BaseLayout seo={seo}>
+<BaseLayout seo={seo} locale={locale} routePath="/lab">
   <PageHero
     title={viewModel.title}
     summary={viewModel.summary}
-    primaryCta={{ label: "View sample audit", href: "/sample-audit" }}
+    primaryCta={{ label: copy.common.viewServices, href: localePath(locale, "/services") }}
   />
-  <section class="case-section">
-    <div class="u-container case-grid">
+  <section class="lab-section">
+    <div class="u-container lab-grid">
       {
-        viewModel.caseStudies.map((caseStudy) => (
-          <article class="case-card">
-            <p class="case-card__label">{caseStudy.redactionStatus}</p>
-            <h2>{caseStudy.title}</h2>
-            <p>{caseStudy.summary}</p>
-            <a href={`/case-studies/${caseStudy.slug}`}>Read case study</a>
+        viewModel.posts.map((post) => (
+          <article class="lab-card">
+            <p class="lab-card__topic">{post.topic}</p>
+            <h2>{post.title}</h2>
+            <p>{post.summary}</p>
+            <p class="lab-card__takeaway">{post.takeaway}</p>
+            <a href={localePath(locale, `/lab/${post.slug}`)}>{copy.common.readNote}</a>
           </article>
         ))
       }
@@ -39,17 +47,17 @@ const seo = buildPageSeo(site, {
 </BaseLayout>
 
 <style>
-  .case-section {
+  .lab-section {
     contain: layout style;
     padding: 0 0 var(--space-16);
   }
 
-  .case-grid {
+  .lab-grid {
     display: grid;
     gap: var(--space-6);
   }
 
-  .case-card {
+  .lab-card {
     padding: var(--space-6);
     background: var(--color-surface);
     border: var(--border-1);
@@ -57,21 +65,17 @@ const seo = buildPageSeo(site, {
     transition: border-color var(--duration-state) var(--ease-standard);
   }
 
-  .case-card:hover {
+  .lab-card:hover {
     border-color: var(--color-border-accent);
   }
 
-  .case-card__label {
-    width: fit-content;
+  .lab-card__topic {
     margin: 0 0 var(--space-3);
-    padding: var(--space-1) var(--space-3);
     color: var(--color-accent);
-    border: 1px solid color-mix(in srgb, var(--color-accent) 40%, transparent);
-    border-radius: var(--radius-1);
     font-family: var(--font-code);
     font-size: var(--t-mono);
     font-weight: 700;
-    text-transform: capitalize;
+    text-transform: uppercase;
   }
 
   h2,
@@ -82,6 +86,12 @@ const seo = buildPageSeo(site, {
   h2 + p {
     margin-top: var(--space-3);
     color: var(--color-muted);
+  }
+
+  .lab-card__takeaway {
+    margin-top: var(--space-4);
+    color: var(--color-text);
+    font-weight: 700;
   }
 
   a {

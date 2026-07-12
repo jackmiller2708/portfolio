@@ -2,11 +2,21 @@ import { Effect } from "effect";
 import type { AuditFinding } from "@domain/audit";
 import type { LabPost } from "@domain/lab";
 import type { ServiceOffer } from "@domain/service";
-import type { SiteMeta } from "@domain/site";
+import type { Locale, SiteMeta } from "@domain/site";
 import type { SystemMap } from "@domain/system-map";
 import type { CaseStudy } from "@domain/case-study";
 import type { DiagnosticOption, DiagnosticOptionSeed } from "@domain/diagnostic";
 import type { ContentRepository } from "@services/ContentRepository";
+import {
+  localizeCaseStudies,
+  localizeFindings,
+  localizeHref,
+  localizeLabPosts,
+  localizeServices,
+  localizeSiteMeta,
+  localizeSystemMap
+} from "@i18n/content";
+import { defaultLocale, localePath } from "@i18n/locales";
 
 const diagnosticSeeds: readonly DiagnosticOptionSeed[] = [
   {
@@ -47,6 +57,29 @@ const diagnosticSeeds: readonly DiagnosticOptionSeed[] = [
   }
 ];
 
+const diagnosticVi: Record<string, Pick<DiagnosticOptionSeed, "label" | "pain" | "ctaLabel">> = {
+  "unclear-state": {
+    label: "State không rõ owner",
+    pain: "Ownership bị rải qua component, service, và route effect.",
+    ctaLabel: "Bắt đầu với state"
+  },
+  "cache-data": {
+    label: "Cache và data behavior",
+    pain: "Các màn hình không khớp vì cache rule, refresh timing, và API state còn ẩn.",
+    ctaLabel: "Trao đổi data flow"
+  },
+  "error-recovery": {
+    label: "Error recovery yếu",
+    pain: "Failure tới người dùng mà không có recovery path được đặt tên hoặc fallback có thể test.",
+    ctaLabel: "Review recovery path"
+  },
+  "refactor-planning": {
+    label: "Kế hoạch refactor",
+    pain: "Đội biết hệ thống cần thay đổi nhưng thiếu chuỗi thực hiện ít rủi ro.",
+    ctaLabel: "Lên sequence"
+  }
+};
+
 const findById = <Value extends { readonly id: string }>(
   values: readonly Value[],
   id: string
@@ -54,43 +87,50 @@ const findById = <Value extends { readonly id: string }>(
 
 const buildDiagnostics = (
   services: readonly ServiceOffer[],
-  auditFindings: readonly AuditFinding[]
+  auditFindings: readonly AuditFinding[],
+  locale: Locale
 ): readonly DiagnosticOption[] =>
   diagnosticSeeds.map((seed) => {
+    const localizedSeed = locale === "vi" ? { ...seed, ...diagnosticVi[seed.id] } : seed;
     const service = findById(services, seed.serviceId) ?? services[0];
     const finding = findById(auditFindings, seed.auditFindingId) ?? auditFindings[0];
 
     return {
       id: seed.id,
-      label: seed.label,
-      pain: seed.pain,
+      label: localizedSeed.label,
+      pain: localizedSeed.pain,
       recommendedService: {
         id: service?.id ?? seed.serviceId,
-        title: service?.title ?? "Frontend systems diagnostic",
-        href: service ? `/services#${service.id}` : "/services"
+        title:
+          service?.title ??
+          (locale === "vi" ? "Audit hệ thống frontend" : "Frontend systems diagnostic"),
+        href: localizeHref(locale, service ? `/services#${service.id}` : "/services")
       },
       auditFinding: {
         id: finding?.id ?? seed.auditFindingId,
-        title: finding?.title ?? "Sample audit finding",
-        href: finding ? `/sample-audit#${finding.id}` : "/sample-audit"
+        title: finding?.title ?? (locale === "vi" ? "Phát hiện audit mẫu" : "Sample audit finding"),
+        href: localizeHref(locale, finding ? `/sample-audit#${finding.id}` : "/sample-audit")
       },
       systemMapState: seed.systemMapState,
-      referenceHref: finding ? `/sample-audit#${finding.id}` : "/sample-audit",
+      referenceHref: localizeHref(
+        locale,
+        finding ? `/sample-audit#${finding.id}` : "/sample-audit"
+      ),
       cta: {
-        label: seed.ctaLabel,
-        href: `/contact?diagnostic=${seed.id}`
+        label: localizedSeed.ctaLabel,
+        href: localizeHref(locale, `/contact?diagnostic=${seed.id}`)
       }
     };
   });
 
-const buildReferenceCards = (caseStudies: readonly CaseStudy[]) =>
+const buildReferenceCards = (caseStudies: readonly CaseStudy[], locale: Locale) =>
   caseStudies.slice(0, 2).map((caseStudy) => ({
     slug: caseStudy.slug,
     title: caseStudy.title,
     problem: caseStudy.problem,
     decision: caseStudy.decisions[0]?.title ?? "Make the system boundary explicit",
     result: caseStudy.result,
-    href: `/case-studies/${caseStudy.slug}`
+    href: localePath(locale, `/case-studies/${caseStudy.slug}`)
   }));
 
 export type HomePageViewModel = {
@@ -122,46 +162,65 @@ export type HomePageViewModel = {
 };
 
 export const loadHomePageFromRepository = (
-  repository: ContentRepository
+  repository: ContentRepository,
+  locale: Locale = defaultLocale
 ): Effect.Effect<HomePageViewModel> =>
   Effect.gen(function* () {
-    const site = yield* repository.getSiteMeta;
-    const services = yield* repository.listServices;
-    const auditFindings = yield* repository.listAuditFindings;
-    const labPosts = yield* repository.listLabPosts;
-    const caseStudies = yield* repository.listCaseStudies;
-    const systemMap = yield* repository.getSystemMap;
+    const site = localizeSiteMeta(yield* repository.getSiteMeta, locale);
+    const services = localizeServices(yield* repository.listServices, locale);
+    const auditFindings = localizeFindings(yield* repository.listAuditFindings, locale);
+    const labPosts = localizeLabPosts(yield* repository.listLabPosts, locale);
+    const caseStudies = localizeCaseStudies(yield* repository.listCaseStudies, locale);
+    const systemMap = localizeSystemMap(yield* repository.getSystemMap, locale);
 
     return {
       hero: {
-        eyebrow: "Nguyen Ngoc Huy / Jack · Angular Frontend Systems Engineer · Vietnam",
-        title: "Complex Angular systems,\nmade explicit.",
+        eyebrow:
+          locale === "vi"
+            ? "Nguyen Ngoc Huy / Jack · Angular Frontend Systems Engineer · Việt Nam"
+            : "Nguyen Ngoc Huy / Jack · Angular Frontend Systems Engineer · Vietnam",
+        title:
+          locale === "vi"
+            ? "Hệ thống Angular phức tạp,\nđược làm rõ."
+            : "Complex Angular systems,\nmade explicit.",
         summary:
-          "I help teams audit, refactor, and stabilize Angular applications where state ownership, RxJS flows, data access, and error handling have become expensive to change."
+          locale === "vi"
+            ? "Tôi giúp các đội audit, refactor, và ổn định ứng dụng Angular khi state ownership, RxJS flow, data access, và error handling đã trở nên tốn kém để thay đổi."
+            : "I help teams audit, refactor, and stabilize Angular applications where state ownership, RxJS flows, data access, and error handling have become expensive to change."
       },
       credibilityPoints: site.credibilityPoints,
       services: services.slice(0, 3),
       auditPreview: {
         summary:
-          "A sample of the review shape: observable evidence, system risk, and a sequenced recommendation.",
+          locale === "vi"
+            ? "Một mẫu review: dấu hiệu quan sát được, rủi ro hệ thống, và đề xuất có sequence."
+            : "A sample of the review shape: observable evidence, system risk, and a sequenced recommendation.",
         findings: auditFindings.slice(0, 2)
       },
-      diagnostics: buildDiagnostics(services, auditFindings),
+      diagnostics: buildDiagnostics(services, auditFindings, locale),
       explorationStrip: [
-        { label: "System map", href: "#system-map" },
-        { label: "Past work", href: "#past-work" },
-        { label: "Audit findings", href: "/sample-audit" },
-        { label: "Lab notes", href: "/lab" }
+        { label: locale === "vi" ? "Bản đồ hệ thống" : "System map", href: "#system-map" },
+        { label: locale === "vi" ? "Công việc cũ" : "Past work", href: "#past-work" },
+        {
+          label: locale === "vi" ? "Phát hiện audit" : "Audit findings",
+          href: localePath(locale, "/sample-audit")
+        },
+        { label: locale === "vi" ? "Ghi chú lab" : "Lab notes", href: localePath(locale, "/lab") }
       ],
-      referenceCards: buildReferenceCards(caseStudies),
+      referenceCards: buildReferenceCards(caseStudies, locale),
       labPreview: labPosts.slice(0, 2),
       heroMap: systemMap,
       cta: {
-        title: "Request an Angular frontend audit.",
+        title:
+          locale === "vi"
+            ? "Yêu cầu audit frontend Angular."
+            : "Request an Angular frontend audit.",
         summary:
-          "Send the product context, Angular version, team size, current pain, and timeline. I will use that to decide whether the right first step is an audit, stabilization sprint, advisory session, or no-fit.",
-        href: "/contact",
-        label: "Request an Angular audit"
+          locale === "vi"
+            ? "Gửi ngữ cảnh sản phẩm, phiên bản Angular, quy mô đội, điểm đau hiện tại, và timeline. Tôi sẽ dùng thông tin đó để xác định bước đầu hợp lý là audit, stabilization sprint, advisory, hay no-fit."
+            : "Send the product context, Angular version, team size, current pain, and timeline. I will use that to decide whether the right first step is an audit, stabilization sprint, advisory session, or no-fit.",
+        href: localePath(locale, "/contact"),
+        label: locale === "vi" ? "Yêu cầu audit Angular" : "Request an Angular audit"
       }
     };
   });

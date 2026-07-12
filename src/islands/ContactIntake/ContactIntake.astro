@@ -1,43 +1,99 @@
 ---
 import type { ContactPageViewModel } from "@programs/load-contact-page";
+import type { Locale } from "@domain/site";
 
 type Props = {
   viewModel: ContactPageViewModel;
+  locale?: Locale;
 };
 
-const { viewModel } = Astro.props;
+const { viewModel, locale = "en" } = Astro.props;
 const firstRecommendation = viewModel.advisoryRecommendations[0];
+const formCopy =
+  locale === "vi"
+    ? {
+        advisoryTitle: "Điều tôi sẽ hỏi trước",
+        advisorySummary:
+          "Chọn điểm đau gần nhất. Đề xuất sẽ giữ inquiry đầu tiên gắn với rủi ro hệ thống Angular.",
+        advisoryOptions: "Điểm bắt đầu advisory",
+        recommendedStep: "Bước đầu đề xuất",
+        useContext: "Dùng ngữ cảnh này",
+        framing:
+          "Chia sẻ ngữ cảnh sản phẩm, phiên bản Angular, quy mô đội, điểm đau hiện tại, và timeline.",
+        name: "Tên",
+        email: "Email",
+        productContext: "Ngữ cảnh sản phẩm",
+        angularVersion: "Phiên bản Angular hoặc frontend stack",
+        teamSize: "Quy mô đội",
+        timeline: "Timeline",
+        budgetComfort: "Mức ngân sách thoải mái - tùy chọn",
+        pain: "Hiện tại điều gì đang đau?",
+        engagementType: "Bạn cần diagnosis, implementation, hay cả hai?",
+        diagnosis: "Diagnosis",
+        implementation: "Implementation",
+        advisory: "Advisory",
+        unsure: "Chưa chắc",
+        consent: "Tôi đồng ý được liên hệ về inquiry này.",
+        submit: "Gửi inquiry",
+        emailFallback: "Thích email hơn? Dùng"
+      }
+    : {
+        advisoryTitle: "What I would ask first",
+        advisorySummary:
+          "Pick the closest pain. The recommendation keeps the first inquiry scoped to the Angular system risk.",
+        advisoryOptions: "Advisory starting points",
+        recommendedStep: "Recommended first step",
+        useContext: "Use this context",
+        framing:
+          "Share the product context, Angular version, team size, current pain, and timeline.",
+        name: "Name",
+        email: "Email",
+        productContext: "Product context",
+        angularVersion: "Angular version or frontend stack",
+        teamSize: "Team size",
+        timeline: "Timeline",
+        budgetComfort: "Budget comfort - optional",
+        pain: "What currently feels painful?",
+        engagementType: "Do you need diagnosis, implementation, or both?",
+        diagnosis: "Diagnosis",
+        implementation: "Implementation",
+        advisory: "Advisory",
+        unsure: "Unsure",
+        consent: "I consent to being contacted about this inquiry.",
+        submit: "Submit inquiry",
+        emailFallback: "Prefer email? Use"
+      };
 const fields = [
   {
     id: "name",
-    label: "Name",
+    label: formCopy.name,
     autocomplete: "name"
   },
   {
     id: "email",
-    label: "Email",
+    label: formCopy.email,
     type: "email",
     autocomplete: "email"
   },
   {
     id: "productContext",
-    label: "Product context"
+    label: formCopy.productContext
   },
   {
     id: "angularVersion",
-    label: "Angular version or frontend stack"
+    label: formCopy.angularVersion
   },
   {
     id: "teamSize",
-    label: "Team size"
+    label: formCopy.teamSize
   },
   {
     id: "timeline",
-    label: "Timeline"
+    label: formCopy.timeline
   },
   {
     id: "budgetComfort",
-    label: "Budget comfort - optional",
+    label: formCopy.budgetComfort,
     required: false
   }
 ] as const;
@@ -48,14 +104,11 @@ const fields = [
     firstRecommendation && (
       <section class="advisory-flow" aria-labelledby="advisory-flow-title" data-advisory-flow>
         <div>
-          <h2 id="advisory-flow-title">What I would ask first</h2>
-          <p>
-            Pick the closest pain. The recommendation keeps the first inquiry scoped to the Angular
-            system risk.
-          </p>
+          <h2 id="advisory-flow-title">{formCopy.advisoryTitle}</h2>
+          <p>{formCopy.advisorySummary}</p>
         </div>
         <div class="advisory-flow__layout">
-          <div class="advisory-flow__options" aria-label="Advisory starting points">
+          <div class="advisory-flow__options" aria-label={formCopy.advisoryOptions}>
             {viewModel.advisoryRecommendations.map((recommendation, index) => (
               <button
                 class:list={["advisory-flow__option", index === 0 && "is-active"]}
@@ -75,11 +128,11 @@ const fields = [
             ))}
           </div>
           <article class="advisory-flow__result" aria-live="polite">
-            <p class="advisory-flow__label">Recommended first step</p>
+            <p class="advisory-flow__label">{formCopy.recommendedStep}</p>
             <h3 data-advisory-title>{firstRecommendation.recommendedServiceTitle}</h3>
             <p data-advisory-reason>{firstRecommendation.reason}</p>
             <a href={firstRecommendation.contactHref} data-advisory-link>
-              Use this context
+              {formCopy.useContext}
             </a>
           </article>
         </div>
@@ -89,7 +142,7 @@ const fields = [
 
   <form class="contact-form" method="post" aria-describedby="contact-fallback" data-astro-reload>
     <p class="contact-form__framing">
-      Share the product context, Angular version, team size, current pain, and timeline.
+      {formCopy.framing}
     </p>
     <p class="contact-form__availability">{viewModel.availability}</p>
     {
@@ -107,25 +160,26 @@ const fields = [
       ))
     }
     <label for="pain">
-      What currently feels painful?
+      {formCopy.pain}
       <textarea id="pain" name="pain" rows="5" required></textarea>
     </label>
     <label for="engagementType">
-      Do you need diagnosis, implementation, or both?
+      {formCopy.engagementType}
       <select id="engagementType" name="engagementType" required>
-        <option value="diagnosis">Diagnosis</option>
-        <option value="implementation">Implementation</option>
-        <option value="advisory">Advisory</option>
-        <option value="unsure">Unsure</option>
+        <option value="diagnosis">{formCopy.diagnosis}</option>
+        <option value="implementation">{formCopy.implementation}</option>
+        <option value="advisory">{formCopy.advisory}</option>
+        <option value="unsure">{formCopy.unsure}</option>
       </select>
     </label>
     <label class="contact-form__checkbox" for="consent">
       <input id="consent" name="consent" type="checkbox" value="true" required />
-      I consent to being contacted about this inquiry.
+      {formCopy.consent}
     </label>
-    <button type="submit">Submit inquiry</button>
+    <button type="submit">{formCopy.submit}</button>
     <p id="contact-fallback" class="contact-form__fallback">
-      Prefer email? Use <a href={`mailto:${viewModel.contactEmail}`}>{viewModel.contactEmail}</a>.
+      {formCopy.emailFallback}
+      <a href={`mailto:${viewModel.contactEmail}`}>{viewModel.contactEmail}</a>.
     </p>
   </form>
 </div>
@@ -288,11 +342,11 @@ const fields = [
   button {
     min-height: 44px;
     width: fit-content;
-    padding: var(--space-3) var(--space-5);
+    padding: var(--control-padding-y) var(--control-padding-x);
     color: #ffffff;
     background: var(--color-accent);
     border: 1px solid var(--color-accent);
-    border-radius: var(--radius-2);
+    border-radius: var(--radius-1);
     cursor: pointer;
     font-weight: 700;
     transition:

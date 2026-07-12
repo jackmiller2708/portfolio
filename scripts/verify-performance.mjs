@@ -5,18 +5,18 @@ import lighthouse from "lighthouse";
 import puppeteer from "puppeteer";
 
 const routes = [
-  "/",
-  "/services",
-  "/sample-audit",
-  "/contact",
-  "/about",
-  "/case-studies/checkout-stabilization",
-  "/lab/rxjs-cleanup"
+  "/en",
+  "/en/services",
+  "/en/sample-audit",
+  "/en/contact",
+  "/en/about",
+  "/en/case-studies/checkout-stabilization",
+  "/en/lab/rxjs-cleanup"
 ];
 const baseUrl = process.env.UI_BASE_URL ?? "http://localhost:4321";
 const outputDir = path.join(process.cwd(), "test-results", "performance");
 const performanceThresholdByRoute = {
-  "/": 80
+  "/en": 80
 };
 const defaultPerformanceThreshold = 90;
 

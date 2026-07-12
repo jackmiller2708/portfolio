@@ -1,35 +1,48 @@
 ---
 import "@styles/global.css";
+import { getRelativeLocaleUrl } from "astro:i18n";
 import { Menu, Moon, Sun, X } from "lucide-astro";
 import { Font } from "astro:assets";
 import type { PageSeo } from "@domain/site";
+import type { Locale } from "@domain/site";
+import { alternateLocale, t } from "@i18n/locales";
 
 type Props = {
   title?: string;
   description?: string;
   seo?: PageSeo;
+  locale?: Locale;
+  routePath?: string;
 };
 
-const { title, description, seo } = Astro.props;
+const { title, description, seo, locale = "en", routePath = Astro.url.pathname } = Astro.props;
+const copy = t(locale);
 const pageTitle = seo?.title ?? title ?? "Nguyen Ngoc Huy / Jack";
 const pageDescription =
   seo?.description ??
   description ??
   "Vietnam-based Angular Frontend Systems Engineer for audits, refactors, and stabilization.";
 const currentPath = Astro.url.pathname.replace(/\/$/, "") || "/";
+const localeUrl = (targetLocale: Locale, path: string) => {
+  const normalizedPath = path === "/" ? "" : path.replace(/^\/+/, "");
+
+  return getRelativeLocaleUrl(targetLocale, normalizedPath);
+};
+const homePath = localeUrl(locale, "/");
+const languagePath = localeUrl(alternateLocale(locale), routePath);
 
 const navItems = [
-  { label: "Services", href: "/services" },
-  { label: "Case Studies", href: "/case-studies" },
-  { label: "Lab", href: "/lab" },
-  { label: "Sample Audit", href: "/sample-audit" },
-  { label: "About", href: "/about" },
-  { label: "Contact", href: "/contact" }
+  { label: copy.nav.services, href: localeUrl(locale, "/services") },
+  { label: copy.nav.caseStudies, href: localeUrl(locale, "/case-studies") },
+  { label: copy.nav.lab, href: localeUrl(locale, "/lab") },
+  { label: copy.nav.sampleAudit, href: localeUrl(locale, "/sample-audit") },
+  { label: copy.nav.about, href: localeUrl(locale, "/about") },
+  { label: copy.nav.contact, href: localeUrl(locale, "/contact") }
 ];
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang={locale}>
   <head>
     <meta charset="UTF-8" />
     <meta name="description" content={pageDescription} />
@@ -55,11 +68,13 @@ const navItems = [
     <title>{pageTitle}</title>
   </head>
   <body>
-    <a class="u-skip-link" href="#main">Skip to content</a>
+    <a class="u-skip-link" href="#main"
+      >{locale === "vi" ? "Bỏ qua điều hướng" : "Skip to content"}</a
+    >
     <header class="site-header">
       <div class="site-header__inner u-container">
         <div class="site-header__bar">
-          <a class="site-header__brand" href="/">
+          <a class="site-header__brand" href={homePath}>
             <span class="site-header__brand-name">Nguyen Ngoc Huy / Jack Miller</span>
             <span class="site-header__brand-role">Angular Frontend Systems Engineer</span>
           </a>
@@ -68,7 +83,7 @@ const navItems = [
               class="site-header__theme"
               type="button"
               data-theme-toggle
-              aria-label="Switch theme"
+              aria-label={copy.header.switchTheme}
             >
               <Sun
                 class="site-header__theme-icon site-header__theme-icon--sun"
@@ -82,13 +97,18 @@ const navItems = [
               />
               <span data-theme-label>Theme</span>
             </button>
+            <a class="site-header__language" href={languagePath} hreflang={alternateLocale(locale)}>
+              {copy.header.language}
+            </a>
             <button
               class="site-header__menu-toggle"
               type="button"
               data-nav-toggle
+              data-open-label={copy.header.openNav}
+              data-close-label={copy.header.closeNav}
               aria-controls="site-navigation"
               aria-expanded="false"
-              aria-label="Open navigation"
+              aria-label={copy.header.openNav}
             >
               <Menu
                 class="site-header__menu-icon site-header__menu-icon--open"
@@ -103,7 +123,11 @@ const navItems = [
             </button>
           </div>
         </div>
-        <nav id="site-navigation" class="site-header__nav" aria-label="Primary navigation">
+        <nav
+          id="site-navigation"
+          class="site-header__nav"
+          aria-label={locale === "vi" ? "Điều hướng chính" : "Primary navigation"}
+        >
           {
             navItems.map((item) => {
               const isActive =
@@ -145,7 +169,7 @@ const navItems = [
 
   .site-header__inner {
     display: grid;
-    grid-template-columns: minmax(220px, auto) minmax(0, 1fr) auto;
+    grid-template-columns: minmax(220px, auto) minmax(0, 1fr) auto auto;
     align-items: center;
     gap: var(--space-6);
     min-height: 64px;
@@ -156,7 +180,9 @@ const navItems = [
   }
 
   .site-header__controls {
-    display: contents;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
   }
 
   .site-header__brand {
@@ -185,6 +211,7 @@ const navItems = [
 
   .site-header__brand,
   .site-header__nav a,
+  .site-header__language,
   .site-header__theme,
   .site-header__menu-toggle {
     transition:
@@ -246,6 +273,7 @@ const navItems = [
     gap: var(--space-2);
     min-height: 35px;
     width: calc(5ch + 2.5rem);
+    padding: var(--control-padding-y) var(--control-padding-x);
     color: var(--color-text);
     background: var(--color-surface);
     border: var(--border-1);
@@ -255,8 +283,34 @@ const navItems = [
     font-weight: 700;
   }
 
+  .site-header__language {
+    grid-column: 4;
+    grid-row: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 35px;
+    padding: var(--control-padding-y) var(--control-padding-x);
+    color: var(--color-text);
+    background: var(--color-surface);
+    border: var(--border-1);
+    border-radius: var(--radius-1);
+    font-size: var(--t-small);
+    font-weight: 700;
+    line-height: 1;
+    text-decoration: none;
+  }
+
+  .site-header__language {
+    line-height: 13px;
+  }
+
+  .site-header__language:hover {
+    border-color: var(--color-border-accent);
+  }
+
   .site-header__theme span {
-    height: 18px;
+    height: 13px;
   }
 
   .site-header__menu-toggle {
@@ -316,12 +370,6 @@ const navItems = [
       width: 100%;
     }
 
-    .site-header__controls {
-      display: inline-flex;
-      align-items: center;
-      gap: var(--space-2);
-    }
-
     .site-header__brand {
       grid-column: auto;
       font-size: 1rem;
@@ -335,7 +383,12 @@ const navItems = [
       grid-column: auto;
       width: 40px;
       min-height: 36px;
-      padding: var(--space-2);
+      padding: var(--control-padding-y);
+    }
+
+    .site-header__language {
+      min-height: 36px;
+      padding: var(--control-padding-y) var(--space-3);
     }
 
     .site-header__theme span {
@@ -481,7 +534,9 @@ const navItems = [
     const setOpen = (isOpen: boolean) => {
       siteHeader.classList.toggle("is-menu-open", isOpen);
       navToggle.setAttribute("aria-expanded", String(isOpen));
-      navToggle.setAttribute("aria-label", isOpen ? "Close navigation" : "Open navigation");
+      const openLabel = navToggle.dataset.openLabel ?? "Open navigation";
+      const closeLabel = navToggle.dataset.closeLabel ?? "Close navigation";
+      navToggle.setAttribute("aria-label", isOpen ? closeLabel : openLabel);
     };
 
     navToggle.dataset.navReady = "true";
