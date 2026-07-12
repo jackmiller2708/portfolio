@@ -1,6 +1,7 @@
 export type DiagnosticOption = {
   readonly id: string;
   readonly label: string;
+  readonly hint: string;
   readonly pain: string;
   readonly recommendedService: {
     readonly id: string;
@@ -23,6 +24,7 @@ export type DiagnosticOption = {
 export type DiagnosticOptionSeed = {
   readonly id: string;
   readonly label: string;
+  readonly hint: string;
   readonly pain: string;
   readonly serviceId: string;
   readonly auditFindingId: string;

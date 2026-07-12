@@ -22,6 +22,7 @@ const diagnosticSeeds: readonly DiagnosticOptionSeed[] = [
   {
     id: "unclear-state",
     label: "Unclear state",
+    hint: "No single owner for state",
     pain: "Ownership is spread across components, services, and route effects.",
     serviceId: "angular-system-audit",
     auditFindingId: "implicit-state",
@@ -31,6 +32,7 @@ const diagnosticSeeds: readonly DiagnosticOptionSeed[] = [
   {
     id: "cache-data",
     label: "Cache and data behavior",
+    hint: "Screens disagree with each other",
     pain: "Screens disagree because cache rules, refresh timing, and API state are implicit.",
     serviceId: "frontend-stabilization",
     auditFindingId: "cache-semantics",
@@ -40,6 +42,7 @@ const diagnosticSeeds: readonly DiagnosticOptionSeed[] = [
   {
     id: "error-recovery",
     label: "Weak error recovery",
+    hint: "Failures reach users silently",
     pain: "Failures reach users without a named recovery path or testable fallback.",
     serviceId: "frontend-stabilization",
     auditFindingId: "unhandled-errors",
@@ -49,6 +52,7 @@ const diagnosticSeeds: readonly DiagnosticOptionSeed[] = [
   {
     id: "refactor-planning",
     label: "Refactor planning",
+    hint: "No low-risk sequence yet",
     pain: "The team knows the system needs change but lacks a low-risk sequence.",
     serviceId: "architecture-advisory",
     auditFindingId: "implicit-state",
@@ -57,24 +61,31 @@ const diagnosticSeeds: readonly DiagnosticOptionSeed[] = [
   }
 ];
 
-const diagnosticVi: Record<string, Pick<DiagnosticOptionSeed, "label" | "pain" | "ctaLabel">> = {
+const diagnosticVi: Record<
+  string,
+  Pick<DiagnosticOptionSeed, "label" | "hint" | "pain" | "ctaLabel">
+> = {
   "unclear-state": {
     label: "State không rõ owner",
+    hint: "Không ai sở hữu state",
     pain: "Ownership bị rải qua component, service, và route effect.",
     ctaLabel: "Bắt đầu với state"
   },
   "cache-data": {
     label: "Cache và data behavior",
+    hint: "Các màn hình không khớp nhau",
     pain: "Các màn hình không khớp vì cache rule, refresh timing, và API state còn ẩn.",
     ctaLabel: "Trao đổi data flow"
   },
   "error-recovery": {
     label: "Error recovery yếu",
+    hint: "Failure tới thẳng người dùng",
     pain: "Failure tới người dùng mà không có recovery path được đặt tên hoặc fallback có thể test.",
     ctaLabel: "Review recovery path"
   },
   "refactor-planning": {
     label: "Kế hoạch refactor",
+    hint: "Chưa có chuỗi an toàn",
     pain: "Đội biết hệ thống cần thay đổi nhưng thiếu chuỗi thực hiện ít rủi ro.",
     ctaLabel: "Lên sequence"
   }
@@ -98,6 +109,7 @@ const buildDiagnostics = (
     return {
       id: seed.id,
       label: localizedSeed.label,
+      hint: localizedSeed.hint,
       pain: localizedSeed.pain,
       recommendedService: {
         id: service?.id ?? seed.serviceId,

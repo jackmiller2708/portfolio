@@ -69,6 +69,12 @@ a {
   color: inherit;
 }
 
+h1,
+h2,
+h3 {
+  text-wrap: balance;
+}
+
 :where(a, button, input, select, textarea, summary, [role="button"]) {
   transition:
     background-color var(--duration-fast) var(--ease-standard),

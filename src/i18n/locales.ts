@@ -39,7 +39,7 @@ export const ui = {
         "My first job is to make the risk visible: where state lives, how data moves, where errors disappear, and which next step is worth taking.",
       diagnosticTitle: "Start where the Angular system is already resisting change",
       diagnosticSummary:
-        "Pick the pain that sounds closest to the current risk. The path updates to a service, a reference finding, and the map state to explore next.",
+        "Pick the pain closest to your current risk. The path below updates with the matching service, audit finding, and map state.",
       diagnosticOptionsLabel: "Frontend system pains",
       recommendedPath: "Recommended path",
       service: "Service",
@@ -53,7 +53,7 @@ export const ui = {
       result: "Result",
       systemMapTitle: "The Angular architecture in context",
       systemMapSummary:
-        "The map shows how messy frontend ownership becomes explicit once state, data access, and recovery paths have named boundaries.",
+        "The map turns messy frontend ownership into named boundaries for state, data access, and recovery paths.",
       labTitle: "Notes from the work",
       labSummary:
         "Short technical entries about decisions that are easy to miss until a system starts failing around them.",
@@ -159,7 +159,7 @@ export const ui = {
         "Việc đầu tiên của tôi là làm rủi ro hiện rõ: state nằm ở đâu, dữ liệu đi như thế nào, lỗi biến mất ở đâu, và bước tiếp theo nào đáng làm.",
       diagnosticTitle: "Bắt đầu từ nơi hệ thống Angular đang khó thay đổi",
       diagnosticSummary:
-        "Chọn vấn đề gần nhất với rủi ro hiện tại. Lộ trình sẽ cập nhật sang dịch vụ, phát hiện tham chiếu, và trạng thái bản đồ nên xem tiếp.",
+        "Chọn vấn đề gần nhất với rủi ro hiện tại. Lộ trình bên dưới sẽ cập nhật theo dịch vụ, phát hiện audit, và trạng thái bản đồ phù hợp.",
       diagnosticOptionsLabel: "Các điểm đau của hệ thống frontend",
       recommendedPath: "Lộ trình đề xuất",
       service: "Dịch vụ",
@@ -173,7 +173,7 @@ export const ui = {
       result: "Kết quả",
       systemMapTitle: "Kiến trúc Angular trong ngữ cảnh",
       systemMapSummary:
-        "Bản đồ cho thấy ownership frontend lộn xộn trở nên rõ ràng khi state, data access, và recovery path có boundary được đặt tên.",
+        "Bản đồ biến ownership frontend lộn xộn thành boundary được đặt tên cho state, data access, và recovery path.",
       labTitle: "Ghi chú từ công việc",
       labSummary:
         "Các ghi chú kỹ thuật ngắn về những quyết định dễ bị bỏ qua cho đến khi hệ thống bắt đầu hỏng quanh chúng.",

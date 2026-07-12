@@ -30,6 +30,7 @@ const localeUrl = (targetLocale: Locale, path: string) => {
 };
 const homePath = localeUrl(locale, "/");
 const languagePath = localeUrl(alternateLocale(locale), routePath);
+const isHomeActive = currentPath === (homePath.replace(/\/$/, "") || "/");
 
 const navItems = [
   { label: copy.nav.services, href: localeUrl(locale, "/services") },
@@ -60,6 +61,7 @@ const navItems = [
     <Font cssVariable="--font-code" />
     <Font cssVariable="--font-body" />
     <script is:inline>
+      document.documentElement.classList.add("has-js");
       const storedTheme = localStorage.getItem("theme");
       if (storedTheme === "light" || storedTheme === "dark") {
         document.documentElement.dataset.theme = storedTheme;
@@ -74,7 +76,11 @@ const navItems = [
     <header class="site-header">
       <div class="site-header__inner u-container">
         <div class="site-header__bar">
-          <a class="site-header__brand" href={homePath}>
+          <a
+            class:list={["site-header__brand", isHomeActive && "is-active"]}
+            href={homePath}
+            aria-current={isHomeActive ? "page" : undefined}
+          >
             <span class="site-header__brand-name">Nguyen Ngoc Huy / Jack Miller</span>
             <span class="site-header__brand-role">Angular Frontend Systems Engineer</span>
           </a>
@@ -130,9 +136,10 @@ const navItems = [
         >
           {
             navItems.map((item) => {
+              const normalizedHref = item.href.replace(/\/$/, "") || "/";
               const isActive =
-                currentPath === item.href ||
-                (item.href !== "/" && currentPath.startsWith(`${item.href}/`));
+                currentPath === normalizedHref ||
+                (normalizedHref !== "/" && currentPath.startsWith(`${normalizedHref}/`));
 
               return (
                 <a
@@ -192,7 +199,7 @@ const navItems = [
     gap: 8px;
     color: var(--color-text);
     font-family: var(--font-display);
-    font-size: 1.15rem;
+    font-size: var(--t-brand);
     font-weight: 300;
     line-height: 1;
     text-decoration: none;
@@ -207,6 +214,10 @@ const navItems = [
     font-family: var(--font-body);
     font-size: var(--t-mono);
     font-weight: 600;
+  }
+
+  .site-header__brand.is-active .site-header__brand-name {
+    color: var(--color-accent);
   }
 
   .site-header__brand,
@@ -267,7 +278,7 @@ const navItems = [
   .site-header__theme {
     grid-column: 3;
     grid-row: 1;
-    display: inline-flex;
+    display: none;
     justify-content: center;
     align-items: center;
     gap: var(--space-2);
@@ -281,6 +292,12 @@ const navItems = [
     cursor: pointer;
     font-size: var(--t-small);
     font-weight: 700;
+  }
+
+  /* The toggle has no effect and no icon state without JS (both depend on
+     the script below), so it only renders once script confirms it can run. */
+  :root.has-js .site-header__theme {
+    display: inline-flex;
   }
 
   .site-header__language {
@@ -299,10 +316,6 @@ const navItems = [
     font-weight: 700;
     line-height: 1;
     text-decoration: none;
-  }
-
-  .site-header__language {
-    line-height: 13px;
   }
 
   .site-header__language:hover {
@@ -370,13 +383,16 @@ const navItems = [
       width: 100%;
     }
 
+    .site-header {
+      --t-brand: 1rem;
+    }
+
     .site-header__brand {
       grid-column: auto;
-      font-size: 1rem;
     }
 
     .site-header__brand-role {
-      font-size: 0.68rem;
+      font-size: var(--t-mono);
     }
 
     .site-header__theme {
@@ -403,7 +419,7 @@ const navItems = [
       border: 0;
     }
 
-    .site-header__menu-toggle {
+    :root.has-js .site-header__menu-toggle {
       position: relative;
       display: inline-flex;
       align-items: center;
@@ -431,11 +447,18 @@ const navItems = [
       grid-row: auto;
       display: grid;
       width: 100%;
-      max-height: 0;
-      padding: 0;
+      padding: var(--space-2) 0 var(--space-3);
       border-top: var(--border-1);
       grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 0;
+    }
+
+    /* Without JS, .is-menu-open never gets toggled, so the nav must stay
+       visible by default; only collapse it once script confirms it can
+       also open it again. */
+    :root.has-js .site-header__nav {
+      max-height: 0;
+      padding: 0;
       opacity: 0;
       overflow: hidden;
       pointer-events: none;
@@ -447,7 +470,7 @@ const navItems = [
         visibility var(--duration-fast) var(--ease-standard);
     }
 
-    .site-header.is-menu-open .site-header__nav {
+    :root.has-js .site-header.is-menu-open .site-header__nav {
       max-height: 180px;
       padding: var(--space-2) 0 var(--space-3);
       opacity: 1;
@@ -547,6 +570,13 @@ const navItems = [
     nav.addEventListener("click", (event) => {
       if (event.target instanceof HTMLAnchorElement) {
         setOpen(false);
+      }
+    });
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && siteHeader.classList.contains("is-menu-open")) {
+        setOpen(false);
+        navToggle.focus();
       }
     });
 

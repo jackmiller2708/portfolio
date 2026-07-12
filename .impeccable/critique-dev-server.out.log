@@ -1,0 +1,15 @@
+
+> portfolio@0.1.0 dev
+> cross-env ASTRO_TELEMETRY_DISABLED=1 astro dev --host 127.0.0.1 --port 4321
+
+[vite] connected.
+[2m16:37:11[22m [34m[types][39m Generated [2m2ms[22m
+[vite] connected.
+[2m16:37:12[22m [34m[content][39m Syncing content
+[2m16:37:12[22m [34m[content][39m Synced content
+[42m[1m astro [22m[49m [32mv6.4.2[39m [2mready in[22m 7148 [2mms[22m
+[2m┃[22m Local    [36mhttp://127.0.0.1:4321/[39m
+[2m16:37:12[22m [32mwatching for file changes...[39m
+[2m16:37:42[22m [34m[200][39m /en/ [2m2493ms[22m
+[2m16:37:44[22m [34m[200][39m /en/ [2m1286ms[22m
+[2m16:38:01[22m [34m[200][39m /en/ [2m1175ms[22m

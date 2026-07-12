@@ -1,0 +1,221 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-07-12T00:00:00+07:00",
+  "title": "Design System: Nguyen Ngoc Huy / Jack Miller Portfolio",
+  "extensions": {
+    "colorMeta": {
+      "diagnostic-blue": {
+        "role": "primary",
+        "displayName": "Diagnostic Blue",
+        "canonical": "#3f63d7",
+        "tonalRamp": ["#07122f", "#102562", "#1f3e9f", "#3f63d7", "#6f8be6", "#a6b8f2", "#d5ddfa", "#f0f3fe"]
+      },
+      "diagnostic-blue-dark": {
+        "role": "primary",
+        "displayName": "Diagnostic Blue Dark",
+        "canonical": "#7b9cff",
+        "tonalRamp": ["#0b1638", "#1a3275", "#3359bd", "#7b9cff", "#a2b9ff", "#c8d6ff", "#e4ebff", "#f5f7ff"]
+      },
+      "deep-obsidian": {
+        "role": "neutral",
+        "displayName": "Deep Obsidian",
+        "canonical": "#0c0d10",
+        "tonalRamp": ["#050608", "#0c0d10", "#13141a", "#20222c", "#3b3e4b", "#6b6d7a", "#9a9ca8", "#e8e6e0"]
+      },
+      "cool-paper": {
+        "role": "neutral",
+        "displayName": "Cool Paper",
+        "canonical": "#f4f5fa",
+        "tonalRamp": ["#12131a", "#343743", "#5a5d6e", "#8a8d9e", "#c7cad8", "#e2e4f0", "#eceef6", "#f4f5fa"]
+      },
+      "risk-red": {
+        "role": "tertiary",
+        "displayName": "Risk Red",
+        "canonical": "#b42318",
+        "tonalRamp": ["#2c0705", "#5a100b", "#8c1b12", "#b42318", "#d6534a", "#ee928c", "#f8c8c5", "#fff0ef"]
+      },
+      "stable-green": {
+        "role": "tertiary",
+        "displayName": "Stable Green",
+        "canonical": "#237a57",
+        "tonalRamp": ["#061f15", "#0f3d2b", "#196143", "#237a57", "#49a77f", "#8bd0b2", "#c7ead9", "#effaf5"]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "Hero positioning only; the rare human tension in an otherwise technical system."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Section and page structure with strong scan clarity."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Precise consulting prose and bilingual page copy."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Diagnostic metadata, badges, and compact technical markers."
+      }
+    },
+    "shadows": [
+      {
+        "name": "accent-lift",
+        "value": "0 8px 24px color-mix(in srgb, var(--color-accent) 12%, transparent)",
+        "purpose": "Button hover only; shows the action waking up."
+      },
+      {
+        "name": "focus-glow",
+        "value": "0 0 0 4px var(--color-accent-dim)",
+        "purpose": "Selected diagram nodes and active proof controls."
+      }
+    ],
+    "motion": [
+      {
+        "name": "duration-fast",
+        "value": "180ms",
+        "purpose": "Button states, badge transitions, and immediate feedback."
+      },
+      {
+        "name": "duration-base",
+        "value": "320ms",
+        "purpose": "Panel reveals, page transitions, and state swaps."
+      },
+      {
+        "name": "ease-standard",
+        "value": "cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "Default outward motion and state settling."
+      },
+      {
+        "name": "ease-spring",
+        "value": "cubic-bezier(0.34, 1.56, 0.64, 1)",
+        "purpose": "Interactive responses that reveal technical craft."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "medium",
+        "value": "720px"
+      },
+      {
+        "name": "contact-layout",
+        "value": "760px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Primary CTA with compact proportions and assertive hover response.",
+      "html": "<a class=\"ds-button ds-button-primary\" href=\"#\"><span>Start a diagnostic</span><svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M5 12h14M13 5l7 7-7 7\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></svg></a>",
+      "css": ".ds-button{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;min-height:44px;padding:.5rem 1rem;border:1px solid var(--color-accent);border-radius:var(--radius-1);font:700 var(--t-small)/1 var(--font-body);text-decoration:none;transition:border-color var(--duration-fast) var(--ease-standard),background-color var(--duration-fast) var(--ease-standard),box-shadow var(--duration-fast) var(--ease-spring),transform var(--duration-fast) var(--ease-spring)}.ds-button svg{width:16px;height:16px}.ds-button-primary{color:#fff;background:var(--color-accent)}.ds-button-primary:hover{box-shadow:0 8px 24px color-mix(in srgb,var(--color-accent) 12%,transparent);transform:translateY(-2px)}.ds-button-primary:focus-visible{outline:2px solid var(--color-accent);outline-offset:3px}@media (prefers-reduced-motion:reduce){.ds-button-primary:hover{transform:none}}"
+    },
+    {
+      "name": "Secondary Button",
+      "kind": "button",
+      "refersTo": "button-secondary",
+      "description": "Secondary action with the same mechanics as primary but quieter surface treatment.",
+      "html": "<a class=\"ds-button ds-button-secondary\" href=\"#\"><span>See past work</span></a>",
+      "css": ".ds-button{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;min-height:44px;padding:.5rem 1rem;border:1px solid var(--color-border);border-radius:var(--radius-1);font:700 var(--t-small)/1 var(--font-body);text-decoration:none;transition:border-color var(--duration-fast) var(--ease-standard),background-color var(--duration-fast) var(--ease-standard),box-shadow var(--duration-fast) var(--ease-spring),transform var(--duration-fast) var(--ease-spring)}.ds-button-secondary{color:var(--color-text);background:var(--color-surface)}.ds-button-secondary:hover{border-color:var(--color-border-accent);box-shadow:0 8px 24px color-mix(in srgb,var(--color-accent) 12%,transparent);transform:translateY(-2px)}.ds-button-secondary:focus-visible{outline:2px solid var(--color-accent);outline-offset:3px}@media (prefers-reduced-motion:reduce){.ds-button-secondary:hover{transform:none}}"
+    },
+    {
+      "name": "Evidence Panel",
+      "kind": "card",
+      "refersTo": "panel",
+      "description": "Decision surface for proof, risk, and recommendation content.",
+      "html": "<article class=\"ds-evidence\"><p class=\"ds-evidence-context\">Evidence</p><h3>State ownership is unclear</h3><p>Symptoms connect to risk and then to a sequenced recommendation.</p></article>",
+      "css": ".ds-evidence{display:grid;gap:1.25rem;padding:1.5rem;color:var(--color-text);background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-2);transition:border-color var(--duration-fast) var(--ease-spring),transform var(--duration-fast) var(--ease-spring)}.ds-evidence:hover{border-color:var(--color-border-accent);transform:translateY(-2px)}.ds-evidence h3,.ds-evidence p{margin:0}.ds-evidence h3{font:700 var(--t-h3)/1.15 var(--font-body)}.ds-evidence p{color:var(--color-muted)}.ds-evidence-context{color:var(--color-accent);font:500 var(--t-mono)/1.4 var(--font-code);text-transform:uppercase}@media (prefers-reduced-motion:reduce){.ds-evidence:hover{transform:none}}"
+    },
+    {
+      "name": "Contact Field",
+      "kind": "input",
+      "refersTo": "input",
+      "description": "System-like form field with clear focus state and compact radius.",
+      "html": "<label class=\"ds-field\"><span>Angular version or frontend stack</span><input type=\"text\" value=\"Angular 17, RxJS-heavy\" /></label>",
+      "css": ".ds-field{display:grid;gap:.5rem;color:var(--color-text);font:700 var(--t-body)/1.4 var(--font-body)}.ds-field input{width:100%;padding:.75rem;color:var(--color-text);background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-1);font:400 var(--t-body)/1.4 var(--font-body);transition:background-color var(--duration-base) var(--ease-standard),border-color var(--duration-base) var(--ease-standard),color var(--duration-base) var(--ease-standard)}.ds-field input:focus{border-color:var(--color-accent)}.ds-field input:focus-visible{outline:2px solid var(--color-accent);outline-offset:3px}"
+    },
+    {
+      "name": "System Map Node",
+      "kind": "custom",
+      "refersTo": "panel",
+      "description": "Signature proof control for architecture-map nodes.",
+      "html": "<button class=\"ds-map-node\" type=\"button\"><span>State owner</span><em>Boundary</em></button>",
+      "css": ".ds-map-node{display:grid;gap:.25rem;width:148px;min-height:56px;padding:.5rem .75rem;color:var(--color-text);background:color-mix(in srgb,var(--color-surface) 88%,transparent);border:1px solid var(--color-border);border-radius:var(--radius-1);text-align:left;cursor:pointer;transition:background-color var(--duration-fast) var(--ease-out-expo),border-color var(--duration-fast) var(--ease-out-expo),box-shadow var(--duration-base) var(--ease-spring)}.ds-map-node span{font:700 var(--t-small)/1.2 var(--font-body)}.ds-map-node em{color:var(--color-muted);font:500 var(--t-mono)/1.4 var(--font-code);font-style:normal;text-transform:uppercase}.ds-map-node:hover,.ds-map-node:focus-visible{background:var(--color-surface);border-color:var(--color-accent);box-shadow:0 0 0 4px var(--color-accent-dim);outline:0}"
+    },
+    {
+      "name": "Site Navigation",
+      "kind": "nav",
+      "refersTo": "panel",
+      "description": "Sticky identity and route surface with functional translucency.",
+      "html": "<nav class=\"ds-nav\"><a class=\"ds-brand\" href=\"#\"><strong>Nguyen Ngoc Huy / Jack</strong><span>Angular Frontend Systems Engineer</span></a><a href=\"#\">Services</a><a href=\"#\">Lab</a></nav>",
+      "css": ".ds-nav{display:flex;align-items:center;gap:1.5rem;min-height:64px;padding:0 1.5rem;color:var(--color-text);background:color-mix(in srgb,var(--color-bg) 88%,transparent);border-bottom:1px solid var(--color-border);backdrop-filter:blur(14px)}.ds-nav a{color:inherit;text-decoration:none;font:700 var(--t-small)/1 var(--font-body);transition:color var(--duration-fast) var(--ease-standard),border-color var(--duration-fast) var(--ease-standard)}.ds-nav a:hover{color:var(--color-accent)}.ds-brand{display:grid;gap:.5rem;margin-right:auto}.ds-brand strong{font:500 1.15rem/1 var(--font-display)}.ds-brand span{color:var(--color-muted);font:600 var(--t-mono)/1 var(--font-body)}"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Living Diagnostic",
+    "overview": "The system should feel like a diagnostic instrument that happens to be a portfolio: quiet in its shell, exact in its feedback, and visibly technical once touched. It is not trying to impress through volume. It earns attention through precise state changes, clear hierarchy, bilingual content discipline, and the sense that every component has an explicit contract.\n\nThe visual register is restrained and technical, with a light/dark token system, one decisive blue accent, flat panels, tight radii, and motion as the proof layer. The product claim says the interface may look simple at a glance, but the details should reveal technical depth. That means hover, focus, selected, page, and system-map transitions must feel deliberate enough to show craft without delaying reading.\n\nThis system rejects generic agency/studio branding, broad \"frontend developer\" positioning, static brochure polish, and any shallow UI that looks simple because there is no deeper system underneath. Simplicity is allowed. Shallow simplicity is not.",
+    "keyCharacteristics": [
+      "Restrained first impression, assertive interaction response.",
+      "Cool neutral surfaces with one diagnostic accent.",
+      "Typography that separates human explanation from technical labels.",
+      "Depth through tonal layering, focus rings, and state motion rather than heavy shadows.",
+      "Named-person credibility: the system must keep Nguyen Ngoc Huy / Jack visible."
+    ],
+    "rules": [
+      {
+        "name": "The One Signal Rule",
+        "body": "Blue is the diagnostic signal. It belongs on CTAs, focus rings, active nodes, and selected states; it does not wash whole sections unless the section is explicitly about state.",
+        "section": "colors"
+      },
+      {
+        "name": "The No Warm Neutral Rule",
+        "body": "Do not drift into cream, sand, beige, parchment, or warm editorial paper. This portfolio is cool, technical, and controlled.",
+        "section": "colors"
+      },
+      {
+        "name": "The Status Means Status Rule",
+        "body": "Green, amber, and red are semantic. Never use them as decorative palette expansion.",
+        "section": "colors"
+      },
+      {
+        "name": "The One Display Moment Rule",
+        "body": "Fraunces is a controlled signal, not the page texture. If every section starts to feel editorial, the typography has escaped its role.",
+        "section": "typography"
+      },
+      {
+        "name": "The No Costume Mono Rule",
+        "body": "JetBrains Mono labels systems and metadata. It must not be used as a blanket developer aesthetic.",
+        "section": "typography"
+      },
+      {
+        "name": "The Flat Until Touched Rule",
+        "body": "Panels rest on borders and tonal layering. Elevation appears only in response to interaction or selection.",
+        "section": "elevation"
+      },
+      {
+        "name": "The No Ghost Card Rule",
+        "body": "Do not pair broad decorative shadows with 1px bordered cards. Pick tonal layering and border clarity first.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do preserve the \"quiet at rest, assertive in state changes\" component feel.",
+      "Do use Diagnostic Blue for CTAs, selected states, focus rings, and active architecture nodes.",
+      "Do keep light mode cool and paper-like without becoming cream, beige, or editorial.",
+      "Do use motion to explain state, flow, and technical behavior.",
+      "Do keep Nguyen Ngoc Huy / Jack visible as the accountable specialist.",
+      "Do respect `prefers-reduced-motion` and provide static fallbacks for animated proof."
+    ],
+    "donts": [
+      "Don't make the site feel like generic agency/studio branding.",
+      "Don't broaden the positioning into generic \"frontend developer\" portfolio language.",
+      "Don't ship shallow UI-only prettiness that cannot survive technical scrutiny.",
+      "Don't rely on static brochure polish where an interaction or artifact should prove the claim.",
+      "Don't use gradient text, decorative glassmorphism, repeated eyebrow scaffolding, or big rounded icon cards.",
+      "Don't let simplicity become emptiness. The simple surface must have a technical system underneath it."
+    ]
+  }
+}

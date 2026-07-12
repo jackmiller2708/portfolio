@@ -381,6 +381,9 @@ const mapJson = JSON.stringify(map);
     current: Vector3;
     target: Vector3;
     button: HTMLButtonElement;
+    width: number;
+    height: number;
+    positioned: boolean;
   };
 
   const colors = {
@@ -484,6 +487,7 @@ const mapJson = JSON.stringify(map);
     const scene = new THREE.Scene();
     const camera = new THREE.OrthographicCamera(-4.4, 4.4, 2.8, -2.8, 0.1, 20);
     camera.position.z = 10;
+    camera.updateMatrixWorld();
 
     const renderer = new THREE.WebGLRenderer({
       alpha: true,
@@ -525,7 +529,10 @@ const mapJson = JSON.stringify(map);
         ring,
         current,
         target,
-        button: nodeButtons[index]
+        button: nodeButtons[index],
+        width: 0,
+        height: 0,
+        positioned: false
       };
     });
 
@@ -541,9 +548,15 @@ const mapJson = JSON.stringify(map);
 
     let activeState: "messy" | "explicit" = "messy";
     let compact = false;
+    let stageWidth = 0;
+    let stageHeight = 0;
+    let rafId: number | null = null;
+    let isVisible = true;
 
     const resize = () => {
       const rect = stage.getBoundingClientRect();
+      stageWidth = rect.width;
+      stageHeight = rect.height;
       compact = rect.width < 720;
       map.dataset.compact = String(compact);
       renderer.setSize(rect.width, rect.height, false);
@@ -554,25 +567,39 @@ const mapJson = JSON.stringify(map);
       camera.top = vertical;
       camera.bottom = -vertical;
       camera.updateProjectionMatrix();
+      camera.updateMatrixWorld();
 
       const layout = getLayout(activeState, compact);
       for (const [index, node] of nodes.entries()) {
+        node.width = node.button.offsetWidth;
+        node.height = node.button.offsetHeight;
         const [x, y, z] = layout[index];
         node.target.set(x, y, z);
-        if (!node.button.style.left) {
+        if (!node.positioned) {
           node.current.copy(node.target);
           node.mesh.position.copy(node.current);
           node.ring.position.copy(node.current);
+          node.positioned = true;
         }
       }
+      ensureAnimating();
     };
 
     const projectButtons = () => {
-      const rect = stage.getBoundingClientRect();
+      const stageInset = 4;
       for (const node of nodes) {
         const projected = node.current.clone().project(camera);
-        node.button.style.left = `${((projected.x + 1) / 2) * rect.width}px`;
-        node.button.style.top = `${((-projected.y + 1) / 2) * rect.height}px`;
+        const halfWidth = node.width / 2;
+        const halfHeight = node.height / 2;
+        const centerX = ((projected.x + 1) / 2) * stageWidth;
+        const centerY = ((-projected.y + 1) / 2) * stageHeight;
+        const minX = halfWidth + stageInset;
+        const maxX = Math.max(minX, stageWidth - halfWidth - stageInset);
+        const minY = halfHeight + stageInset;
+        const maxY = Math.max(minY, stageHeight - halfHeight - stageInset);
+        const boundedX = Math.min(Math.max(centerX, minX), maxX);
+        const boundedY = Math.min(Math.max(centerY, minY), maxY);
+        node.button.style.transform = `translate3d(${boundedX}px, ${boundedY}px, 0) translate(-50%, -50%)`;
       }
     };
 
@@ -632,6 +659,16 @@ const mapJson = JSON.stringify(map);
         copy.hidden = copy.dataset.stateCopy !== state;
       }
       if (drawer) drawer.hidden = true;
+      ensureAnimating();
+    };
+
+    const isSettled = () =>
+      nodes.every((node) => node.current.distanceToSquared(node.target) < 0.00002);
+
+    const ensureAnimating = () => {
+      if (rafId === null && isVisible && !isSettled()) {
+        rafId = window.requestAnimationFrame(animate);
+      }
     };
 
     const animate = () => {
@@ -643,7 +680,7 @@ const mapJson = JSON.stringify(map);
       updateLines();
       projectButtons();
       renderer.render(scene, camera);
-      window.requestAnimationFrame(animate);
+      rafId = isVisible && !isSettled() ? window.requestAnimationFrame(animate) : null;
     };
 
     for (const button of stateButtons) {
@@ -670,6 +707,18 @@ const mapJson = JSON.stringify(map);
 
     const observer = new ResizeObserver(resize);
     observer.observe(stage);
+
+    const visibilityObserver = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          isVisible = entry.isIntersecting;
+        }
+        ensureAnimating();
+      },
+      { rootMargin: "200px" }
+    );
+    visibilityObserver.observe(stage);
+
     resize();
     setState("messy");
     animate();

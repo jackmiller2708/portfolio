@@ -192,6 +192,8 @@ const seo = buildPageSeo(site, {
     color: var(--color-accent);
     border: 1px solid color-mix(in srgb, var(--color-accent) 40%, transparent);
     border-radius: var(--radius-1);
+    font-family: var(--font-code);
+    font-size: var(--t-mono);
     font-weight: 700;
     text-transform: capitalize;
   }
@@ -219,15 +221,16 @@ const seo = buildPageSeo(site, {
 
   h2 {
     font-family: var(--font-body);
-    font-size: 2rem;
+    font-size: var(--t-h2);
     font-weight: 800;
-    line-height: 1.15;
+    line-height: 1.12;
   }
 
   h3 {
     font-family: var(--font-body);
-    font-size: 1.25rem;
+    font-size: var(--t-h3);
     font-weight: 700;
+    line-height: 1.15;
   }
 
   p,
