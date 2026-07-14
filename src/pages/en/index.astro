@@ -242,7 +242,7 @@ const initialDiagnostic = viewModel.diagnostics[0];
     transition:
       background-color var(--duration-fast) var(--ease-out-expo),
       border-color var(--duration-fast) var(--ease-out-expo),
-      transform var(--duration-fast) var(--ease-spring);
+      transform var(--duration-fast) var(--ease-out-quint);
   }
 
   .diagnostic__option::before {
@@ -253,7 +253,7 @@ const initialDiagnostic = viewModel.diagnostics[0];
     content: "";
     transform: scaleY(0);
     transform-origin: bottom;
-    transition: transform 220ms var(--ease-spring);
+    transition: transform 220ms var(--ease-out-quint);
   }
 
   .diagnostic__option:hover {
@@ -370,7 +370,7 @@ const initialDiagnostic = viewModel.diagnostics[0];
     transition:
       background-color var(--duration-fast) var(--ease-standard),
       border-color var(--duration-fast) var(--ease-standard),
-      transform var(--duration-fast) var(--ease-spring);
+      transform var(--duration-fast) var(--ease-out-quint);
   }
 
   .diagnostic__cta:hover {
@@ -396,8 +396,8 @@ const initialDiagnostic = viewModel.diagnostics[0];
   .reference-card {
     text-decoration: none;
     transition:
-      border-color var(--duration-fast) var(--ease-spring),
-      transform var(--duration-fast) var(--ease-spring);
+      border-color var(--duration-fast) var(--ease-out-quint),
+      transform var(--duration-fast) var(--ease-out-quint);
   }
 
   .reference-card:hover {

@@ -134,24 +134,26 @@ const navItems = [
           class="site-header__nav"
           aria-label={locale === "vi" ? "Điều hướng chính" : "Primary navigation"}
         >
-          {
-            navItems.map((item) => {
-              const normalizedHref = item.href.replace(/\/$/, "") || "/";
-              const isActive =
-                currentPath === normalizedHref ||
-                (normalizedHref !== "/" && currentPath.startsWith(`${normalizedHref}/`));
+          <div class="site-header__nav-inner">
+            {
+              navItems.map((item) => {
+                const normalizedHref = item.href.replace(/\/$/, "") || "/";
+                const isActive =
+                  currentPath === normalizedHref ||
+                  (normalizedHref !== "/" && currentPath.startsWith(`${normalizedHref}/`));
 
-              return (
-                <a
-                  class:list={[isActive && "is-active"]}
-                  href={item.href}
-                  aria-current={isActive ? "page" : undefined}
-                >
-                  {item.label}
-                </a>
-              );
-            })
-          }
+                return (
+                  <a
+                    class:list={[isActive && "is-active"]}
+                    href={item.href}
+                    aria-current={isActive ? "page" : undefined}
+                  >
+                    {item.label}
+                  </a>
+                );
+              })
+            }
+          </div>
         </nav>
       </div>
     </header>
@@ -229,7 +231,7 @@ const navItems = [
       background-color var(--duration-1) var(--ease-standard),
       color var(--duration-1) var(--ease-standard),
       border-color var(--duration-1) var(--ease-standard),
-      transform var(--duration-1) var(--ease-spring);
+      transform var(--duration-1) var(--ease-out-quint);
   }
 
   .site-header__nav {
@@ -240,6 +242,13 @@ const navItems = [
     justify-content: flex-end;
     gap: clamp(var(--space-2), 1.4vw, var(--space-4));
     min-width: 0;
+  }
+
+  /* Structural grouping only: on desktop the links stay direct flex
+     participants of .site-header__nav. The mobile breakpoint below gives
+     this its own box to drive the collapse animation. */
+  .site-header__nav-inner {
+    display: contents;
   }
 
   .site-header__nav a {
@@ -263,7 +272,7 @@ const navItems = [
     content: "";
     transform: scaleX(0);
     transform-origin: left;
-    transition: transform 200ms var(--ease-spring);
+    transition: transform 200ms var(--ease-out-quint);
   }
 
   .site-header__nav a:hover,
@@ -455,32 +464,39 @@ const navItems = [
       grid-row: auto;
       display: grid;
       width: 100%;
-      padding: var(--space-2) 0 var(--space-3);
-      border-top: var(--border-1);
+    }
+
+    .site-header__nav-inner {
+      display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 0;
+      padding: var(--space-2) 0 var(--space-3);
+      border-top: var(--border-1);
     }
 
     /* Without JS, .is-menu-open never gets toggled, so the nav must stay
        visible by default; only collapse it once script confirms it can
-       also open it again. */
+       also open it again. The 0fr/1fr grid-row trick (paired with
+       min-height:0 + overflow:hidden on the inner) collapses the real
+       layout height without animating height or padding directly. */
     :root.has-js .site-header__nav {
-      max-height: 0;
-      padding: 0;
+      grid-template-rows: 0fr;
       opacity: 0;
-      overflow: hidden;
       pointer-events: none;
       visibility: hidden;
       transition:
-        max-height var(--duration-base) var(--ease-out-expo),
+        grid-template-rows var(--duration-base) var(--ease-out-expo),
         opacity var(--duration-fast) var(--ease-standard),
-        padding var(--duration-fast) var(--ease-standard),
         visibility var(--duration-fast) var(--ease-standard);
     }
 
+    :root.has-js .site-header__nav-inner {
+      min-height: 0;
+      overflow: hidden;
+    }
+
     :root.has-js .site-header.is-menu-open .site-header__nav {
-      max-height: 180px;
-      padding: var(--space-2) 0 var(--space-3);
+      grid-template-rows: 1fr;
       opacity: 1;
       pointer-events: auto;
       visibility: visible;

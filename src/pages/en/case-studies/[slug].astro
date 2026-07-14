@@ -34,6 +34,22 @@ const seo = buildPageSeo(site, {
   description: caseStudy.summary,
   ogImage: "/og/case-studies.svg"
 });
+
+// Jump-nav entries mirror the same conditional rendering as the sections
+// themselves below, so a case study missing e.g. tradeoffs never links to
+// an empty target.
+const jumpSections = [
+  { id: "case-scan", label: copy.cases.caseScan, show: true },
+  { id: "decisions", label: copy.cases.decisions, show: caseStudy.decisions.length > 0 },
+  { id: "tradeoffs", label: copy.cases.tradeoffs, show: caseStudy.tradeoffs.length > 0 },
+  {
+    id: "before-after",
+    label: copy.cases.beforeAfter,
+    show: caseStudy.beforeAfter.before.length > 0 || caseStudy.beforeAfter.after.length > 0
+  },
+  { id: "system-map", label: systemMap.title, show: true },
+  { id: "evidence", label: copy.cases.evidence, show: caseStudy.evidence.length > 0 }
+].filter((section) => section.show);
 ---
 
 <BaseLayout seo={seo} locale={locale} routePath={`/case-studies/${caseStudy.slug}`}>
@@ -49,9 +65,23 @@ const seo = buildPageSeo(site, {
         <p class="case-detail__label">{caseStudy.redactionStatus}</p>
         <h2>{copy.cases.context}</h2>
         <p>{caseStudy.context}</p>
+        <nav class="case-detail__jump-nav" aria-label="On this page">
+          <p class="case-detail__jump-nav-label">On this page</p>
+          <ul>
+            {
+              jumpSections.map((section) => (
+                <li>
+                  <a href={`#${section.id}`} data-jump-link={section.id}>
+                    {section.label}
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+        </nav>
       </aside>
       <div class="case-detail__main">
-        <section class="scan-section" aria-labelledby="case-scan-title">
+        <section class="scan-section" id="case-scan" data-jump-target aria-labelledby="case-scan-title">
           <h2 id="case-scan-title">{copy.cases.caseScan}</h2>
           <div class="scan-grid">
             <article>
@@ -68,58 +98,87 @@ const seo = buildPageSeo(site, {
             </article>
           </div>
         </section>
-        <section>
-          <h2>{copy.cases.constraints}</h2>
-          <ul>{caseStudy.constraints.map((item) => <li>{item}</li>)}</ul>
-        </section>
-        <section>
-          <h2>{copy.cases.decisions}</h2>
-          <div class="detail-grid">
-            {
-              caseStudy.decisions.map((decision) => (
-                <article class="detail-card">
-                  <h3>{decision.title}</h3>
-                  <p>{decision.rationale}</p>
-                </article>
-              ))
-            }
-          </div>
-        </section>
-        <section>
-          <h2>{copy.cases.tradeoffs}</h2>
-          <ul>{caseStudy.tradeoffs.map((item) => <li>{item}</li>)}</ul>
-        </section>
-        <section>
-          <h2>{copy.cases.beforeAfter}</h2>
-          <div class="before-after">
-            <article>
-              <h3>{copy.cases.before}</h3>
-              <ul>{caseStudy.beforeAfter.before.map((item) => <li>{item}</li>)}</ul>
-            </article>
-            <article>
-              <h3>{copy.cases.after}</h3>
-              <ul>{caseStudy.beforeAfter.after.map((item) => <li>{item}</li>)}</ul>
-            </article>
-          </div>
-        </section>
-        <section aria-labelledby="case-system-map">
+        {
+          caseStudy.constraints.length > 0 && (
+            <section>
+              <h2>{copy.cases.constraints}</h2>
+              <ul>{caseStudy.constraints.map((item) => <li>{item}</li>)}</ul>
+            </section>
+          )
+        }
+        {
+          caseStudy.decisions.length > 0 && (
+            <section id="decisions" data-jump-target>
+              <h2>{copy.cases.decisions}</h2>
+              <div class="detail-grid">
+                {
+                  caseStudy.decisions.map((decision) => (
+                    <article class="detail-card">
+                      <h3>{decision.title}</h3>
+                      <p>{decision.rationale}</p>
+                    </article>
+                  ))
+                }
+              </div>
+            </section>
+          )
+        }
+        {
+          caseStudy.tradeoffs.length > 0 && (
+            <section id="tradeoffs" data-jump-target>
+              <h2>{copy.cases.tradeoffs}</h2>
+              <ul>{caseStudy.tradeoffs.map((item) => <li>{item}</li>)}</ul>
+            </section>
+          )
+        }
+        {
+          (caseStudy.beforeAfter.before.length > 0 || caseStudy.beforeAfter.after.length > 0) && (
+            <section id="before-after" data-jump-target>
+              <h2>{copy.cases.beforeAfter}</h2>
+              <div class="before-after">
+                {
+                  caseStudy.beforeAfter.before.length > 0 && (
+                    <article>
+                      <h3>{copy.cases.before}</h3>
+                      <ul>{caseStudy.beforeAfter.before.map((item) => <li>{item}</li>)}</ul>
+                    </article>
+                  )
+                }
+                {
+                  caseStudy.beforeAfter.after.length > 0 && (
+                    <article>
+                      <h3>{copy.cases.after}</h3>
+                      <ul>{caseStudy.beforeAfter.after.map((item) => <li>{item}</li>)}</ul>
+                    </article>
+                  )
+                }
+              </div>
+            </section>
+          )
+        }
+        <section id="system-map" data-jump-target aria-labelledby="case-system-map">
           <h2 id="case-system-map">{systemMap.title}</h2>
           <p>{systemMap.summary}</p>
-          <HeroSystemMap map={systemMap} />
+          <HeroSystemMap map={systemMap} showCaption={false} />
         </section>
-        <section>
-          <h2>{copy.cases.evidence}</h2>
-          <div class="detail-grid">
-            {
-              caseStudy.evidence.map((item) => (
-                <article class="detail-card">
-                  <h3>{item.label}</h3>
-                  <p>{item.detail}</p>
-                </article>
-              ))
-            }
-          </div>
-        </section>
+        {
+          caseStudy.evidence.length > 0 && (
+            <section id="evidence" data-jump-target>
+              <h2>{copy.cases.evidence}</h2>
+              <div class="detail-grid">
+                {
+                  caseStudy.evidence.map((item) => (
+                    <article class="detail-card">
+                      <span class="evidence-tag">Exhibit</span>
+                      <h3>{item.label}</h3>
+                      <p>{item.detail}</p>
+                    </article>
+                  ))
+                }
+              </div>
+            </section>
+          )
+        }
         <section class="case-detail__body">
           <Content />
         </section>
@@ -172,18 +231,86 @@ const seo = buildPageSeo(site, {
     background: var(--color-surface);
     border: var(--border-1);
     border-radius: var(--radius-2);
+  }
+
+  /* Only .recommended-card is a real link; the rest are plain <article>
+     containers. A shared hover state on all of them implied the others
+     were clickable too. */
+  .recommended-card {
     transition: border-color var(--duration-state) var(--ease-standard);
   }
 
-  .detail-card:hover,
-  .scan-grid > article:hover,
-  .before-after > article:hover,
   .recommended-card:hover {
     border-color: var(--color-accent);
   }
 
   .case-detail__meta {
     align-self: start;
+  }
+
+  /* Scoped to this page: clicking a jump-nav link should glide, not jump,
+     but stays covered by the site-wide reduced-motion reset (global.css
+     forces scroll-behavior: auto !important there). */
+  :global(html) {
+    scroll-behavior: smooth;
+  }
+
+  [data-jump-target] {
+    scroll-margin-top: var(--sticky-offset, 80px);
+  }
+
+  .case-detail__jump-nav {
+    margin-top: var(--space-2);
+    padding-top: var(--space-5);
+    border-top: var(--border-1);
+  }
+
+  .case-detail__jump-nav-label {
+    margin: 0 0 var(--space-3);
+    color: var(--color-muted);
+    font-family: var(--font-code);
+    font-size: var(--t-mono);
+    font-weight: 500;
+    text-transform: uppercase;
+  }
+
+  .case-detail__jump-nav ul {
+    gap: var(--space-1);
+  }
+
+  /* Reuses the site header's own active-link underline mechanism
+     (BaseLayout.astro .site-header__nav a::after) rather than inventing a
+     new indicator. */
+  .case-detail__jump-nav a {
+    position: relative;
+    display: block;
+    padding-block: var(--space-1);
+    color: var(--color-muted);
+    font-size: var(--t-small);
+    text-decoration: none;
+    transition: color var(--duration-fast) var(--ease-out-quint);
+  }
+
+  .case-detail__jump-nav a::after {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    height: 2px;
+    background: var(--color-accent);
+    content: "";
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 200ms var(--ease-out-quint);
+  }
+
+  .case-detail__jump-nav a:hover,
+  .case-detail__jump-nav a.is-active {
+    color: var(--color-accent);
+  }
+
+  .case-detail__jump-nav a.is-active::after {
+    transform: scaleX(1);
   }
 
   .case-detail__label {
@@ -198,7 +325,23 @@ const seo = buildPageSeo(site, {
     text-transform: capitalize;
   }
 
+  /* Decisions and Evidence share .detail-card, which otherwise makes a
+     rationale and a proof exhibit look like the same content type. This
+     is card-scoped, not a section-level eyebrow: only Evidence cards get
+     it, matching the mono/uppercase/accent label convention already used
+     for ServiceCard's dt and EvidencePanel's context line. */
+  .evidence-tag {
+    display: block;
+    margin-bottom: var(--space-2);
+    color: var(--color-accent);
+    font-family: var(--font-code);
+    font-size: var(--t-mono);
+    font-weight: 500;
+    text-transform: uppercase;
+  }
+
   .case-detail__main,
+  .case-detail__meta,
   section,
   .detail-grid,
   .scan-grid,
@@ -263,9 +406,31 @@ const seo = buildPageSeo(site, {
     color: var(--color-muted);
   }
 
+  /* Card-internal text is already width-capped by its card; these are the
+     free-flowing prose blocks that otherwise stretch to the full ~800px
+     main column and blow well past a comfortable reading measure. */
+  .case-detail__main > section > p,
+  .case-detail__main > section > ul,
+  .case-detail__cta p,
+  .case-detail__body :global(p) {
+    max-width: 65ch;
+  }
+
   @media (min-width: 980px) {
     .case-detail__layout {
       grid-template-columns: 320px minmax(0, 1fr);
+    }
+
+    /* align-self: start (set above, unconditionally) keeps the aside from
+       stretching to the main column's full height, which sticky needs to
+       have room to move within. max-height + overflow-y guards against a
+       short viewport where the sticky content itself would otherwise run
+       past the bottom edge. */
+    .case-detail__meta {
+      position: sticky;
+      top: var(--sticky-offset, 80px);
+      max-height: calc(100vh - var(--sticky-offset, 80px) - var(--space-8));
+      overflow-y: auto;
     }
 
     .detail-grid,
@@ -275,9 +440,117 @@ const seo = buildPageSeo(site, {
       grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
+    /* Every one of these grids is backed by a content array with no fixed
+       length (the case-study schema doesn't cap decisions/evidence/
+       recommended reads), so any count that doesn't divide evenly leaves a
+       lone orphaned card with an empty gap beside it. Span it full width
+       instead. Below 1180px there isn't room for a 3rd column without
+       overflowing card text (verified: "Recommendation" alone needs more
+       than a 3-up card gets here), so 2-up + span is the fix at this size;
+       the 1180px breakpoint below switches scan-grid/detail-grid to 3
+       equal columns, where three coequal items fit without spanning.
+       recommended-grid/before-after stay 2-up at every width. */
+    .detail-grid > :last-child:nth-child(2n + 1),
+    .scan-grid > :last-child:nth-child(2n + 1),
+    .recommended-grid > :last-child:nth-child(2n + 1),
+    .before-after > :last-child:nth-child(2n + 1) {
+      grid-column: 1 / -1;
+    }
+
     .case-detail__cta {
       grid-template-columns: minmax(0, 1fr) auto;
       align-items: center;
     }
   }
+
+  @media (min-width: 1180px) {
+    .detail-grid,
+    .scan-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    /* Undo the 2-up span rule above: a 3rd item is no longer an orphan
+       once there are three equal columns to fill. */
+    .detail-grid > :last-child:nth-child(2n + 1),
+    .scan-grid > :last-child:nth-child(2n + 1) {
+      grid-column: auto;
+    }
+
+    .detail-grid > :last-child:nth-child(3n + 1),
+    .scan-grid > :last-child:nth-child(3n + 1) {
+      grid-column: 1 / -1;
+    }
+  }
 </style>
+
+<script>
+  const initJumpNav = () => {
+    const header = document.querySelector<HTMLElement>(".site-header");
+    const links = [...document.querySelectorAll<HTMLAnchorElement>("[data-jump-link]")];
+
+    if (links.length === 0) return;
+
+    const targets = links
+      .map((link) => {
+        const id = link.getAttribute("data-jump-link");
+        const el = id ? document.getElementById(id) : null;
+        return el ? { link, el } : null;
+      })
+      .filter((entry): entry is { link: HTMLAnchorElement; el: HTMLElement } => entry !== null);
+
+    // The static 80px CSS fallback already matches the current header
+    // height closely; this just keeps it exact if the header's own
+    // content ever reflows (e.g. a longer brand name at some viewport).
+    const applyStickyOffset = () => {
+      if (!header) return;
+      const offset = Math.round(header.getBoundingClientRect().height) + 16;
+      document.documentElement.style.setProperty("--sticky-offset", `${offset}px`);
+    };
+
+    applyStickyOffset();
+
+    if (header && "ResizeObserver" in window) {
+      new ResizeObserver(applyStickyOffset).observe(header);
+    } else {
+      window.addEventListener("resize", applyStickyOffset);
+    }
+
+    if (targets.length === 0) return;
+
+    const setActive = (id: string) => {
+      for (const { link } of targets) {
+        link.classList.toggle("is-active", link.getAttribute("data-jump-link") === id);
+      }
+    };
+
+    // Walks targets in document order and keeps the last one whose top has
+    // crossed the activation line: the standard scrollspy algorithm. An
+    // IntersectionObserver's rootMargin band can have multiple short
+    // sections intersecting it at once with no defined winner; this
+    // doesn't have that ambiguity.
+    let ticking = false;
+    const updateActive = () => {
+      ticking = false;
+      const activationLine = (header?.getBoundingClientRect().height ?? 0) + 24;
+      let currentId = targets[0].el.id;
+      for (const { el } of targets) {
+        if (el.getBoundingClientRect().top <= activationLine) {
+          currentId = el.id;
+        }
+      }
+      setActive(currentId);
+    };
+
+    const requestUpdate = () => {
+      if (ticking) return;
+      ticking = true;
+      window.requestAnimationFrame(updateActive);
+    };
+
+    updateActive();
+    window.addEventListener("scroll", requestUpdate, { passive: true });
+    window.addEventListener("resize", requestUpdate);
+  };
+
+  document.addEventListener("DOMContentLoaded", initJumpNav);
+</script>

@@ -3,19 +3,26 @@ import type { SystemMap } from "@domain/system-map";
 
 type Props = {
   map: SystemMap;
+  /** Omit when the caller already renders map.title/map.summary as its own
+      heading immediately above (avoids rendering the same text twice). */
+  showCaption?: boolean;
 };
 
-const { map } = Astro.props;
+const { map, showCaption = true } = Astro.props;
 const riskByNode = new Map(map.riskMarkers.map((marker) => [marker.nodeId, marker]));
 const decisionByNode = new Map(map.decisionMarkers.map((marker) => [marker.nodeId, marker]));
 const mapJson = JSON.stringify(map);
 ---
 
 <figure class="system-map" aria-label={map.fallbackLabel} data-system-map data-state="messy">
-  <figcaption>
-    <strong>{map.title}</strong>
-    <span>{map.summary}</span>
-  </figcaption>
+  {
+    showCaption && (
+      <figcaption>
+        <strong>{map.title}</strong>
+        <span>{map.summary}</span>
+      </figcaption>
+    )
+  }
 
   <div class="system-map__toolbar" role="group" aria-label="Architecture state">
     <button class="system-map__state is-active" type="button" data-map-state="messy">
@@ -64,7 +71,7 @@ const mapJson = JSON.stringify(map);
   </div>
 
   <div class="system-map__details" aria-live="polite" data-map-details>
-    <h2>Map details</h2>
+    <h3>Map details</h3>
     <p>Tap a node to read the risk or decision marker.</p>
   </div>
 
@@ -109,7 +116,7 @@ const mapJson = JSON.stringify(map);
   }
 
   figcaption strong,
-  .system-map__details h2 {
+  .system-map__details h3 {
     font-family: var(--font-body);
     font-size: var(--t-h3);
     font-weight: 800;
@@ -141,7 +148,7 @@ const mapJson = JSON.stringify(map);
     transition:
       background-color var(--duration-fast) var(--ease-out-expo),
       border-color var(--duration-fast) var(--ease-out-expo),
-      transform var(--duration-fast) var(--ease-spring);
+      transform var(--duration-fast) var(--ease-out-quint);
   }
 
   .system-map__state:hover,
@@ -185,7 +192,13 @@ const mapJson = JSON.stringify(map);
   }
 
   .system-map__node {
+    /* Resting position until the three.js scene hydrates and takes over via
+       inline transform (see initMap): without this, nodes have no left/top
+       and stack at the container origin for the duration of the async
+       import, which reads as a broken layout rather than a loading state. */
     position: absolute;
+    left: var(--node-rest-x, 50%);
+    top: var(--node-rest-y, 50%);
     display: grid;
     gap: var(--space-1);
     width: 148px;
@@ -201,7 +214,37 @@ const mapJson = JSON.stringify(map);
     transition:
       background-color var(--duration-fast) var(--ease-out-expo),
       border-color var(--duration-fast) var(--ease-out-expo),
-      box-shadow var(--duration-base) var(--ease-spring);
+      box-shadow var(--duration-base) var(--ease-out-quint);
+  }
+
+  .system-map__node[data-node-index="0"] {
+    --node-rest-x: 15%;
+    --node-rest-y: 19%;
+  }
+
+  .system-map__node[data-node-index="1"] {
+    --node-rest-x: 68%;
+    --node-rest-y: 15%;
+  }
+
+  .system-map__node[data-node-index="2"] {
+    --node-rest-x: 47%;
+    --node-rest-y: 49%;
+  }
+
+  .system-map__node[data-node-index="3"] {
+    --node-rest-x: 85%;
+    --node-rest-y: 60%;
+  }
+
+  .system-map__node[data-node-index="4"] {
+    --node-rest-x: 23%;
+    --node-rest-y: 80%;
+  }
+
+  .system-map__node[data-node-index="5"] {
+    --node-rest-x: 61%;
+    --node-rest-y: 85%;
   }
 
   .system-map__node span {
@@ -273,8 +316,8 @@ const mapJson = JSON.stringify(map);
     transform: translateY(8px);
   }
 
-  .system-map__details h2,
-  .system-map__drawer h2,
+  .system-map__details h3,
+  .system-map__drawer h3,
   .system-map__details p,
   .system-map__drawer p {
     margin: 0;
@@ -373,6 +416,39 @@ const mapJson = JSON.stringify(map);
     .system-map__node {
       width: 128px;
       min-height: 64px;
+    }
+
+    /* Wider safe margin than the desktop resting positions: node buttons
+       are a bigger share of the narrower mobile stage width, so a smaller
+       margin here would clip past the stage's overflow:hidden edge. */
+    .system-map__node[data-node-index="0"] {
+      --node-rest-x: 20%;
+      --node-rest-y: 20%;
+    }
+
+    .system-map__node[data-node-index="1"] {
+      --node-rest-x: 79%;
+      --node-rest-y: 30%;
+    }
+
+    .system-map__node[data-node-index="2"] {
+      --node-rest-x: 28%;
+      --node-rest-y: 44%;
+    }
+
+    .system-map__node[data-node-index="3"] {
+      --node-rest-x: 80%;
+      --node-rest-y: 55%;
+    }
+
+    .system-map__node[data-node-index="4"] {
+      --node-rest-x: 27%;
+      --node-rest-y: 69%;
+    }
+
+    .system-map__node[data-node-index="5"] {
+      --node-rest-x: 76%;
+      --node-rest-y: 80%;
     }
   }
 
@@ -524,6 +600,15 @@ const mapJson = JSON.stringify(map);
 
     if (!json?.textContent || !canvas || !stage) {
       return;
+    }
+
+    // Hand off from the CSS resting position (left/top percentages) to the
+    // translate3d-based positioning below, which assumes a 0,0 origin.
+    // Left as one synchronous block with the first projectButtons() call
+    // further down so nothing paints in between.
+    for (const button of nodeButtons) {
+      button.style.left = "0px";
+      button.style.top = "0px";
     }
 
     const data = JSON.parse(json.textContent) as MapData;
@@ -686,7 +771,7 @@ const mapJson = JSON.stringify(map);
       const markers = [risk && `Risk hotspot: ${risk}`, decision && `Decision overlay: ${decision}`]
         .filter(Boolean)
         .join(" ");
-      const html = `<h2>${button.dataset.nodeLabel}</h2><p>${button.dataset.nodeDescription} ${markers}</p>`;
+      const html = `<h3>${button.dataset.nodeLabel}</h3><p>${button.dataset.nodeDescription} ${markers}</p>`;
 
       if (!compact) {
         withStateFade(details, () => {
