@@ -33,11 +33,10 @@ const seo = buildPageSeo(site, {
     <div class="u-container about-grid">
       <article class="about-panel about-panel--lead">
         <h2>{copy.about.shortVersion}</h2>
-        <p>{viewModel.about.context}</p>
         <dl class="snapshot-list">
           <div>
             <dt>{copy.about.name}</dt>
-            <dd>Nguyen Ngoc Huy</dd>
+            <dd>Nguyễn Ngọc Huy</dd>
           </div>
           <div>
             <dt>{copy.about.alsoCalled}</dt>
@@ -101,6 +100,7 @@ const seo = buildPageSeo(site, {
 
   .about-grid {
     display: grid;
+    align-items: start;
     gap: var(--space-6);
   }
 
@@ -110,12 +110,21 @@ const seo = buildPageSeo(site, {
     background: var(--color-surface);
     border: var(--border-1);
     border-radius: var(--radius-2);
+    transition: border-color var(--duration-state) var(--ease-standard);
+  }
+
+  .about-panel:hover {
+    border-color: var(--color-border-accent);
   }
 
   .about-panel {
     display: grid;
     align-content: start;
     gap: var(--space-5);
+  }
+
+  .about-panel--lead p {
+    max-width: 65ch;
   }
 
   .about-panel h2,
@@ -162,7 +171,10 @@ const seo = buildPageSeo(site, {
   .communication {
     display: grid;
     gap: var(--space-3);
-    max-width: 760px;
+  }
+
+  .communication p {
+    max-width: 65ch;
   }
 
   .communication h2,
