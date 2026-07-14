@@ -128,29 +128,83 @@ const initAuditWalkthrough = () => {
     });
   };
 
+  const setRovingTabindex = (items: HTMLButtonElement[], active: HTMLButtonElement) => {
+    for (const item of items) {
+      item.tabIndex = item === active ? 0 : -1;
+    }
+  };
+
+  const selectFinding = (finding: HTMLButtonElement) => {
+    activeFinding = finding;
+    for (const item of findings) {
+      const isActive = item === finding;
+      item.classList.toggle("is-active", isActive);
+      item.setAttribute("aria-pressed", String(isActive));
+    }
+    setRovingTabindex(findingsList, finding);
+    updatePanel();
+  };
+
+  const selectPhase = (phase: HTMLButtonElement) => {
+    activePhase = phase.dataset.phase ?? "symptom";
+    for (const item of phases) {
+      const isActive = item === phase;
+      item.classList.toggle("is-active", isActive);
+      item.setAttribute("aria-pressed", String(isActive));
+    }
+    setRovingTabindex(phasesList, phase);
+    updatePanel();
+  };
+
+  const findingsList = [...findings];
+  const phasesList = [...phases];
+
+  setRovingTabindex(findingsList, findingsList[0]);
+  setRovingTabindex(phasesList, phasesList[0]);
+
   for (const finding of findings) {
-    finding.addEventListener("click", () => {
-      activeFinding = finding;
-      for (const item of findings) {
-        const isActive = item === finding;
-        item.classList.toggle("is-active", isActive);
-        item.setAttribute("aria-pressed", String(isActive));
-      }
-      updatePanel();
-    });
+    finding.addEventListener("click", () => selectFinding(finding));
   }
 
-  for (const phase of phases) {
-    phase.addEventListener("click", () => {
-      activePhase = phase.dataset.phase ?? "symptom";
-      for (const item of phases) {
-        const isActive = item === phase;
-        item.classList.toggle("is-active", isActive);
-        item.setAttribute("aria-pressed", String(isActive));
+  findingsList.forEach((finding, index) => {
+    finding.addEventListener("keydown", (event) => {
+      let nextIndex: number | null = null;
+
+      if (event.key === "ArrowDown") nextIndex = (index + 1) % findingsList.length;
+      else if (event.key === "ArrowUp") nextIndex = (index - 1 + findingsList.length) % findingsList.length;
+      else if (event.key === "Home") nextIndex = 0;
+      else if (event.key === "End") nextIndex = findingsList.length - 1;
+
+      if (nextIndex !== null) {
+        event.preventDefault();
+        const next = findingsList[nextIndex];
+        next.focus();
+        selectFinding(next);
       }
-      updatePanel();
     });
+  });
+
+  for (const phase of phases) {
+    phase.addEventListener("click", () => selectPhase(phase));
   }
+
+  phasesList.forEach((phase, index) => {
+    phase.addEventListener("keydown", (event) => {
+      let nextIndex: number | null = null;
+
+      if (event.key === "ArrowRight") nextIndex = (index + 1) % phasesList.length;
+      else if (event.key === "ArrowLeft") nextIndex = (index - 1 + phasesList.length) % phasesList.length;
+      else if (event.key === "Home") nextIndex = 0;
+      else if (event.key === "End") nextIndex = phasesList.length - 1;
+
+      if (nextIndex !== null) {
+        event.preventDefault();
+        const next = phasesList[nextIndex];
+        next.focus();
+        selectPhase(next);
+      }
+    });
+  });
 };
 
 const initAdvisoryFlow = () => {

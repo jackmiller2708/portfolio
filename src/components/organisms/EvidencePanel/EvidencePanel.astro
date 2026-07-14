@@ -8,18 +8,29 @@ type Props = {
   evidence?: string;
   risk?: string;
   recommendation?: string;
+  headingLevel?: "h2" | "h3";
   cta?: {
     readonly label: string;
     readonly href: string;
   };
 };
 
-const { eyebrow, title, summary, evidence, risk, recommendation, cta } = Astro.props;
+const {
+  eyebrow,
+  title,
+  summary,
+  evidence,
+  risk,
+  recommendation,
+  headingLevel = "h3",
+  cta
+} = Astro.props;
+const Heading = headingLevel;
 ---
 
 <article class="evidence-panel">
   <div class="evidence-panel__header">
-    <h3>{title}</h3>
+    <Heading>{title}</Heading>
     {eyebrow && <p class="evidence-panel__context">{eyebrow}</p>}
     {summary && <p>{summary}</p>}
   </div>
@@ -88,6 +99,7 @@ const { eyebrow, title, summary, evidence, risk, recommendation, cta } = Astro.p
     text-transform: uppercase;
   }
 
+  h2,
   h3 {
     margin: 0;
     font-family: var(--font-body);

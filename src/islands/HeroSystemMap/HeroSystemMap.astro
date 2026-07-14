@@ -50,6 +50,8 @@ const mapJson = JSON.stringify(map);
             >
               <span>{node.label}</span>
               <em>{map.groups.find((group) => group.id === node.group)?.label}</em>
+              {risk && <span class="u-visually-hidden">, Risk hotspot: {risk.label}</span>}
+              {decision && <span class="u-visually-hidden">, Decision overlay: {decision.label}</span>}
             </button>
           );
         })
@@ -297,7 +299,9 @@ const mapJson = JSON.stringify(map);
 
   .system-map__drawer > button {
     justify-self: end;
-    min-height: 32px;
+    min-width: 44px;
+    min-height: 44px;
+    padding: var(--control-padding-y) var(--control-padding-x);
     color: var(--color-muted);
     background: transparent;
     border: 0;

@@ -1,16 +1,18 @@
 ---
 import BaseLayout from "@layouts/BaseLayout.astro";
 import PageHero from "@components/sections/PageHero/PageHero.astro";
+import type { Locale } from "@domain/site";
+import { localePath, t } from "@i18n/locales";
+
+const locale: Locale = Astro.url.pathname.startsWith("/vi") ? "vi" : "en";
+const copy = t(locale).notFound;
 ---
 
-<BaseLayout
-  title="Not Found | Nguyen Ngoc Huy / Jack"
-  description="The requested page was not found."
->
+<BaseLayout title={copy.title} description={copy.description} locale={locale}>
   <PageHero
-    title="This page is not available."
-    summary="Use the navigation to return to the portfolio routes that are currently defined."
-    primaryCta={{ label: "Go home", href: "/" }}
-    secondaryCta={{ label: "Contact", href: "/en/contact" }}
+    title={copy.heading}
+    summary={copy.summary}
+    primaryCta={{ label: copy.goHome, href: localePath(locale, "/") }}
+    secondaryCta={{ label: copy.contact, href: localePath(locale, "/contact") }}
   />
 </BaseLayout>

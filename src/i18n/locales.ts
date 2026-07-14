@@ -72,6 +72,14 @@ export const ui = {
       takeaway: "Takeaway",
       codeLanguage: "Code language"
     },
+    notFound: {
+      title: "Not Found | Nguyen Ngoc Huy / Jack",
+      description: "The requested page was not found.",
+      heading: "This page is not available.",
+      summary: "Use the navigation to return to the portfolio routes that are currently defined.",
+      goHome: "Go home",
+      contact: "Contact"
+    },
     services: {
       usefulTitle: "Where this work is useful",
       usefulSummary:
@@ -191,6 +199,14 @@ export const ui = {
       relatedServices: "Dịch vụ liên quan",
       takeaway: "Điểm chính",
       codeLanguage: "Ngôn ngữ code"
+    },
+    notFound: {
+      title: "Không tìm thấy | Nguyễn Ngọc Huy / Jack",
+      description: "Không tìm thấy trang được yêu cầu.",
+      heading: "Trang này hiện không có sẵn.",
+      summary: "Dùng menu điều hướng để quay lại các route hiện có của portfolio.",
+      goHome: "Về trang chủ",
+      contact: "Liên hệ"
     },
     services: {
       usefulTitle: "Khi nào công việc này hữu ích",

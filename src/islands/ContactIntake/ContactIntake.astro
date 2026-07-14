@@ -35,7 +35,8 @@ const formCopy =
         unsure: "Chưa chắc",
         consent: "Tôi đồng ý được liên hệ về inquiry này.",
         submit: "Gửi inquiry",
-        emailFallback: "Thích email hơn? Dùng"
+        emailFallback: "Thích email hơn? Dùng",
+        requiredHint: "Các trường có dấu * là bắt buộc."
       }
     : {
         advisoryTitle: "What I would ask first",
@@ -61,7 +62,8 @@ const formCopy =
         unsure: "Unsure",
         consent: "I consent to being contacted about this inquiry.",
         submit: "Submit inquiry",
-        emailFallback: "Prefer email? Use"
+        emailFallback: "Prefer email? Use",
+        requiredHint: "Fields marked * are required."
       };
 const fields = [
   {
@@ -145,26 +147,44 @@ const fields = [
       {formCopy.framing}
     </p>
     <p class="contact-form__availability">{viewModel.availability}</p>
+    <p class="contact-form__required-hint">{formCopy.requiredHint}</p>
     {
-      fields.map((field) => (
-        <label for={field.id}>
-          {field.label}
-          <input
-            id={field.id}
-            name={field.id}
-            type={"type" in field ? field.type : "text"}
-            autocomplete={"autocomplete" in field ? field.autocomplete : undefined}
-            required={!("required" in field) || field.required}
-          />
-        </label>
-      ))
+      fields.map((field) => {
+        const isRequired = !("required" in field) || field.required;
+        return (
+          <label for={field.id}>
+            {field.label}
+            {isRequired && (
+              <span class="required-indicator" aria-hidden="true">
+                {" "}
+                *
+              </span>
+            )}
+            <input
+              id={field.id}
+              name={field.id}
+              type={"type" in field ? field.type : "text"}
+              autocomplete={"autocomplete" in field ? field.autocomplete : undefined}
+              required={isRequired}
+            />
+          </label>
+        );
+      })
     }
     <label for="pain">
       {formCopy.pain}
+      <span class="required-indicator" aria-hidden="true">
+        {" "}
+        *
+      </span>
       <textarea id="pain" name="pain" rows="5" required></textarea>
     </label>
     <label for="engagementType">
       {formCopy.engagementType}
+      <span class="required-indicator" aria-hidden="true">
+        {" "}
+        *
+      </span>
       <select id="engagementType" name="engagementType" required>
         <option value="diagnosis">{formCopy.diagnosis}</option>
         <option value="implementation">{formCopy.implementation}</option>
@@ -175,6 +195,7 @@ const fields = [
     <label class="contact-form__checkbox" for="consent">
       <input id="consent" name="consent" type="checkbox" value="true" required />
       {formCopy.consent}
+      <span class="required-indicator" aria-hidden="true"> *</span>
     </label>
     <button type="submit">{formCopy.submit}</button>
     <p id="contact-fallback" class="contact-form__fallback">
@@ -301,6 +322,10 @@ const fields = [
     font-weight: 700;
   }
 
+  .contact-form__required-hint {
+    font-size: var(--t-small);
+  }
+
   label {
     display: grid;
     gap: var(--space-2);
@@ -308,10 +333,15 @@ const fields = [
     font-weight: 700;
   }
 
+  .required-indicator {
+    color: var(--color-danger);
+  }
+
   input,
   select,
   textarea {
     width: 100%;
+    min-height: 44px;
     padding: var(--space-3);
     color: var(--color-text);
     background: var(--color-surface);
@@ -331,11 +361,13 @@ const fields = [
 
   .contact-form__checkbox {
     display: flex;
-    align-items: flex-start;
+    align-items: center;
+    min-height: 44px;
   }
 
   .contact-form__checkbox input {
     width: auto;
+    min-height: 0;
     margin-top: 0.35em;
   }
 

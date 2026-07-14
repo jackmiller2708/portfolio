@@ -19,7 +19,7 @@ export default defineConfig({
       subsets: ["latin", "vietnamese"],
       provider: fontProviders.google(),
       cssVariable: "--font-display",
-      weights: [100, 200, 300, 400, 500, 600, 700, 800, 900],
+      weights: [300, 500],
       variationSettings: '"SOFT" 0, "WONK" 0',
       styles: ["normal", "italic"]
     },
@@ -28,7 +28,7 @@ export default defineConfig({
       subsets: ["latin", "vietnamese"],
       provider: fontProviders.google(),
       cssVariable: "--font-body",
-      weights: [100, 200, 300, 400, 500, 600, 700, 800, 900],
+      weights: [400, 600, 700, 800],
       styles: ["normal"]
     },
     {
@@ -37,9 +37,14 @@ export default defineConfig({
       subsets: ["latin", "vietnamese"],
       provider: fontProviders.google(),
       cssVariable: "--font-code",
-      weights: [100, 200, 300, 400, 500, 600, 700, 800, 900],
+      weights: [400, 500, 700],
       styles: ["normal"]
     }
   ],
+  markdown: {
+    shikiConfig: {
+      theme: "css-variables"
+    }
+  },
   output: "static"
 });

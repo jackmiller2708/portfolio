@@ -282,7 +282,7 @@ const navItems = [
     justify-content: center;
     align-items: center;
     gap: var(--space-2);
-    min-height: 35px;
+    min-height: 44px;
     width: calc(5ch + 2.5rem);
     padding: var(--control-padding-y) var(--control-padding-x);
     color: var(--color-text);
@@ -306,7 +306,7 @@ const navItems = [
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    min-height: 35px;
+    min-height: 44px;
     padding: var(--control-padding-y) var(--control-padding-x);
     color: var(--color-text);
     background: var(--color-surface);
@@ -383,6 +383,11 @@ const navItems = [
       width: 100%;
     }
 
+    .site-header__brand,
+    .site-header__controls {
+      min-width: 0;
+    }
+
     .site-header {
       --t-brand: 1rem;
     }
@@ -397,14 +402,16 @@ const navItems = [
 
     .site-header__theme {
       grid-column: auto;
-      width: 40px;
-      min-height: 36px;
+      flex-shrink: 0;
+      width: 44px;
+      min-height: 44px;
       padding: var(--control-padding-y);
     }
 
     .site-header__language {
-      min-height: 36px;
-      padding: var(--control-padding-y) var(--space-3);
+      min-width: 0;
+      min-height: 44px;
+      padding: var(--control-padding-y) clamp(0.4rem, 1.8vw, 0.75rem);
     }
 
     .site-header__theme span {
@@ -424,8 +431,9 @@ const navItems = [
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      width: 40px;
-      min-height: 36px;
+      flex-shrink: 0;
+      width: 44px;
+      min-height: 44px;
       color: var(--color-text);
       background: var(--color-surface);
       border: var(--border-1);

@@ -34,11 +34,15 @@ const seo = buildPageSeo(site, {
       {
         viewModel.posts.map((post) => (
           <article class="lab-card">
-            <p class="lab-card__topic">{post.topic}</p>
-            <h2>{post.title}</h2>
-            <p>{post.summary}</p>
-            <p class="lab-card__takeaway">{post.takeaway}</p>
-            <a href={localePath(locale, `/lab/${post.slug}`)}>{copy.common.readNote}</a>
+            <div>
+              <p class="lab-card__topic">{post.topic}</p>
+              <h2>{post.title}</h2>
+              <p>{post.summary}</p>
+              <p class="lab-card__takeaway">{post.takeaway}</p>
+            </div>
+            <a href={localePath(locale, `/lab/${post.slug}`)} aria-label={`${copy.common.readNote}: ${post.title}`}>
+              {copy.common.readNote}
+            </a>
           </article>
         ))
       }
@@ -58,6 +62,9 @@ const seo = buildPageSeo(site, {
   }
 
   .lab-card {
+    display: grid;
+    align-content: space-between;
+    gap: var(--space-5);
     padding: var(--space-6);
     background: var(--color-surface);
     border: var(--border-1);
@@ -103,7 +110,7 @@ const seo = buildPageSeo(site, {
 
   a {
     display: inline-block;
-    margin-top: var(--space-5);
+    width: fit-content;
     color: var(--color-text);
     font-weight: 700;
     transition: color var(--duration-state) var(--ease-standard);

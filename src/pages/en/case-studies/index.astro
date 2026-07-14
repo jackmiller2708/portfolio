@@ -34,10 +34,15 @@ const seo = buildPageSeo(site, {
       {
         viewModel.caseStudies.map((caseStudy) => (
           <article class="case-card">
-            <p class="case-card__label">{caseStudy.redactionStatus}</p>
-            <h2>{caseStudy.title}</h2>
-            <p>{caseStudy.summary}</p>
-            <a href={localePath(locale, `/case-studies/${caseStudy.slug}`)}>
+            <div>
+              <p class="case-card__label">{caseStudy.redactionStatus}</p>
+              <h2>{caseStudy.title}</h2>
+              <p>{caseStudy.summary}</p>
+            </div>
+            <a
+              href={localePath(locale, `/case-studies/${caseStudy.slug}`)}
+              aria-label={`${copy.common.readCaseStudy}: ${caseStudy.title}`}
+            >
               {copy.common.readCaseStudy}
             </a>
           </article>
@@ -59,6 +64,9 @@ const seo = buildPageSeo(site, {
   }
 
   .case-card {
+    display: grid;
+    align-content: space-between;
+    gap: var(--space-5);
     padding: var(--space-6);
     background: var(--color-surface);
     border: var(--border-1);
@@ -102,7 +110,7 @@ const seo = buildPageSeo(site, {
 
   a {
     display: inline-block;
-    margin-top: var(--space-5);
+    width: fit-content;
     color: var(--color-text);
     font-weight: 700;
     transition: color var(--duration-state) var(--ease-standard);

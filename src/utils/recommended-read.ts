@@ -32,7 +32,8 @@ export const buildLabRecommendedReads = (
   services: readonly ServiceOffer[],
   caseStudies: readonly CaseStudy[]
 ): readonly RecommendedRead[] => {
-  const service = services.find((offer) => post.relatedServices?.includes(offer.id)) ?? services[0];
+  const relatedServiceIds = new Set(post.relatedServices ?? []);
+  const service = services.find((offer) => !relatedServiceIds.has(offer.id)) ?? services[0];
   const caseStudy = caseStudies[0];
 
   return [
